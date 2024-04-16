@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { FaGoogle } from "react-icons/fa6";
-import { FaFacebook } from "react-icons/fa";
 
-const Login = () => {
+const AdminLogin = () => {
   const [visible, setVisible] = useState(false);
   const [credentials, setCredentials] = useState({
     email: "",
@@ -21,13 +18,13 @@ const Login = () => {
 
   const handleSubmitData = (e) => {
     e.preventDefault();
-    console.log(credentials)
+    console.log(credentials);
   };
 
   return (
     <div className="min-w-screen min-h-screen bg-[#e5e1e1] flex items-center justify-center">
       <div className="w-[350px] text-[#fffFFF] bg-[#a1cbd9] p-7 rounded-md">
-        <h2 className="text-xl mb-3 font-bold">Login</h2>
+        <h2 className="text-xl mb-3 font-bold">Admin Login</h2>
 
         <form className="space-y-6" onSubmit={handleSubmitData}>
           <div>
@@ -93,37 +90,10 @@ const Login = () => {
               Sign in
             </button>
           </div>
-          <div className="flex gap-4">
-            <h4>Do not have an account?</h4>
-            <Link to="/register" className="text-blue-600 pl-2">
-              Sign up
-            </Link>
-          </div>
-
-          <div className="w-full flex justify-center items-center mb-3">
-            <div className="w-[45%] bg-slate-700 h-[2px]"></div>
-            <div className="w-[10%] flex justify-center items-center ">
-              <span className="pb-1"> Or</span>
-            </div>
-            <div className="w-[45%] bg-slate-700 h-[2px]"></div>
-          </div>
-
-          <div className="flex justify-center items-center gap-3">
-            <div className="w-[135px] h-[35px] flex rounded-md bg-orange-500 shadow-lg hover:shadow-orange-600/50 justify-center cursor-pointer items-center overflow-hidden">
-              <span>
-                <FaGoogle />
-              </span>
-            </div>
-            <div className="w-[135px] h-[35px] flex rounded-md bg-blue-500 shadow-lg hover:shadow-orange-600/50 justify-center cursor-pointer items-center overflow-hidden">
-              <span>
-                <FaFacebook />
-              </span>
-            </div>
-          </div>
         </form>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default AdminLogin;

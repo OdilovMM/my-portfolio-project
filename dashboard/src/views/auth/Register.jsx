@@ -6,12 +6,30 @@ import { FaFacebook } from "react-icons/fa";
 
 const Register = () => {
   const [visible, setVisible] = useState(false);
+  const [credentials, setCredentials] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleInput = (e) => {
+    e.preventDefault();
+    setCredentials({
+      ...credentials,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmitData = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="min-w-screen min-h-screen bg-[#e5e1e1] flex items-center justify-center">
-      <div className="w-[350px] text-[#fffFFF] bg-[#52a2bc] p-4 rounded-md">
+      <div className="w-[350px] text-[#fffFFF] bg-[#a1cbd9] p-7 rounded-md">
         <h2 className="text-xl mb-3 font-bold">Register</h2>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmitData}>
           <div>
             <label
               htmlFor="name"
@@ -24,6 +42,8 @@ const Register = () => {
                 type="text"
                 name="name"
                 autoComplete="name"
+                value={credentials.name}
+                onChange={handleInput}
                 required
                 className="appearance-none block w-full px-3 text-black  py-2 border border-gray-400 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
@@ -42,6 +62,8 @@ const Register = () => {
                 type="email"
                 name="email"
                 autoComplete="email"
+                value={credentials.email}
+                onChange={handleInput}
                 required
                 className="appearance-none block text-black w-full px-3 py-2 border border-gray-400 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
@@ -61,6 +83,8 @@ const Register = () => {
                 name="password"
                 autoComplete="current-password"
                 required
+                value={credentials.password}
+                onChange={handleInput}
                 className="appearance-none block w-full text-black  px-3 py-2 border border-gray-400 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
               {visible ? (
