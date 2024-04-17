@@ -1,7 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-
+import { useDispatch, useSelector } from "react-redux";
+import { admin_Login, clearMessage } from "../../store/Reducers/authReducer";
+import { BarLoader, BeatLoader, FadeLoader, ScaleLoader } from "react-spinners";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 const AdminLogin = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { loader, errorMessage, successMessage } = useSelector(
+    (state) => state.auth
+  );
+
   const [visible, setVisible] = useState(false);
   const [credentials, setCredentials] = useState({
     email: "",
@@ -19,7 +30,21 @@ const AdminLogin = () => {
   const handleSubmitData = (e) => {
     e.preventDefault();
     console.log(credentials);
+    dispatch(admin_Login(credentials));
   };
+
+  useEffect(() => {
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(clearMessage());
+    }
+    // if (successMessage) {
+    //   toast.error(errorMessage);
+    //   dispatch(clearMessage());
+    // }
+
+    navigate("/");
+  }, [errorMessage, dispatch, navigate]);
 
   return (
     <div className="min-w-screen min-h-screen bg-[#e5e1e1] flex items-center justify-center">
@@ -85,9 +110,14 @@ const AdminLogin = () => {
           <div>
             <button
               type="submit"
+              disabled={loader ? true : false}
               className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700"
             >
-              Sign in
+              {loader ? (
+                <ScaleLoader color="#fff" height={22} width={5} radius={2} />
+              ) : (
+                "Sign in"
+              )}
             </button>
           </div>
         </form>
