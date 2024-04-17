@@ -10,6 +10,7 @@ export const admin_Login = createAsyncThunk(
       const { data } = await api.post("/admin-login", info, {
         withCredentials: true,
       });
+      localStorage.setItem("accessToken", data.token);
       return fulfillWithValue(data);
     } catch (error) {
       console.log(error.response.data);
@@ -40,7 +41,7 @@ export const authReducer = createSlice({
       .addCase(admin_Login.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message;
-        toast.success(payload.message)
+        toast.success(payload.message);
       })
       .addCase(admin_Login.rejected, (state, { payload }) => {
         state.loader = false;
