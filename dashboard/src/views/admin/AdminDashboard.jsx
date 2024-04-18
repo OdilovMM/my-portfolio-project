@@ -257,7 +257,7 @@ const AdminDashboard = () => {
                   <td className="py-3 px-4 font-medium whitespace-nowrap">
                     <Link>View</Link>
                   </td>
-                </tr>
+                </tr> 
               ))}
             </tbody>
           </table>
