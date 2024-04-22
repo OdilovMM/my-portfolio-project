@@ -7,7 +7,7 @@ const Sidebar = ({ showBar, setShowBar }) => {
   const { pathname } = useLocation();
   const [allMenu, setAllMenu] = useState([]);
   useEffect(() => {
-    const menus = getMenu("admin");
+    const menus = getMenu("seller");
     setAllMenu(menus);
   }, []);
 

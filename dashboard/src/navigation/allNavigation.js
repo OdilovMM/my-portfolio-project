@@ -5,6 +5,12 @@ import { LuUsers } from "react-icons/lu";
 import { MdPayments } from "react-icons/md";
 import { CiSquareQuestion } from "react-icons/ci";
 import { IoMdChatboxes } from "react-icons/io";
+import { IoIosAddCircle } from "react-icons/io";
+import { CiBoxList } from "react-icons/ci";
+import { MdDiscount } from "react-icons/md";
+import { FaShoppingCart } from "react-icons/fa";
+import { MdOutlineSupportAgent } from "react-icons/md";
+import { MdManageAccounts } from "react-icons/md";
 
 export const allNav = [
   {
@@ -63,5 +69,68 @@ export const allNav = [
     role: "admin",
     path: "/admin/dashboard/chat-seller",
   },
-
+  // seller navlinks
+  {
+    id: 9,
+    title: "Dashboard",
+    icon: <RxDashboard />,
+    role: "seller",
+    path: "/seller/dashboard",
+  },
+  {
+    id: 10,
+    title: "Add Product",
+    icon: <IoIosAddCircle />,
+    role: "seller",
+    path: "/seller/dashboard/add-product",
+  },
+  {
+    id: 11,
+    title: "All Products",
+    icon: <CiBoxList />,
+    role: "seller",
+    path: "/seller/dashboard/products",
+  },
+  {
+    id: 12,
+    title: "Discount Products",
+    icon: <MdDiscount />,
+    role: "seller",
+    path: "/seller/dashboard/discount-product",
+  },
+  {
+    id: 13,
+    title: "Orders",
+    icon: <FaShoppingCart />,
+    role: "seller",
+    path: "/seller/dashboard/orders",
+  },
+  {
+    id: 14,
+    title: "Payments",
+    icon: <MdPayments />,
+    role: "seller",
+    path: "/seller/dashboard/payments",
+  },
+  {
+    id: 15,
+    title: "Chat-Customer",
+    icon: <IoMdChatboxes />,
+    role: "seller",
+    path: "/seller/dashboard/chat-customer",
+  },
+  {
+    id: 16,
+    title: "Support",
+    icon: <MdOutlineSupportAgent />,
+    role: "seller",
+    path: "/seller/dashboard/chat-support",
+  },
+  {
+    id: 17,
+    title: "Profile",
+    icon: <MdManageAccounts />,
+    role: "seller",
+    path: "/seller/dashboard/profile",
+  },
 ];

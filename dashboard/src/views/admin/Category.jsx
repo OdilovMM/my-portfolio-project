@@ -5,6 +5,7 @@ import { FaPenNib } from "react-icons/fa";
 import { MdAutoDelete } from "react-icons/md";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
+import Search from "../components/Search";
 
 const Category = () => {
   const [parPage, setParPage] = useState(5);
@@ -29,21 +30,11 @@ const Category = () => {
       <div className="flex flex-wrap w-full">
         <div className="w-full lg:w-7/12">
           <div className="w-full p-4 bg-[#3D464D] rounded-md">
-            <div className="flex justify-between items-center">
-              <select
-                onChange={(e) => setParPage(parseInt(e.target.value))}
-                className="px-4 py-2 focus:border-[#4b535a] outline-none bg-[#94A3B8] border border-slate-700 rounded-md text-[#d0d2d6]"
-              >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-              </select>
-              <input
-                className="px-4 py-2 focus:border-[#4b535a] outline-none bg-[#E2DDDD] border border-slate-700 rounded-md text-[#333]"
-                type="text"
-                placeholder="search"
-              />
-            </div>
+            <Search
+              setParPage={setParPage}
+              setSearch={setSearch}
+              search={search}
+            />
 
             <div className="relative overflow-x-auto">
               <table className="w-full text-sm text-left text-[#d0d2d6]">
