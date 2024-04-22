@@ -9,9 +9,7 @@ const AdminLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loader, errorMessage } = useSelector(
-    (state) => state.auth
-  );
+  const { loader, errorMessage } = useSelector((state) => state.auth);
 
   const [visible, setVisible] = useState(false);
   const [credentials, setCredentials] = useState({
@@ -31,6 +29,11 @@ const AdminLogin = () => {
     e.preventDefault();
     console.log(credentials);
     dispatch(admin_Login(credentials));
+
+    
+    setTimeout(() => {
+      navigate("/");
+    }, 1500);
   };
 
   useEffect(() => {
@@ -42,8 +45,6 @@ const AdminLogin = () => {
     //   toast.error(errorMessage);
     //   dispatch(clearMessage());
     // }
-
-    // navigate("/");
   }, [errorMessage, dispatch, navigate]);
 
   return (

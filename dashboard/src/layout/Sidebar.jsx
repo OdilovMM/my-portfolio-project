@@ -2,14 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getMenu } from "../navigation";
 import { AiOutlineLogout } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const Sidebar = ({ showBar, setShowBar }) => {
+
+  const dispatch = useDispatch();
+  const { role } = useSelector((state) => state.auth);
+
+
   const { pathname } = useLocation();
   const [allMenu, setAllMenu] = useState([]);
   useEffect(() => {
-    const menus = getMenu("seller");
+    const menus = getMenu(role);
     setAllMenu(menus);
-  }, []);
+  }, [role]);
 
   return (
     <div>

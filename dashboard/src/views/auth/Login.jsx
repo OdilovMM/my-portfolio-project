@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaGoogle } from "react-icons/fa6";
 import { FaFacebook } from "react-icons/fa";
@@ -8,6 +8,7 @@ import { ScaleLoader } from "react-spinners";
 import { seller_login } from "../../store/Reducers/authReducer";
 
 const Login = () => {
+  const navigate = useNavigate();
   const { loader } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -29,6 +30,10 @@ const Login = () => {
     e.preventDefault();
     console.log(credentials);
     dispatch(seller_login(credentials));
+    
+    setTimeout(() => {
+      navigate("/");
+    }, 1500);
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaGoogle } from "react-icons/fa6";
 import { FaFacebook } from "react-icons/fa";
@@ -8,6 +8,7 @@ import { ScaleLoader } from "react-spinners";
 import { seller_register } from "../../store/Reducers/authReducer";
 
 const Register = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loader } = useSelector((state) => state.auth);
 
@@ -30,11 +31,8 @@ const Register = () => {
   const handleSubmitData = (e) => {
     e.preventDefault();
     dispatch(seller_register(credentials));
+    navigate("/");
   };
-
-  useEffect(()=> {
-
-  },[])
 
   return (
     <div className="min-w-screen min-h-screen bg-[#e5e1e1] flex items-center justify-center">
