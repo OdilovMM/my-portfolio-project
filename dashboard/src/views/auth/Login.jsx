@@ -3,8 +3,14 @@ import { Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaGoogle } from "react-icons/fa6";
 import { FaFacebook } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { ScaleLoader } from "react-spinners";
+import { seller_login } from "../../store/Reducers/authReducer";
 
 const Login = () => {
+  const { loader } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
   const [visible, setVisible] = useState(false);
   const [credentials, setCredentials] = useState({
     email: "",
@@ -21,7 +27,8 @@ const Login = () => {
 
   const handleSubmitData = (e) => {
     e.preventDefault();
-    console.log(credentials)
+    console.log(credentials);
+    dispatch(seller_login(credentials));
   };
 
   return (
@@ -88,9 +95,14 @@ const Login = () => {
           <div>
             <button
               type="submit"
+              disabled={loader ? true : false}
               className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700"
             >
-              Sign in
+              {loader ? (
+                <ScaleLoader color="#fff" height={22} width={5} radius={2} />
+              ) : (
+                "Sign in"
+              )}
             </button>
           </div>
           <div className="flex gap-4">

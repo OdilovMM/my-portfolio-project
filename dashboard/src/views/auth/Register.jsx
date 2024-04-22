@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaGoogle } from "react-icons/fa6";
 import { FaFacebook } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { ScaleLoader } from "react-spinners";
+import { seller_register } from "../../store/Reducers/authReducer";
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const { loader } = useSelector((state) => state.auth);
+
   const [visible, setVisible] = useState(false);
+
   const [credentials, setCredentials] = useState({
     name: "",
     email: "",
@@ -22,7 +29,12 @@ const Register = () => {
 
   const handleSubmitData = (e) => {
     e.preventDefault();
+    dispatch(seller_register(credentials));
   };
+
+  useEffect(()=> {
+
+  },[])
 
   return (
     <div className="min-w-screen min-h-screen bg-[#e5e1e1] flex items-center justify-center">
@@ -118,9 +130,14 @@ const Register = () => {
           <div>
             <button
               type="submit"
+              disabled={loader ? true : false}
               className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700"
             >
-              Sign up
+              {loader ? (
+                <ScaleLoader color="#fff" height={22} width={5} radius={2} />
+              ) : (
+                "Sign un"
+              )}
             </button>
           </div>
           <div className="flex gap-4">

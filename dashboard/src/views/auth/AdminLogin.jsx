@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { admin_Login, clearMessage } from "../../store/Reducers/authReducer";
-import { BarLoader, BeatLoader, FadeLoader, ScaleLoader } from "react-spinners";
+import { ScaleLoader } from "react-spinners";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 const AdminLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loader, errorMessage, successMessage } = useSelector(
+  const { loader, errorMessage } = useSelector(
     (state) => state.auth
   );
 

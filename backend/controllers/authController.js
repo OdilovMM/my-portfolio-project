@@ -1,11 +1,12 @@
-const adminModel = require("../models/adminModel");
 const Admin = require("../models/adminModel");
+const Seller = require("../models/sellerModel");
+const sellerCustomer = require("../models/chat/sellerCustomerModel");
 const { createToken } = require("../utils/createToken");
 const { responseReturn } = require("../utils/response");
 const bcrypt = require("bcrypt");
 
 class authControllers {
-  admin_login = async (req, res) => {
+  adminLogin = async (req, res) => {
     const { password, email } = req.body;
 
     try {
@@ -36,11 +37,75 @@ class authControllers {
     }
   };
 
+  sellerRegister = async (req, res) => {
+    const { email, name, password } = req.body;
+    try {
+      const existSeller = await Seller.findOne({ email });
+      if (existSeller) {
+        responseReturn(res, 404, { error: "Email already in use" });
+      } else {
+        const seller = await Seller.create({
+          name,
+          email,
+          password: await bcrypt.hash(password, 12),
+          method: "manual",
+          shopInfo: {},
+        });
+        await sellerCustomer.create({
+          myId: seller.id,
+        });
+
+        const token = await createToken({
+          id: seller.id,
+          role: seller.role,
+        });
+        res.cookie("accessToken", token, {
+          expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        });
+
+        responseReturn(res, 201, { token, message: "Successfully registered" });
+      }
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { error: "Internal Server error" });
+    }
+  };
+
+  sellerLogin = async (req, res) => {
+    const { password, email } = req.body;
+    try {
+      const seller = await Seller.findOne({ email }).select("+password");
+      console.log(seller);
+      if (seller) {
+        const match = await bcrypt.compare(password, seller.password);
+
+        // now generating a token
+        if (match) {
+          //
+          const token = await createToken({
+            id: seller.id,
+            role: seller.role,
+          });
+          res.cookie("accessToken", token, {
+            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          });
+          responseReturn(res, 200, { token, message: "Login success" });
+        } else {
+          responseReturn(res, 400, { error: "Wrong password" });
+        }
+      } else {
+        responseReturn(res, 400, { error: "Email not found" });
+      }
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+
   getUser = async (req, res) => {
     const { id, role } = req;
     try {
       if (role === "admin") {
-        const user = await adminModel.findById(id);
+        const user = await Admin.findById(id);
         responseReturn(res, 200, { userInfo: user });
       } else {
         console.log("Seller");
