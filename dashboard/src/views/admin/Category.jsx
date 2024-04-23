@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
 import { FaPenNib } from "react-icons/fa";
@@ -6,12 +6,25 @@ import { MdAutoDelete } from "react-icons/md";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import Search from "../components/Search";
+import { ScaleLoader } from "react-spinners";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addCategory,
+  getAllCategories,
+} from "../../store/Reducers/categoryReducer";
 
 const Category = () => {
-  const [parPage, setParPage] = useState(5);
+  const { loader, categories, totalCategory } = useSelector(
+    (state) => state.category
+  );
+  const dispatch = useDispatch();
 
+  // *** search components states
+  const [parPage, setParPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
+  // ***
+
   const [pages, setPages] = useState(5);
   const [show, setShow] = useState(false);
 
@@ -34,6 +47,30 @@ const Category = () => {
     } else {
     }
   };
+
+  const handleAddCategory = (e) => {
+    e.preventDefault();
+    console.log(categoryData);
+    dispatch(addCategory(categoryData));
+
+    setTimeout(() => {
+      setCategoryData({
+        name: "",
+        image: null,
+      });
+      setShowImage("");
+    }, 1000);
+  };
+
+  useEffect(() => {
+    const obj = {
+      parPage: parseInt(parPage),
+      page: parseInt(currentPage),
+      search,
+    };
+
+    dispatch(getAllCategories(obj));
+  }, [search, currentPage, parPage, dispatch]);
 
   return (
     <div className="px-2 lg:px-7 pt-5">
@@ -76,13 +113,13 @@ const Category = () => {
                 </thead>
 
                 <tbody>
-                  {[1, 2, 3, 4, 5].map((d, i) => (
+                  {categories.map((d, i) => (
                     <tr key={i}>
                       <td
                         scope="row"
                         className="py-1 px-4 font-medium whitespace-nowrap"
                       >
-                        {d}
+                        {i + 1}
                       </td>
                       <td
                         scope="row"
@@ -90,7 +127,7 @@ const Category = () => {
                       >
                         <img
                           className="w-[45px] h-[45px]"
-                          src={`http://localhost:3000/images/category/${d}.jpg`}
+                          src={d.image}
                           alt=""
                         />
                       </td>
@@ -98,7 +135,7 @@ const Category = () => {
                         scope="row"
                         className="py-3 px-4 font-medium whitespace-nowrap"
                       >
-                        T-Shirt
+                        {d.name}
                       </td>
 
                       <td
@@ -151,7 +188,7 @@ const Category = () => {
                 </div>
               </div>
 
-              <form>
+              <form onSubmit={handleAddCategory}>
                 <div className="flex flex-col w-full gap-1 mb-3">
                   <label htmlFor="name"> Category Name</label>
                   <input
@@ -193,9 +230,22 @@ const Category = () => {
                     name="image"
                     id="image"
                   />
-                  <div>
-                    <button className="bg-[#94A3B8] w-full py-2 mt-1 rounded-[5px]">
-                      Add Category
+                  <div className="mt-5">
+                    <button
+                      type="submit"
+                      disabled={loader ? true : false}
+                      className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-500 hover:bg-gray-600"
+                    >
+                      {loader ? (
+                        <ScaleLoader
+                          color="#fff"
+                          height={22}
+                          width={5}
+                          radius={2}
+                        />
+                      ) : (
+                        "Add Category"
+                      )}
                     </button>
                   </div>
                 </div>

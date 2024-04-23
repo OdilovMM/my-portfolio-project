@@ -8,7 +8,7 @@ export const admin_Login = createAsyncThunk(
   async (info, { rejectWithValue, fulfillWithValue }) => {
     console.log(info);
     try {
-      const { data } = await api.post("/admin-login", info, {
+      const { data } = await api.post("/auth/admin-login", info, {
         withCredentials: true,
       });
       localStorage.setItem("accessToken", data.token);
@@ -25,7 +25,7 @@ export const seller_login = createAsyncThunk(
   async (info, { rejectWithValue, fulfillWithValue }) => {
     console.log(info);
     try {
-      const { data } = await api.post("/seller-login", info, {
+      const { data } = await api.post("/auth/seller-login", info, {
         withCredentials: true,
       });
       localStorage.setItem("accessToken", data.token);
@@ -41,7 +41,7 @@ export const getUserDetail = createAsyncThunk(
   "auth/get_user_detail",
   async (_, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const { data } = await api.get("/get-user-detail", {
+      const { data } = await api.get("/auth/get-user-detail", {
         withCredentials: true,
       });
       return fulfillWithValue(data);
@@ -57,7 +57,7 @@ export const seller_register = createAsyncThunk(
   async (info, { rejectWithValue, fulfillWithValue }) => {
     try {
       console.log(info);
-      const { data } = await api.post("/seller-register", info, {
+      const { data } = await api.post("/auth/seller-register", info, {
         withCredentials: true,
       });
       localStorage.setItem("accessToken", data.token);
