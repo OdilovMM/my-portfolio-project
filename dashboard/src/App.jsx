@@ -19,7 +19,6 @@ function App() {
   useEffect(() => {
     if (token) {
       dispatch(getUserDetail());
-    } else {
     }
   }, [token, dispatch]);
 

@@ -118,7 +118,6 @@ export const authReducer = createSlice({
         state.errorMessage = payload.error;
         toast.error(payload.error);
       })
-
       .addCase(seller_register.pending, (state, { payload }) => {
         state.loader = true;
       })

@@ -15,6 +15,26 @@ const Category = () => {
   const [pages, setPages] = useState(5);
   const [show, setShow] = useState(false);
 
+  const [showImage, setShowImage] = useState("");
+
+  const [categoryData, setCategoryData] = useState({
+    name: "",
+    image: "",
+  });
+
+  const handleImageInput = (e) => {
+    let files = e.target.files;
+
+    if (files.length > 0) {
+      setShowImage(URL.createObjectURL(files[0]));
+      setCategoryData({
+        ...categoryData,
+        image: files[0],
+      });
+    } else {
+    }
+  };
+
   return (
     <div className="px-2 lg:px-7 pt-5">
       <div className="flex lg:hidden justify-between items-center mb-5 p-5 bg-[#3D464D] rounded-[5px]">
@@ -140,6 +160,10 @@ const Category = () => {
                     id="name"
                     name="category_name"
                     placeholder="Category Name"
+                    value={categoryData.name}
+                    onChange={(e) =>
+                      setCategoryData({ ...categoryData, name: e.target.value })
+                    }
                   />
                 </div>
                 <div>
@@ -147,13 +171,24 @@ const Category = () => {
                     htmlFor="image"
                     className="flex justify-center items-center flex-col h-[238px] cursor-pointer  border border-dashed w-full "
                   >
-                    <span>
-                      <MdOutlineAddPhotoAlternate size={45} />
-                    </span>
-                    <span>Select Image</span>
+                    {showImage ? (
+                      <img
+                        src={showImage}
+                        alt="category"
+                        className="h-[235px] w-full object-cover"
+                      />
+                    ) : (
+                      <>
+                        <span>
+                          <MdOutlineAddPhotoAlternate size={45} />
+                        </span>
+                        <span>Select Image</span>
+                      </>
+                    )}
                   </label>
                   <input
                     className="hidden"
+                    onChange={handleImageInput}
                     type="file"
                     name="image"
                     id="image"
