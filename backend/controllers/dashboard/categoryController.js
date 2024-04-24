@@ -50,9 +50,13 @@ class categoryController {
   getCategory = async (req, res) => {
     console.log(req.query);
     const { page, search, parPage } = req.query;
-    const skipPage = parseInt(parPage) * (parseInt(page) - 1);
 
     try {
+      let skipPage = "";
+      if (parPage && page) {
+        skipPage = parseInt(parPage) * (parseInt(page) - 1);
+      }
+
       if (search && page && parPage) {
         const categories = await Category.find({
           $text: { $search: search },
@@ -80,7 +84,7 @@ class categoryController {
         responseReturn(res, 200, { categories, totalCategories });
       }
     } catch (error) {
-      console.log(error.message);
+      responseReturn(res, 500, { error: error.message });
     }
   };
 }

@@ -1,51 +1,27 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Form, Link } from "react-router-dom";
 import { LuImagePlus } from "react-icons/lu";
 import { TbTrashFilled } from "react-icons/tb";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCategories } from "../../store/Reducers/categoryReducer";
+import { addProduct } from "../../store/Reducers/productReducer";
+import { ScaleLoader } from "react-spinners";
+import toast from "react-hot-toast";
 
 const AddProduct = () => {
-  const categories = [
-    {
-      id: 1,
-      name: "Clothes",
-    },
-    {
-      id: 2,
-      name: "Shoes",
-    },
-    {
-      id: 3,
-      name: "TShirts",
-    },
-    {
-      id: 4,
-      name: "Laptops",
-    },
-    {
-      id: 5,
-      name: "Outdoors",
-    },
-    {
-      id: 6,
-      name: "Gardening",
-    },
-    {
-      id: 7,
-      name: "Mobile",
-    },
-    {
-      id: 8,
-      name: "Car",
-    },
-    {
-      id: 9,
-      name: "Books",
-    },
-    {
-      id: 10,
-      name: "Bikes",
-    },
-  ];
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.category);
+  const { products, loader } = useSelector((state) => state.product);
+
+  useEffect(() => {
+    dispatch(
+      getAllCategories({
+        search: "",
+        page: "",
+        parPage: "",
+      })
+    );
+  }, [dispatch]);
 
   const [product, setProduct] = useState({
     name: "",
@@ -120,17 +96,65 @@ const AddProduct = () => {
     setImageShow(filterImageUrl);
   };
 
+  const handleAddProduct = (e) => {
+    e.preventDefault();
+
+    for (const key in product) {
+      if (product.hasOwnProperty(key)) {
+        if (!product[key]) {
+          toast.error("Please fill in all fields.");
+          return;
+        }
+      }
+    }
+
+    const formData = new FormData();
+    formData.append("name", product.name);
+    formData.append("description", product.description);
+    formData.append("brand", product.brand);
+    formData.append("price", product.price);
+    formData.append("discount", product.discount);
+    formData.append("stock", product.stock);
+    formData.append("shopName", "MascoMarket");
+    formData.append("category", category);
+
+    for (let i = 0; i < imgFiles.length; i++) {
+      formData.append("images", imgFiles[i]);
+    }
+
+    dispatch(addProduct(formData));
+
+    setProduct({
+      name: "",
+      description: "",
+      discount: "",
+      price: "",
+      brand: "",
+      stock: "",
+    });
+    setCategory("");
+    setImgFiles([]);
+    setImageShow([]);
+  };
+
+  useEffect(() => {
+    setAllCategory(categories);
+  }, [categories]);
+
   return (
     <div className="px-2 lg:px-7 pt-4">
       <div className="w-full p-4 bg-[#3D464D] rounded-[5px] ">
         <div className="flex justify-between items-center pb-4">
           <h2 className="text-white font-semibold">Add Product</h2>
-          <Link to='/seller/dashboard/products' className="bg-[#a6afb6] px-2 py-1 rounded-[5px]">
+          <Link
+            to="/seller/dashboard/products"
+            className="bg-[#a6afb6] px-2 py-1 rounded-[5px]"
+          >
             All Products
           </Link>
         </div>
         <div>
-          <form>
+          <form onSubmit={handleAddProduct}>
             <div className="flex flex-col mb-2 md:flex-row gap-3 w-full text-white">
               <div className="flex flex-col w-full gap-1">
                 <label htmlFor="name">Product name</label>
@@ -174,11 +198,11 @@ const AddProduct = () => {
                 />
 
                 <div
-                  className={`absolute top-[39%] rounded-md bg-[#3D464D] gap-1 w-full overflow-hidden transition-all ${
+                  className={`absolute top-[39%] rounded-md bg-[#7e8b95] gap-1 w-full overflow-hidden transition-all ${
                     show ? "h-[250px]" : "h-0 hidden"
                   }`}
                 >
-                  <div className="w-full  absolute mt-[1px]">
+                  <div className="w-full  absolute ">
                     <input
                       value={searchValue}
                       onChange={handleCategorySearch}
@@ -186,7 +210,7 @@ const AddProduct = () => {
                       //   className="px-3 w-full focus:border-gray-400 outline-none  rounded-[3px] text-black overflow-hidden"
                       className="px-4 py-2 w-full  outline-none bg-[#dfe2dd] border border-slate-700 rounded-md text-[#333]"
                       name=""
-                      placeholder="Search"
+                      placeholder="--select category--"
                       id=""
                     />
                   </div>
@@ -316,8 +340,22 @@ const AddProduct = () => {
             </div>
 
             <div className="flex">
-              <button className="bg-[#94A3B8] w-[250px] py-2 mt-1 rounded-[5px]">
-                Add Product
+              <button
+                disabled={loader}
+                type="submit"
+                // disabled={loader ? true : false}
+                className="group relative w-[250px] h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-500 hover:bg-gray-600"
+              >
+                {loader ? (
+                  <ScaleLoader
+                    color="#fff"
+                    height={22}
+                    width={5}
+                    radius={2}
+                  />
+                ) : (
+                  "Add Product"
+                )}
               </button>
             </div>
           </form>

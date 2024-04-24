@@ -8,6 +8,7 @@ import { ScaleLoader } from "react-spinners";
 import { seller_login } from "../../store/Reducers/authReducer";
 
 const Login = () => {
+  
   const navigate = useNavigate();
   const { loader } = useSelector((state) => state.auth);
   const dispatch = useDispatch();

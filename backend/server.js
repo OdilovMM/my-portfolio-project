@@ -6,9 +6,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRoutes");
 const categoryRouter = require("./routes/dashboard/categoryRoutes");
-
-
-
+const productRouter = require("./routes/dashboard/productRoutes");
 
 app.use(
   cors({
@@ -27,6 +25,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/categories", categoryRouter);
+app.use("/api/v1/products", productRouter);
 
 const port = process.env.PORT || 8000;
 dbConnect();
