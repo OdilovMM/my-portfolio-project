@@ -19,12 +19,12 @@ export const addProduct = createAsyncThunk(
   }
 );
 
-export const getProduct = createAsyncThunk(
+export const getProducts = createAsyncThunk(
   "product/getProduct",
   async ({ parPage, page, search }, { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.get(
-        `/products/get-product?page=${page}&&search=${search}&&parPage=${parPage}`,
+        `/products/get-products?page=${page}&&search=${search}&&parPage=${parPage}`,
         {
           withCredentials: true,
         }
@@ -67,7 +67,7 @@ export const productReducer = createSlice({
         toast.error(payload.error);
         state.products = [...state.products, payload.category];
       })
-      .addCase(getProduct.fulfilled, (state, { payload }) => {
+      .addCase(getProducts.fulfilled, (state, { payload }) => {
         state.totalProducts = payload.totalProducts;
         state.products = payload.products;
       });

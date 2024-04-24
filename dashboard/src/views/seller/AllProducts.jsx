@@ -1,22 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
 import Pagination from "../admin/Pagination";
 import { FaPenNib } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { MdAutoDelete } from "react-icons/md";
 import { LuEye } from "react-icons/lu";
+import { useSelector, useDispatch } from "react-redux";
+import { ScaleLoader } from "react-spinners";
+import { getProducts } from "../../store/Reducers/productReducer";
 
 const AllProducts = () => {
+  const dispatch = useDispatch();
+  const { loader, products, totalProducts } = useSelector(
+    (state) => state.product
+  );
+
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [parPage, setParPage] = useState(5);
   const [pages, setPages] = useState(5);
 
+  useEffect(() => {
+    const obj = {
+      parPage: parseInt(parPage),
+      page: parseInt(currentPage),
+      search,
+    };
+
+    dispatch(getProducts(obj));
+  }, [search, currentPage, parPage, dispatch]);
+
   return (
     <div className="px-2 lg:px-7 pt-5">
       <h1 className="text-black mb-2">All Products</h1>
       <div className="w-full p-4 bg-[#3D464D] rounded-md">
-        <Search setParPage={setParPage} setSearch={setSearch} search={search} />
+        {totalProducts <= parPage ? (
+          " "
+        ) : (
+          <Search
+            setParPage={setParPage}
+            setSearch={setSearch}
+            search={search}
+          />
+        )}
+
         <div className="relative overflow-x-auto mt-4">
           <table className="w-full text-sm text-left text-[#d0d2d6]">
             <thead className="text-sm text-[#d0d2d6] uppercase border-b border-slate-700">
@@ -52,13 +79,13 @@ const AllProducts = () => {
             </thead>
 
             <tbody>
-              {[1, 2, 3, 4, 5].map((d, i) => (
+              {products.map((d, i) => (
                 <tr key={i}>
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
-                    {d}
+                    {i + 1}
                   </td>
                   <td
                     scope="row"
@@ -66,7 +93,7 @@ const AllProducts = () => {
                   >
                     <img
                       className="w-[45px] h-[45px]"
-                      src={`http://localhost:3000/images/category/${d}.jpg`}
+                      src={d.images[0]}
                       alt=""
                     />
                   </td>
@@ -74,37 +101,41 @@ const AllProducts = () => {
                     scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
-                    T-Shirt
+                    {d?.name?.length > 7 ? d?.name?.slice(0, 6) : d.name}
                   </td>
                   <td
                     scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
-                    Clothes
+                    {d.category}
                   </td>
                   <td
                     scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
-                    Adidas
+                    {d.brand}
                   </td>
                   <td
                     scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
-                    210$
+                    $ {d.price}
                   </td>
                   <td
                     scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
-                    12 %
+                    {d.discount === 0 ? (
+                      <span>No Discount</span>
+                    ) : (
+                      <span>% {d.discount}</span>
+                    )}
                   </td>
                   <td
                     scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
-                    15
+                    {d.stock}
                   </td>
 
                   <td
@@ -112,7 +143,10 @@ const AllProducts = () => {
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     <div className="flex flex-start items-center gap-4">
-                      <Link to={`/seller/dashboard/edit-product/554`} className="px-[6px] cursor-pointer">
+                      <Link
+                        to={`/seller/dashboard/edit-product/554`}
+                        className="px-[6px] cursor-pointer"
+                      >
                         <FaPenNib size={18} />
                       </Link>
                       <Link className="px-[6px] cursor-pointer">
@@ -130,13 +164,17 @@ const AllProducts = () => {
         </div>
 
         <div className="w-full justify-end flex mt-1 bottom-1 right-2">
-          <Pagination
-            pageNumber={currentPage}
-            setPageNumber={setCurrentPage}
-            totalItem={50}
-            pages={pages}
-            showItem={2}
-          />
+          {totalProducts <= parPage ? (
+            ""
+          ) : (
+            <Pagination
+              pageNumber={currentPage}
+              setPageNumber={setCurrentPage}
+              totalItem={50}
+              pages={pages}
+              showItem={2}
+            />
+          )}
         </div>
       </div>
     </div>

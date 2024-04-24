@@ -87,11 +87,15 @@ const Category = () => {
       <div className="flex flex-wrap w-full">
         <div className="w-full lg:w-7/12">
           <div className="w-full p-4 bg-[#3D464D] rounded-md">
-            <Search
-              setParPage={setParPage}
-              setSearch={setSearch}
-              search={search}
-            />
+            {totalCategory <= parPage ? (
+              " "
+            ) : (
+              <Search
+                setParPage={setParPage}
+                setSearch={setSearch}
+                search={search}
+              />
+            )}
 
             <div className="relative overflow-x-auto">
               <table className="w-full text-sm text-left text-[#d0d2d6]">
@@ -158,22 +162,24 @@ const Category = () => {
             </div>
 
             <div className="w-full justify-end flex mt-1 bottom-1 right-2">
-              <Pagination
-                pageNumber={currentPage}
-                setPageNumber={setCurrentPage}
-                totalItem={50}
-                pages={pages}
-                showItem={2}
-              />
+              {totalCategory <= parPage ? (
+                " "
+              ) : (
+                <Pagination
+                  pageNumber={currentPage}
+                  setPageNumber={setCurrentPage}
+                  totalItem={50}
+                  pages={pages}
+                  showItem={2}
+                />
+              )}
             </div>
-
-            
           </div>
         </div>
 
         <div
           className={`w-[320px]  lg:w-5/12 translate-x-100 lg:relative lg:right-0 fixed ${
-            show ? "right-0 top-[115px]" : "-right-[340px] z-0" 
+            show ? "right-0 top-[115px]" : "-right-[340px] z-0"
           } z-0  transition-all duration-500 `}
         >
           <div className="w-full pl-5">
