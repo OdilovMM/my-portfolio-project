@@ -4,6 +4,8 @@ const sellerCustomer = require("../models/chat/sellerCustomerModel");
 const { createToken } = require("../utils/createToken");
 const { responseReturn } = require("../utils/response");
 const bcrypt = require("bcrypt");
+const cloudinary = require("cloudinary").v2;
+const formidable = require("formidable");
 
 class authControllers {
   adminLogin = async (req, res) => {
@@ -113,6 +115,67 @@ class authControllers {
       }
     } catch (error) {
       responseReturn(res, 500, { error: "Internal server error" });
+    }
+  };
+
+  uploadProfileImage = async (req, res) => {
+    const { id } = req;
+    const form = formidable({ multiples: true });
+
+    form.parse(req, async (err, _, files) => {
+      console.log(err);
+      cloudinary.config({
+        cloud_name: process.env.CLOUD_NAME,
+        api_key: process.env.CLOUD_API_KEY,
+        api_secret: process.env.CLOUD_API_SECRET,
+        secure: true,
+      });
+
+      const { image } = files;
+
+      try {
+        const result = await cloudinary.uploader.upload(image.filepath, {
+          folder: "profile",
+        });
+        console.log(result);
+
+        if (result) {
+          await Seller.findByIdAndUpdate(id, { image: result.url });
+          const userInfo = await Seller.findById(id);
+          responseReturn(res, 200, {
+            userInfo,
+            message: "Profile Image uploaded",
+          });
+        } else {
+          responseReturn(res, 400, { error: "Image upload failed" });
+        }
+      } catch (error) {
+        console.log(error);
+        responseReturn(res, 500, { error: error.message });
+      }
+    });
+  };
+
+  addProfileAddress = async (req, res) => {
+    const { division, district, shopName, subDistrict } = req.body;
+    const { id } = req;
+
+    try {
+      await Seller.findByIdAndUpdate(id, {
+        shopInfo: {
+          shopName,
+          division,
+          district,
+          subDistrict,
+        },
+      });
+      const userInfo = await Seller.findById(id);
+      responseReturn(res, 201, {
+        message: "User information updated",
+        userInfo,
+      });
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
     }
   };
 }

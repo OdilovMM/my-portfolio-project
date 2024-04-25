@@ -86,12 +86,48 @@ const returnRole = (token) => {
   }
 };
 
+export const profileImageUpload = createAsyncThunk(
+  "auth/uploadProfileImage",
+  async (image, { rejectWithValue, fulfillWithValue }) => {
+    console.log(image);
+    try {
+      const { data } = await api.patch("/auth/upload-profile-image", image, {
+        withCredentials: true,
+      });
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      console.log(error.response.data);
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const addProfileInfo = createAsyncThunk(
+  "auth/addProfileInfo",
+  async (detail, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      console.log(detail);
+      const { data } = await api.post("/auth/add-profile-address", detail, {
+        withCredentials: true,
+      });
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const authReducer = createSlice({
   name: "auth",
   initialState: {
     successMessage: "",
     errorMessage: "",
     loader: false,
+    imgLoader: false,
     userInfo: "",
     role: returnRole(localStorage.getItem("accessToken")),
     token: localStorage.getItem("accessToken"),
@@ -153,6 +189,34 @@ export const authReducer = createSlice({
       .addCase(getUserDetail.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.userInfo = payload.userInfo;
+      })
+      .addCase(profileImageUpload.pending, (state, { payload }) => {
+        state.imgLoader = true;
+      })
+      .addCase(profileImageUpload.fulfilled, (state, { payload }) => {
+        state.imgLoader = false;
+        state.userInfo = payload.userInfo;
+        toast.success(payload.message);
+        console.log(payload.message);
+      })
+      .addCase(profileImageUpload.rejected, (state, { payload }) => {
+        state.imgLoader = false;
+        state.errorMessage = payload.error;
+        toast.error(payload.error);
+      })
+      .addCase(addProfileInfo.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(addProfileInfo.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.userInfo = payload.userInfo;
+        toast.success(payload.message);
+        console.log(payload.message);
+      })
+      .addCase(addProfileInfo.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error;
+        toast.error(payload.error);
       });
   },
 });
