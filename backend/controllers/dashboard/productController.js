@@ -68,7 +68,7 @@ class productController {
     const { page, search, parPage } = req.query;
     const { id } = req;
 
-   const skipPage = parseInt(parPage) * (parseInt(page) - 1);
+    const skipPage = parseInt(parPage) * (parseInt(page) - 1);
 
     try {
       if (search) {
@@ -99,6 +99,98 @@ class productController {
     } catch (error) {
       responseReturn(res, 500, { error: error.message });
     }
+  };
+
+  // get single product
+  getProduct = async (req, res) => {
+    const { productId } = req.params;
+    console.log("getA_Product:", productId);
+
+    try {
+      const product = await Product.findById(productId);
+      console.log(product);
+      responseReturn(res, 200, { product });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  updateProduct = async (req, res) => {
+    console.log(req.body);
+    let { name, description, discount, price, brand, stock, productId } =
+      req.body;
+    name = name.trim();
+    const slug = name.split(" ").join("-");
+
+    try {
+      await Product.findByIdAndUpdate(
+        productId,
+        {
+          name,
+          description,
+          discount,
+          price,
+          brand,
+          stock,
+          productId,
+          slug,
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+
+      const product = await Product.findById(productId);
+      responseReturn(res, 200, { product, message: "Product Updated" });
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+
+  updateProductImage = async (req, res) => {
+    const form = formidable({ multiples: true });
+
+    form.parse(req, async (err, field, files) => {
+      console.log(field, files);
+
+      const { oldImage, productId } = field;
+      const { newImage } = files;
+
+      if (err) {
+        responseReturn(res, 400, { error: error.message });
+      } else {
+        try {
+          cloudinary.config({
+            cloud_name: process.env.CLOUD_NAME,
+            api_key: process.env.CLOUD_API_KEY,
+            api_secret: process.env.CLOUD_API_SECRET,
+            secure: true,
+          });
+
+          const result = await cloudinary.uploader.upload(newImage.filepath, {
+            folder: "products",
+          });
+
+          if (result) {
+            let { images } = await Product.findById(productId);
+            const index = images.findIndex((img) => img === oldImage);
+            images[index] = result.url;
+            await Product.findByIdAndUpdate(productId, { images });
+
+            const product = await Product.findById(productId);
+            responseReturn(res, 200, {
+              product,
+              message: "Product Image updated",
+            });
+          } else {
+            responseReturn(res, 404, { error: "Image update failed" });
+          }
+        } catch (error) {
+          responseReturn(res, 500, { error: error.message });
+        }
+      }
+    });
   };
 }
 

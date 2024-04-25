@@ -82,13 +82,11 @@ const AllProducts = () => {
               {products.map((d, i) => (
                 <tr key={i}>
                   <td
-                    scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
                     {i + 1}
                   </td>
                   <td
-                    scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
                     <img
@@ -98,31 +96,26 @@ const AllProducts = () => {
                     />
                   </td>
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     {d?.name?.length > 7 ? d?.name?.slice(0, 6) : d.name}
                   </td>
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     {d.category}
                   </td>
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     {d.brand}
                   </td>
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     $ {d.price}
                   </td>
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     {d.discount === 0 ? (
@@ -132,26 +125,27 @@ const AllProducts = () => {
                     )}
                   </td>
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     {d.stock}
                   </td>
 
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     <div className="flex flex-start items-center gap-4">
+                      {/* edit product */}
                       <Link
-                        to={`/seller/dashboard/edit-product/554`}
+                        to={`/seller/dashboard/edit-product/${d._id}`}
                         className="px-[6px] cursor-pointer"
                       >
                         <FaPenNib size={18} />
                       </Link>
+                      {/* view product */}
                       <Link className="px-[6px] cursor-pointer">
                         <LuEye size={18} />
                       </Link>
+                      {/* delete product  */}
                       <button>
                         <MdAutoDelete size={18} />
                       </button>

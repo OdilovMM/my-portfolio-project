@@ -1,50 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { LuImagePlus } from "react-icons/lu";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCategories } from "../../store/Reducers/categoryReducer";
+import {
+  getA_Product,
+  updateProduct,
+  productImageUpdate,
+} from "../../store/Reducers/productReducer";
+import { ScaleLoader, FadeLoader } from "react-spinners";
 
 const EditProduct = () => {
-  const categories = [
-    {
-      id: 1,
-      name: "Clothes",
-    },
-    {
-      id: 2,
-      name: "Shoes",
-    },
-    {
-      id: 3,
-      name: "TShirts",
-    },
-    {
-      id: 4,
-      name: "Laptops",
-    },
-    {
-      id: 5,
-      name: "Outdoors",
-    },
-    {
-      id: 6,
-      name: "Gardening",
-    },
-    {
-      id: 7,
-      name: "Mobile",
-    },
-    {
-      id: 8,
-      name: "Car",
-    },
-    {
-      id: 9,
-      name: "Books",
-    },
-    {
-      id: 10,
-      name: "Bikes",
-    },
-  ];
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.category);
+  const {
+    loader,
+    product: singleProduct,
+    imageLoader,
+  } = useSelector((state) => state.product);
+  const { productId } = useParams();
+
+  useEffect(() => {
+    dispatch(
+      getAllCategories({
+        search: "",
+        page: "",
+        parPage: "",
+      })
+    );
+  }, [dispatch]);
+
+  // get specific product based on the id
+
+  useEffect(() => {
+    dispatch(getA_Product(productId));
+  }, [dispatch, productId]);
 
   const [product, setProduct] = useState({
     name: "",
@@ -66,6 +56,7 @@ const EditProduct = () => {
   const [category, setCategory] = useState("");
   const [allCategory, setAllCategory] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [showImage, setImageShow] = useState([]);
 
   const handleCategorySearch = (e) => {
     const value = e.target.value;
@@ -81,32 +72,50 @@ const EditProduct = () => {
     }
   };
 
-  const [imgFiles, setImgFiles] = useState([]);
-  const [showImage, setImageShow] = useState([]);
-
   const handleChangeImage = (img, files) => {
     if (files.length > 0) {
-    } else {
+      dispatch(
+        productImageUpdate({
+          oldImage: img,
+          newImage: files[0],
+          productId,
+        })
+      );
     }
   };
 
   useEffect(() => {
     setProduct({
-      name: "Kids Jeans",
-      description: "very nice and only made with cotton",
-      discount: 10,
-      price: 185,
-      brand: "Adidas",
-      stock: 12,
+      name: singleProduct.name,
+      description: singleProduct.description,
+      discount: singleProduct.discount,
+      price: singleProduct.price,
+      brand: singleProduct.brand,
+      stock: singleProduct.stock,
     });
+    setCategory(singleProduct.category);
+    setImageShow(singleProduct.images);
+  }, [singleProduct]);
 
-    setCategory("Clothes");
-    setImageShow([
-      "http://localhost:3000/images/category/1.jpg",
-      "http://localhost:3000/images/category/1.jpg",
-      "http://localhost:3000/images/category/1.jpg",
-    ]);
-  }, []);
+  useEffect(() => {
+    if (categories.length > 0) {
+      setAllCategory(categories);
+    }
+  }, [categories]);
+
+  const handleUpdateProduct = (e) => {
+    e.preventDefault();
+    const obj = {
+      name: product.name,
+      description: product.description,
+      discount: product.discount,
+      price: product.price,
+      brand: product.brand,
+      stock: product.stock,
+      productId: productId,
+    };
+    dispatch(updateProduct(obj));
+  };
 
   return (
     <div className="px-2 lg:px-7 pt-4">
@@ -121,7 +130,7 @@ const EditProduct = () => {
           </Link>
         </div>
         <div>
-          <form>
+          <form onSubmit={handleUpdateProduct}>
             <div className="flex flex-col mb-2 md:flex-row gap-3 w-full text-white">
               <div className="flex flex-col w-full gap-1">
                 <label htmlFor="name">Product name</label>
@@ -183,21 +192,22 @@ const EditProduct = () => {
                   </div>
                   <div className="pt-14"></div>
                   <div className="flex justify-start items-start flex-col h-[200px] overflow-y-scroll ">
-                    {allCategory.map((categ, index) => (
-                      <span
-                        className={`px-4 py-1 font-semibold mb-1 hover:bg-gray-600 w-full cursor-pointer ${
-                          category === categ.name && "bg-gray-600"
-                        } `}
-                        onClick={() => {
-                          setShow(false);
-                          setCategory(categ.name);
-                          setSearchValue("");
-                          setAllCategory(categories);
-                        }}
-                      >
-                        {categ.name}
-                      </span>
-                    ))}
+                    {allCategory.length > 0 &&
+                      allCategory.map((categ, index) => (
+                        <span
+                          className={`px-4 py-1 font-semibold mb-1 hover:bg-gray-600 w-full cursor-pointer ${
+                            category === categ.name && "bg-gray-600"
+                          } `}
+                          onClick={() => {
+                            setShow(false);
+                            setCategory(categ.name);
+                            setSearchValue("");
+                            setAllCategory(categories);
+                          }}
+                        >
+                          {categ.name}
+                        </span>
+                      ))}
                   </div>
                 </div>
               </div>
@@ -262,24 +272,31 @@ const EditProduct = () => {
             </div>
 
             <div className=" grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 gap-3 w-full text-white mb-4">
-              {showImage.map((img, index) => (
-                <div className="h-[180px] relative">
-                  <label htmlFor={index}>
-                    <img
-                      src={img}
-                      //   src={img.url}
-                      alt=""
-                      className="w-full h-full rounded-sm object-cover"
+              {showImage &&
+                showImage.length > 0 &&
+                showImage.map((img, index) => (
+                  <div className="h-[180px] relative" key={index}>
+                    <label htmlFor={index}>
+                      {imageLoader ? (
+                        <div className="flex justify-center items-center h-full">
+                          <FadeLoader />
+                        </div>
+                      ) : (
+                        <img
+                          src={img}
+                          alt=""
+                          className="w-full cursor-pointer h-full rounded-sm object-cover"
+                        />
+                      )}
+                    </label>
+                    <input
+                      type="file"
+                      id={index}
+                      className="hidden"
+                      onChange={(e) => handleChangeImage(img, e.target.files)}
                     />
-                  </label>
-                  <input
-                    type="file"
-                    id={index}
-                    className="hidden"
-                    onChange={(e) => handleChangeImage(img.e.target.files)}
-                  />
-                </div>
-              ))}
+                  </div>
+                ))}
               <label
                 htmlFor="image"
                 className="flex justify-center items-center flex-col h-[180px] cursor-pointer border hover:border-red-300 w-full text-white "
@@ -292,8 +309,17 @@ const EditProduct = () => {
             </div>
 
             <div className="flex">
-              <button className="bg-[#94A3B8] w-[250px] py-2 mt-1 rounded-[5px]">
-                Save
+              <button
+                disabled={loader}
+                type="submit"
+                // disabled={loader ? true : false}
+                className="group relative w-[250px] h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-500 hover:bg-gray-600"
+              >
+                {loader ? (
+                  <ScaleLoader color="#fff" height={22} width={5} radius={2} />
+                ) : (
+                  "Save"
+                )}
               </button>
             </div>
           </form>

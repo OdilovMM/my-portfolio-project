@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { LuImagePlus } from "react-icons/lu";
 import { TbTrashFilled } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 const AddProduct = () => {
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.category);
-  const { products, loader } = useSelector((state) => state.product);
+  const { loader } = useSelector((state) => state.product);
 
   useEffect(() => {
     dispatch(
