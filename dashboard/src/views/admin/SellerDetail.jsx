@@ -1,6 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  getSellerDetail,
+  updateSellerStatus,
+} from "../../store/Reducers/sellerReducer";
+import { ScaleLoader } from "react-spinners";
 
 const SellerDetail = () => {
+  const { seller, loader } = useSelector((state) => state.seller);
+  const { sellerId } = useParams();
+  const dispatch = useDispatch();
+
+  console.log(sellerId, seller);
+
+  useEffect(() => {
+    dispatch(getSellerDetail(sellerId));
+  }, [dispatch, sellerId]);
+
+  const [status, setStatus] = useState("");
+
+  const handleStatusSubmit = (e) => {
+    e.preventDefault();
+    dispatch(
+      updateSellerStatus({
+        sellerId,
+        status,
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (seller) {
+      setStatus(seller.status);
+    }
+  }, [seller]);
   return (
     <div className="px-2 lg:px-7 pt-5">
       <h1 className="text-[20px] font-bold mb-3 text-[#fff] ">
@@ -11,11 +45,11 @@ const SellerDetail = () => {
         <div className="w-full flex flex-wrap text-[#fff]">
           <div className="w-3/12 flex justify-center items-center py-3">
             <div>
-              <img
-                className="w-full h-[230px]"
-                src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                alt=""
-              />
+              {seller?.image ? (
+                <img className="w-full h-[230px]" src={seller.image} alt="" />
+              ) : (
+                <span>Image Not uploaded</span>
+              )}
             </div>
           </div>
 
@@ -28,24 +62,24 @@ const SellerDetail = () => {
               <div className="flex justify-between text-[#fff] text-sm flex-col gap-2 p-4 bg-[#616b72] rounded-md">
                 <div className="flex gap-2 font-bold text-[#fff]">
                   <span>Name : </span>
-                  <span>John Doe </span>
+                  <span>{seller?.name} </span>
                 </div>
                 <div className="flex gap-2 font-bold ">
                   <span>Email : </span>
-                  <span>johndoe@gmail.com </span>
+                  <span>{seller?.email} </span>
                 </div>
 
                 <div className="flex gap-2 font-bold ">
                   <span>Role : </span>
-                  <span>Seller </span>
+                  <span>{seller?.role} </span>
                 </div>
                 <div className="flex gap-2 font-bold ">
                   <span>Status : </span>
-                  <span>Active </span>
+                  <span>{seller?.status} </span>
                 </div>
                 <div className="flex gap-2 font-bold ]">
                   <span>Payment Status : </span>
-                  <span>Active </span>
+                  <span>{seller?.payment} </span>
                 </div>
               </div>
             </div>
@@ -59,20 +93,20 @@ const SellerDetail = () => {
               <div className="flex justify-between text-[#fff] text-sm flex-col gap-2 p-4 bg-[#616b72] rounded-md">
                 <div className="flex gap-2 font-bold text-[#fff]">
                   <span>Shop Name : </span>
-                  <span>MakroMarket </span>
+                  <span>{seller?.shopInfo?.shopName} </span>
                 </div>
                 <div className="flex gap-2 font-bold ">
                   <span>Division : </span>
-                  <span>Fergana </span>
+                  <span>{seller?.shopInfo?.division} </span>
                 </div>
 
                 <div className="flex gap-2 font-bold ">
                   <span>District : </span>
-                  <span>Fergana </span>
+                  <span>{seller?.shopInfo?.district} </span>
                 </div>
                 <div className="flex gap-2 font-bold ">
                   <span>State : </span>
-                  <span>Uzbekistan </span>
+                  <span>{seller?.shopInfo?.subDistrict} </span>
                 </div>
               </div>
             </div>
@@ -80,19 +114,32 @@ const SellerDetail = () => {
         </div>
 
         <div>
-          <form>
+          <form onSubmit={handleStatusSubmit}>
             <div className="flex gap-4 py-3">
               <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
                 className="px-4 py-2 focus:border-[#3D464D] outline-none bg-[#5c666e] border border-slate-700 rounded-md text-[#d0d2d6]"
                 name=""
                 id=""
+                required
               >
-                <option value="">--Select Status--</option>
+                <option value="">-- Select Status --</option>
                 <option value="active">Active</option>
-                <option value="deactive">Deactive</option>
+                <option value="deactive">De-active</option>
               </select>
-              <button className="bg-[#4c9ddc] w-[170px] hover:shadow-red-500/40 hover:shadow-md text-white rounded-md px-7 py-2">
-                Submit
+
+              <button
+                disabled={loader}
+                type="submit"
+                // disabled={loader ? true : false}
+                className="group bg-[#4c9ddc] w-[170px] hover:shadow-red-500/40 hover:shadow-md text-white rounded-md px-7 py-2"
+              >
+                {loader ? (
+                  <ScaleLoader color="#fff" height={14} width={5} radius={1} />
+                ) : (
+                  "Submit"
+                )}
               </button>
             </div>
           </form>

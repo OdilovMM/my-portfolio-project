@@ -1,34 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
 import { FaEye } from "react-icons/fa";
+import Search from "../components/Search";
+import { useSelector, useDispatch } from "react-redux";
+import { getSellerRequest } from "../../store/Reducers/sellerReducer";
 
 const SellerReq = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchValue, setSearchValue] = useState("");
-  const [parPage, setParPage] = useState(5);
+  const dispatch = useDispatch();
+  const { loader, sellers, totalSellers } = useSelector(
+    (state) => state.seller
+  );
+
   const [show, setShow] = useState(false);
+  // *** search components states
+  const [parPage, setParPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("");
+  // ***
+
+  useEffect(() => {
+    const obj = {
+      parPage: parseInt(parPage),
+      page: parseInt(currentPage),
+      search,
+    };
+    dispatch(getSellerRequest(obj));
+  }, [search, currentPage, parPage, dispatch]);
 
   return (
     <div className="px-2 lg:px-7 pt-5">
-      <h1 className="mb-3 font-semibold text-[21px]">Requests</h1>
+      <h1 className="mb-3 font-semibold text-[21px]">Pending Seller Requests</h1>
       <div className="w-full p-4 bg-[#3D464D] rounded-md">
-        <div className="flex justify-between items-center">
-          <select
-            onChange={(e) => setParPage(parseInt(e.target.value))}
-            className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#94A3B8] border border-slate-700 rounded-md text-[#d0d2d6]"
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-          </select>
-          <input
-            className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#cacfd5] border border-slate-700 rounded-md text-[#333]"
-            type="text"
-            placeholder="search"
+        {totalSellers > 0 ? (
+          <Search
+            setParPage={setParPage}
+            setSearch={setSearch}
+            search={search}
           />
-        </div>
-
+        ) : (
+          <></>
+        )}
         <div className="relative overflow-x-auto">
           <table className="w-full text-sm text-left text-[#d0d2d6]">
             <thead className="text-sm text-[#d0d2d6] uppercase border-b border-slate-700">
@@ -60,58 +72,34 @@ const SellerReq = () => {
             </thead>
 
             <tbody>
-              {[1, 2, 3, 4, 5].map((d, i) => (
+              {sellers.map((d, i) => (
                 <tr key={i}>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    {d}
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {i + 1}
                   </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    <img
-                      className="w-[45px] h-[45px]"
-                      src={`http://localhost:3000/images/category/${d}.jpg`}
-                      alt=""
-                    />
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    <img className="w-[45px] h-[45px]" src={d.image} alt="" />
                   </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    John Doe{" "}
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {d.name}
                   </td>
 
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    johndoe@gmail.com{" "}
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {d.email}
                   </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    <span>Active</span>{" "}
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    <span>{d.payment}</span>{" "}
                   </td>
 
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    Deactive
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {d.status}
                   </td>
 
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
                     <div className="flex justify-start items-center gap-4">
-                      <Link className="p-[6px]  rounded"
-                      to='/admin/dashboard/seller/detail/55428'
+                      <Link
+                        className="p-[6px]  rounded"
+                        to={`/admin/dashboard/seller/detail/${d._id}`}
                       >
                         <FaEye />
                       </Link>
