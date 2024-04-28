@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  AiFillHeart,
-  AiFillStar,
-  AiOutlineEye,
-  AiOutlineHeart,
-  AiOutlineStar,
-} from "react-icons/ai";
+import { AiFillHeart, AiOutlineEye, AiOutlineHeart } from "react-icons/ai";
 import { FaLink } from "react-icons/fa";
 import { MdAddShoppingCart } from "react-icons/md";
 import Rating from "./Rating";
@@ -20,7 +14,7 @@ const Cart = ({ product, index }) => {
 
   return (
     <>
-      <div className="w-[232px] md-lg:w-[290px] h-[453px] bg-white mb-8 group gap-5  rounded-[3px] shadow-lg  relative cursor-pointer">
+      <div className="w-[232px] md:w-[210px] md-lg:w-[290px] h-[453px] bg-white mb-8 group gap-5  rounded-[3px] shadow-lg  relative cursor-pointer">
         <div className="flex flex-col">
           <div className="relative h-[358px]  overflow-hidden ">
             <Link className="h-[358px]  w-full flex justify-center items-center transition-transform duration-500 transform scale-105 group-hover:scale-110">

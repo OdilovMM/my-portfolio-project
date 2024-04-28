@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IoIosMail, IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { IoIosMail, IoIosArrowDown } from "react-icons/io";
 import { MdAddIcCall, MdFacebook } from "react-icons/md";
 import {
   FaTelegram,
@@ -140,11 +140,13 @@ const Header = () => {
               </div>
             </div>
 
+            {/* Desktop Views */}
             <div className="md:lg:w-full w-9/12">
               <div className="flex justify-between md-lg:justify-center items-center flex-wrap pl-8">
                 <ul className="flex justify-start items-start gap-7 text-sm font-bold uppercase md-lg:hidden">
                   <li>
                     <Link
+                      to="/"
                       className={`p-2 block ${
                         pathname === "/" ? "text-[#059473]" : "text-black"
                       }`}
@@ -154,6 +156,7 @@ const Header = () => {
                   </li>
                   <li>
                     <Link
+                      to="/shop"
                       className={`p-2 block ${
                         pathname === "/shop" ? "text-[#059473]" : "text-black"
                       }`}
@@ -163,6 +166,7 @@ const Header = () => {
                   </li>
                   <li>
                     <Link
+                      to="/blog"
                       className={`p-2 block ${
                         pathname === "/blog" ? "text-[#059473]" : "text-black"
                       }`}
@@ -172,6 +176,7 @@ const Header = () => {
                   </li>
                   <li>
                     <Link
+                      to="/about"
                       className={`p-2 block ${
                         pathname === "/about-us"
                           ? "text-[#059473]"
@@ -183,6 +188,7 @@ const Header = () => {
                   </li>
                   <li>
                     <Link
+                      to="/contact"
                       className={`p-2 block ${
                         pathname === "/contact"
                           ? "text-[#059473]"
@@ -284,10 +290,11 @@ const Header = () => {
               </div>
             </div>
 
-            {/* menu */}
+            {/* Mobile views */}
             <ul className="flex flex-col justify-start items-start text-sm font-bold uppercase ">
               <li>
                 <Link
+                  to="/"
                   className={`py-2 block ${
                     pathname === "/" ? "text-[#059473]" : "text-black"
                   }`}
@@ -297,6 +304,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
+                  to="/shop"
                   className={`py-2 block ${
                     pathname === "/shop" ? "text-[#059473]" : "text-black"
                   }`}
@@ -306,6 +314,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
+                  to="/blog"
                   className={`py-2 block ${
                     pathname === "/blog" ? "text-[#059473]" : "text-black"
                   }`}
@@ -315,6 +324,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
+                  to="/about"
                   className={`py-2 block ${
                     pathname === "/about-us" ? "text-[#059473]" : "text-black"
                   }`}
@@ -324,6 +334,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
+                  to="contact"
                   className={`py-2 block ${
                     pathname === "/contact" ? "text-[#059473]" : "text-black"
                   }`}
@@ -448,7 +459,9 @@ const Header = () => {
                     >
                       <option value="">Select category</option>
                       {categories.map((ctg, ind) => (
-                        <option key={ind} value={ctg}>{ctg} </option>
+                        <option key={ind} value={ctg}>
+                          {ctg}{" "}
+                        </option>
                       ))}
                     </select>
                   </div>
