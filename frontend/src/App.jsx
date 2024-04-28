@@ -1,6 +1,14 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { About, Blog, Contact, Home, Shop } from "./pages";
+import {
+  About,
+  AddedProductCart,
+  Blog,
+  Contact,
+  Home,
+  ShippingPage,
+  Shop,
+} from "./pages";
 import { MainLayout } from "./layout";
 
 const App = () => {
@@ -13,6 +21,8 @@ const App = () => {
           <Route path="blog" element={<Blog />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="my-cart" element={<AddedProductCart />} />
+          <Route path="shipping" element={<ShippingPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
