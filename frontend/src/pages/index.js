@@ -7,6 +7,8 @@ import ShoppingProducts from "./ShoppingProducts";
 import AddedProductCart from "./AddedProductCart";
 import ShippingPage from "./ShippingPage";
 import ProductDetail from "./ProductDetail";
+import RegisterPage from "./RegisterPage";
+import LoginPage from "./LoginPage";
 
 export {
   Home,
@@ -18,4 +20,6 @@ export {
   AddedProductCart,
   ShippingPage,
   ProductDetail,
+  RegisterPage,
+  LoginPage,
 };
