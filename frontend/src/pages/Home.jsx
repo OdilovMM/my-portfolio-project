@@ -1,9 +1,13 @@
 import React from "react";
 import { Banner, Category, FeaturedProducts, Products } from "../components";
+import toast from "react-hot-toast";
+
+
 
 const Home = () => {
   return (
     <div className="w-full">
+     
       <Banner />
       <Category />
       <div className="py-[40px]">
