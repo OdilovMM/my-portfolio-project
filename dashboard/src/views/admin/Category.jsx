@@ -7,7 +7,7 @@ import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import Search from "../components/Search";
 import { ScaleLoader } from "react-spinners";
-import { useSelector, useDispatch } from "react-redux";
+// import { useSelector, useDispatch } from "react-redux";
 import {
   addCategory,
   getAllCategories,

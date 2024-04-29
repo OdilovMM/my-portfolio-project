@@ -8,6 +8,9 @@ import Rating from "./Rating";
 import FeaturedProducts from "./products/FeaturedProducts";
 import BreadCrumbs from "./BreadCrumbs";
 import Pagination from "./Pagination";
+import ProductReviews from "./ProductReviews";
+import ProductDescription from "./ProductDescription";
+import RatingTemps from "./RatingTemps";
 
 export {
   Banner,
@@ -20,4 +23,7 @@ export {
   FeaturedProducts,
   BreadCrumbs,
   Pagination,
+  ProductReviews,
+  ProductDescription,
+  RatingTemps
 };

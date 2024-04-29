@@ -6,6 +6,7 @@ import {
   Blog,
   Contact,
   Home,
+  ProductDetail,
   ShippingPage,
   Shop,
 } from "./pages";
@@ -23,6 +24,10 @@ const App = () => {
           <Route path="contact" element={<Contact />} />
           <Route path="my-cart" element={<AddedProductCart />} />
           <Route path="shipping" element={<ShippingPage />} />
+          <Route
+            path="product/details/:slug"
+            element={<ProductDetail />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

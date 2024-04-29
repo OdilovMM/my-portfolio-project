@@ -6,6 +6,7 @@ import About from "./About";
 import ShoppingProducts from "./ShoppingProducts";
 import AddedProductCart from "./AddedProductCart";
 import ShippingPage from "./ShippingPage";
+import ProductDetail from "./ProductDetail";
 
 export {
   Home,
@@ -16,4 +17,5 @@ export {
   ShoppingProducts,
   AddedProductCart,
   ShippingPage,
+  ProductDetail,
 };

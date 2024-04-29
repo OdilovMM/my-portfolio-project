@@ -19,7 +19,8 @@ const Cart = ({ product, index }) => {
           <div className="relative h-[358px]  overflow-hidden ">
             <Link className="h-[358px]  w-full flex justify-center items-center transition-transform duration-500 transform scale-105 group-hover:scale-110">
               <img
-                src={`http://localhost:3000/images/products/${index + 1}.webp`}
+                // src={`http://localhost:3000/images/products/${index + 1}.webp`}
+                src="https://expertphotography.b-cdn.net/wp-content/uploads/2020/11/product-photography-tips-17-1.jpg"
                 alt=""
                 className=" sm:w-full w-full object-fit "
               />
@@ -45,14 +46,11 @@ const Cart = ({ product, index }) => {
                   <AiOutlineHeart size={18} />
                 )}
               </button>
-              <button
-                onClick={() => setOpen(!open)}
+              <Link
+                to="/product/details/new-product"
                 className="p-2 bg-white shadow-md hover:bg-pink-500 transition duration-900 ease-in-out"
               >
                 <AiOutlineEye size={18} />
-              </button>
-              <Link className="p-2 bg-white shadow-md hover:bg-pink-500 transition duration-900 ease-in-out">
-                <FaLink size={18} />
               </Link>
             </div>
 
