@@ -305,7 +305,7 @@ const Shop = () => {
                 {/* Products */}
                 <div className="grid pb-8 grid-cols-3 md-lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1">
                   {[1, 2, 3, 4, 5, 6].map((product, index) => (
-                    <Cart index={index} />
+                    <Cart product={product} index={index} />
                   ))}
                 </div>
                 <div className="flex justify-end">

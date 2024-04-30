@@ -24,17 +24,18 @@ const Banner = () => {
   };
 
   return (
-    <div className="w-full md-lg:mt-6">
-      <div className="w-[85%] lg:w-[90%] mx-auto">
-        <div className="w-full flex flex-wrap md-lg:gap-8">
-          <div className="w-full">
-            <div className="my-8">
+    <div className="w-full md-lg:mt-6 ">
+      <div className="w-[85%] lg:w-[90%] mx-auto ">
+        <div className="w-full flex flex-wrap md-lg:gap-8 ">
+          <div className="w-full ">
+            <div className="my-8 rounded-[13px] overflow-hidden">
               <Carousel
                 autoPlay={true}
                 infinite={true}
                 arrows={true}
                 showDots={true}
                 responsive={responsive}
+                draggable={false}
               >
                 {[1, 2, 3, 4, 5, 6].map((img, i) => (
                   <Link key={i} to="#">
