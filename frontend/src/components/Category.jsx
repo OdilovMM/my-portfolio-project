@@ -1,19 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Carousel from "react-multi-carousel";
 import { Link } from "react-router-dom";
 import "react-multi-carousel/lib/styles.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCategories } from "../store/reducers/homeReducer";
 
 const Category = () => {
-  const categories = [
-    "Mobiles",
-    "Laptops",
-    "Speakers",
-    "Top wear",
-    "Footwear",
-    "Watches",
-    "Home Decor",
-    "Smart Watches",
-  ];
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.home);
+
+  useEffect(() => {
+    dispatch(getAllCategories());
+  }, [dispatch]);
+
+  console.log(categories);
 
   const responsive = {
     superLargeDesktop: {
@@ -58,13 +58,10 @@ const Category = () => {
         {categories.map((c, i) => (
           <Link className="h-[185px] border block" key={i} to="#">
             <div className="w-full h-full relative p-3">
-              <img
-                src={`http://localhost:3000/images/products/${i + 1}.webp`}
-                alt=""
-              />
+              <img src={c.image} alt="" />
               <div className="absolute bottom-6 w-full mx-auto font-bold left-0 flex justify-center items-center">
                 <span className="py-[2px] px-6 bg-[#3330305d] text-white">
-                  {c}
+                  {c.name}
                 </span>
               </div>
             </div>

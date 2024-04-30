@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosMail, IoIosArrowDown } from "react-icons/io";
 import { MdAddIcCall, MdFacebook } from "react-icons/md";
 import {
@@ -16,8 +16,17 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { IoHeart } from "react-icons/io5";
 import { SiShopify } from "react-icons/si";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCategories } from "../store/reducers/homeReducer";
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.home);
+
+  useEffect(() => {
+    dispatch(getAllCategories());
+  }, [dispatch]);
+
   const user = true;
   const [showBar, setShowBar] = useState(true);
   const [showCategory, setShowCategory] = useState(true);
@@ -25,15 +34,15 @@ const Header = () => {
   const { pathname } = useLocation();
   const wishlist_count = 3;
 
-  const categories = [
-    "Laptops",
-    "Sneakers",
-    "Shoes",
-    "Watches",
-    "Power Tools",
-    "Cars",
-    "Home Decor",
-  ];
+  // const categories = [
+  //   "Laptops",
+  //   "Sneakers",
+  //   "Shoes",
+  //   "Watches",
+  //   "Power Tools",
+  //   "Cars",
+  //   "Home Decor",
+  // ];
 
   const [searchValue, setSearchValue] = useState("");
   const [category, setCategory] = useState();
@@ -213,7 +222,7 @@ const Header = () => {
 
                     <div className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]">
                       <span className="text-xl text-green-500">
-                        <Link to='/my-cart'>
+                        <Link to="/my-cart">
                           <SiShopify color="black" />
                         </Link>
                       </span>
@@ -428,17 +437,24 @@ const Header = () => {
               </div>
               <div
                 className={`${
-                  showCategory ? "h-0" : "h-[400px]"
-                } overflow-hidden transition-all md-lg:relative duration-500 absolute z-[99999] bg-[#8ccaba] w-full border-x`}
+                  showCategory ? "h-0" : "h-[600px]"
+                } overflow-hidden transition-all md-lg:relative duration-500 absolute z-[99999] bg-[#bacfd9] w-full border-x`}
               >
                 <ul className="py-2 text-slate-600 font-semibold uppercase">
                   {categories.map((cat, index) => {
                     return (
                       <li
                         key={index}
-                        className="flex items-center gap-2 justify-start px-[24px] py-[6px]"
+                        className="flex items-center gap-2 justify-start px-2 py-[3px]"
                       >
-                        <Link className="text-sm block">{cat}</Link>
+                        <img
+                          src={cat.image}
+                          alt=""
+                          className="h-[33px] w-[33px] rounded-full object-fit"
+                        />
+                        <Link className="text-sm block hover:text-yellow-700 capitalize">
+                          {cat.name}
+                        </Link>
                       </li>
                     );
                   })}
@@ -459,10 +475,10 @@ const Header = () => {
                       name=""
                       id=""
                     >
-                      <option value="">Select category</option>
+                      <option value=''>Select category</option>
                       {categories.map((ctg, ind) => (
                         <option key={ind} value={ctg}>
-                          {ctg}{" "}
+                          {ctg.name}{" "}
                         </option>
                       ))}
                     </select>
