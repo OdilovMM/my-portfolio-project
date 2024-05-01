@@ -34,16 +34,6 @@ const Header = () => {
   const { pathname } = useLocation();
   const wishlist_count = 3;
 
-  // const categories = [
-  //   "Laptops",
-  //   "Sneakers",
-  //   "Shoes",
-  //   "Watches",
-  //   "Power Tools",
-  //   "Cars",
-  //   "Home Decor",
-  // ];
-
   const [searchValue, setSearchValue] = useState("");
   const [category, setCategory] = useState();
 
@@ -437,8 +427,8 @@ const Header = () => {
               </div>
               <div
                 className={`${
-                  showCategory ? "h-0" : "h-[600px]"
-                } overflow-hidden transition-all md-lg:relative duration-500 absolute z-[99999] bg-[#bacfd9] w-full border-x`}
+                  showCategory ? "h-0" : "h-[440px]"
+                } overflow-hidden transition-all md-lg:relative duration-100 absolute z-[99999] bg-[#bacfd9] w-full border-x`}
               >
                 <ul className="py-2 text-slate-600 font-semibold uppercase">
                   {categories.map((cat, index) => {
@@ -452,7 +442,11 @@ const Header = () => {
                           alt=""
                           className="h-[33px] w-[33px] rounded-full object-fit"
                         />
-                        <Link className="text-sm block hover:text-yellow-700 capitalize">
+                        <Link
+                          onClick={() => setShowCategory(!showCategory)}
+                          to={`/products?category=${cat.name}`}
+                          className="text-sm block hover:text-yellow-700 capitalize"
+                        >
                           {cat.name}
                         </Link>
                       </li>
@@ -475,7 +469,7 @@ const Header = () => {
                       name=""
                       id=""
                     >
-                      <option value=''>Select category</option>
+                      <option value="">Select category</option>
                       {categories.map((ctg, ind) => (
                         <option key={ind} value={ctg}>
                           {ctg.name}{" "}

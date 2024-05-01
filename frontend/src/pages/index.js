@@ -9,6 +9,8 @@ import ShippingPage from "./ShippingPage";
 import ProductDetail from "./ProductDetail";
 import RegisterPage from "./RegisterPage";
 import LoginPage from "./LoginPage";
+import CategoryProducts from "./CategoryProducts";
+
 
 export {
   Home,
@@ -22,4 +24,5 @@ export {
   ProductDetail,
   RegisterPage,
   LoginPage,
+  CategoryProducts
 };

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { AiFillHeart, AiOutlineEye, AiOutlineHeart } from "react-icons/ai";
-import { FaLink } from "react-icons/fa";
-import { MdAddShoppingCart } from "react-icons/md";
 import Rating from "./Rating";
 import saleIcon from "./../assets/icon/icons8-sale.gif";
 
@@ -10,8 +8,6 @@ const Cart = ({ product, index }) => {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
 
-  //   const dt = product.name;
-  //   const productName = dt.replace(/\s+/g, "-");
 
   return (
     <>
@@ -36,7 +32,7 @@ const Cart = ({ product, index }) => {
 
             {product?.discount ? (
               <span className="bg-black text-white px-2 shadow-sm text-[14px]">
-                -{product.discount}%
+                -{product?.discount}%
               </span>
             ) : (
               <></>
@@ -77,7 +73,7 @@ const Cart = ({ product, index }) => {
         {/* bottom info */}
         <div className="flex flex-col h-[100px] overflow-hidden bg-[#d0dae3] ">
           <div className="px-3 py-3">
-            <h2>{product?.name}</h2>
+            <h2>{product?.name.slice(0, 10)}...</h2>
             <div className="flex flex-row items-center justify-between">
               <p
                 style={{
@@ -86,15 +82,19 @@ const Cart = ({ product, index }) => {
               >
                 $ {product?.price}
                 <span className="pl-2 line-through text-red-600">
-                  {/* {product?.discount} */}
+                  {product.discount > 0 &&
+                    product.price +
+                      Math.floor((product.price * product.discount) / 100)}{" "}
                 </span>
               </p>
               <div className="flex ">
                 <Rating ratings={product?.rating} />
               </div>
             </div>
-            <div className="flex  justify-between">
-              <h2 className="text-red-600 font-semibold">{product?.brand}</h2>
+            <div className="flex  justify-between items-center">
+              <h2 className="text-red-600 font-semibold text-[13px]">
+                {product?.brand}
+              </h2>
               <h2 className="text-blue-600 font-semibold">
                 {product?.shopName}
               </h2>

@@ -54,17 +54,21 @@ const Category = () => {
         transitionDuration={500}
         draggable={false}
       >
-        {categories.map((c, i) => (
-          <Link className="h-[230px] border block" key={i} to="#">
+        {categories.map((category, i) => (
+          <Link
+            to={`/products?category=${category.name}`}
+            className="h-[230px] border block"
+            key={i}
+          >
             <div className="w-full h-full relative p-3 bg-white ">
               <img
-                src={c.image}
+                src={category.image}
                 alt=""
                 className="rounded-full object-cover bg-slate-200  w-full h-full hover:scale-105 transition-all duration-300"
               />
               <div className="absolute bottom-1 shadow-md w-full mx-auto font-bold left-0 top-[170px] flex justify-center items-center">
                 <span className="py-[1px] rounded-md px-6 bg-green-400 text-black">
-                  {c.name}
+                  {category.name}
                 </span>
               </div>
             </div>

@@ -2,6 +2,7 @@ const Category = require("./../../models/categoryModel");
 const Products = require("./../../models/productModel");
 const formidable = require("formidable");
 const { responseReturn } = require("../../utils/response");
+const queryProducts = require("../../utils/queryProducts");
 
 class homeController {
   formateProduct = (products) => {
@@ -59,6 +60,75 @@ class homeController {
       });
     } catch (error) {
       console.log(error.message);
+    }
+  };
+
+  getProductsByPriceRange = async (req, res) => {
+    try {
+      const priceRange = {
+        low: 0,
+        high: 0,
+      };
+
+      const products = await Products.find({}).limit(20).sort({
+        createdAt: -1,
+      });
+
+      const latestProduct = this.formateProduct(products);
+      const getPriceProduct = await Products.find({}).sort({
+        price: 1,
+      });
+      if (getPriceProduct.length > 0) {
+        priceRange.high = getPriceProduct[getPriceProduct.length - 1].price;
+        priceRange.low = getPriceProduct[0].price;
+      }
+
+      responseReturn(res, 200, {
+        latestProduct,
+        priceRange,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  getProductQuery = async (req, res) => {
+    const parPage = 8;
+    req.query.parPage = parPage;
+    console.log(req.query);
+
+    try {
+      const products = await Products.find({}).sort({
+        createdAt: -1,
+      });
+
+      const totalProducts = new queryProducts(products, req.query)
+        .queryCategory()
+        .queryRating()
+        .queryPrice()
+        .querySortPrice()
+        .getProductsCount();
+
+      const result = new queryProducts(products, req.query)
+        .queryCategory()
+        .queryRating()
+        .queryPrice()
+        .querySortPrice()
+        .paginate()
+        .limitField()
+        .getProducts();
+
+      console.log(result);
+
+      responseReturn(res, 200, {
+        products: result,
+        totalProducts: totalProducts,
+        parPage,
+      });
+    } catch (error) {
+      responseReturn(res, 500, {
+        error: error.message,
+      });
     }
   };
 }

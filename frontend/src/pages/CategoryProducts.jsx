@@ -5,19 +5,19 @@ import { AiFillStar } from "react-icons/ai";
 import { CiStar } from "react-icons/ci";
 import { Products } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import { FadeLoader, GridLoader } from "react-spinners";
-
-import { BsFillGridFill } from "react-icons/bs";
-import { FaThList } from "react-icons/fa";
-import ShoppingProducts from "./ShoppingProducts";
-
+import { GridLoader } from "react-spinners";
 import {
   getProductsPriceRange,
   queryProduct,
 } from "../store/reducers/homeReducer";
+import { useSearchParams } from "react-router-dom";
 
-const Shop = () => {
+const CategoryProducts = () => {
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchCategory = searchParams.get("category");
+  console.log("category:", searchCategory);
+
   const {
     latestProduct,
     priceRange,
@@ -40,18 +40,7 @@ const Shop = () => {
 
   const [filter, setFilter] = useState(true);
   const [rating, setRating] = useState("");
-  const [styles, setStyles] = useState("grid");
   const [sortPrice, setSortPrice] = useState("");
-
-  const [searchCategory, setSearchCategory] = useState("");
-
-  const queryCategory = (e, value) => {
-    if (e.target.checked) {
-      setSearchCategory(value);
-    } else {
-      setSearchCategory("");
-    }
-  };
 
   // for pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -67,8 +56,8 @@ const Shop = () => {
   useEffect(() => {
     dispatch(
       queryProduct({
-        low: value.values[0],
-        high: value.values[1],
+        low: value.values[0] || "",
+        high: value.values[1] || "",
         searchCategory,
         rating,
         sortPrice,
@@ -79,7 +68,6 @@ const Shop = () => {
 
   const resetFilter = () => {
     setRating("");
-    setSearchCategory("");
     setSortPrice("");
     setCurrentPage(1);
     setValue({ values: [priceRange.low, priceRange.high] });
@@ -89,14 +77,14 @@ const Shop = () => {
     <>
       <div className="bg-[url('http://localhost:3000/images/banner/shop.png')]  h-[220px] mt-6 bg-cover bg-no-repeat bg-left">
         <div className="flex flex-col justify-center gap-1 items-center h-full w-full text-black">
-          <h2 className="text-3xl font-bold">Shop Page</h2>
+          <h2 className="text-3xl font-bold">Category Page</h2>
           <div className="flex justify-center items-center gap-2 text-2xl w-full">
             <BreadCrumbs
               from="/"
               fromPage="Home"
               to="/shop"
               iconSize={27}
-              toPage="Shop"
+              toPage={searchCategory}
               iconColor="black"
             />
           </div>
@@ -121,34 +109,6 @@ const Shop = () => {
                   : "md:h-auto md:overflow-auto md:mb-0"
               }`}
             >
-              <h2 className="text-3xl font-bold mb-3 text-slate-700">
-                Categories
-              </h2>
-
-              <div className="py-2">
-                {categories.map((category, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-start items-center gap-2 py-1"
-                  >
-                    <input
-                      checked={searchCategory === category.name ? true : false}
-                      onChange={(e) => queryCategory(e, category.name)}
-                      type="checkbox"
-                      name=""
-                      id={category.name}
-                      key={index}
-                    />
-                    <label
-                      className="block cursor-pointer capitalize text-slate-600"
-                      htmlFor={category.name}
-                    >
-                      {category.name}
-                    </label>
-                  </div>
-                ))}
-              </div>
-
               <div className="py-2 flex flex-col gap-5">
                 <h2 className="text-3xl font-bold mb-3 text-slate-600">
                   Price
@@ -297,8 +257,6 @@ const Shop = () => {
                       <CiStar />{" "}
                     </span>
                   </div>
-
-                 
                 </div>
               </div>
               {/* latest */}
@@ -373,4 +331,4 @@ const Shop = () => {
   );
 };
 
-export default Shop;
+export default CategoryProducts;

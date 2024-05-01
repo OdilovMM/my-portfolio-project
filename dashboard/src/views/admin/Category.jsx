@@ -12,6 +12,7 @@ import {
   addCategory,
   getAllCategories,
 } from "../../store/Reducers/categoryReducer";
+import { useDispatch, useSelector } from "react-redux";
 
 const Category = () => {
   const { loader, categories, totalCategory } = useSelector(
