@@ -11,7 +11,7 @@ import {
   FaPhoneAlt,
 } from "react-icons/fa";
 import { IoLanguageSharp } from "react-icons/io5";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoHeart } from "react-icons/io5";
 import { SiShopify } from "react-icons/si";
@@ -20,6 +20,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories } from "../store/reducers/homeReducer";
 
 const Header = () => {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.home);
 
@@ -27,7 +29,7 @@ const Header = () => {
     dispatch(getAllCategories());
   }, [dispatch]);
 
-  const user = true;
+  const user = false;
   const [showBar, setShowBar] = useState(true);
   const [showCategory, setShowCategory] = useState(true);
 
@@ -36,6 +38,10 @@ const Header = () => {
 
   const [searchValue, setSearchValue] = useState("");
   const [category, setCategory] = useState();
+
+  const searchItem = () => {
+    navigate(`/products/search?category=${category}&&value=${searchValue}`);
+  };
 
   return (
     <div className="w-full bg-white">
@@ -104,7 +110,7 @@ const Header = () => {
                   <>
                     <Link
                       className="flex cursor-pointer justify-center items-center gap-2 text-sm text-black"
-                      to="/dashboard"
+                      to="/login"
                     >
                       <span>
                         {" "}
@@ -471,7 +477,7 @@ const Header = () => {
                     >
                       <option value="">Select category</option>
                       {categories.map((ctg, ind) => (
-                        <option key={ind} value={ctg}>
+                        <option key={ind} value={ctg.name}>
                           {ctg.name}{" "}
                         </option>
                       ))}
@@ -487,7 +493,10 @@ const Header = () => {
                     className="w-full relative bg-transparent text-slate-500 outline-0 px-3 h-full"
                   />
 
-                  <button className="bg-[#059473] right-0 absolute px-8 h-full font-semibold uppercase text-white">
+                  <button
+                    onClick={searchItem}
+                    className="bg-[#059473] right-0 absolute px-8 h-full font-semibold uppercase text-white"
+                  >
                     Search
                   </button>
                 </div>

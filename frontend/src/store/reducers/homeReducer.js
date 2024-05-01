@@ -46,13 +46,21 @@ export const getProductsPriceRange = createAsyncThunk(
 export const queryProduct = createAsyncThunk(
   "home/queryProduct",
   async (query, { rejectWithValue, fulfillWithValue }) => {
+    console.log(query)
     try {
       const { data } = await api.get(
-        `/home/product-query?category=${query.searchCategory}&&rating=${query.rating}&&lowPrice=${query.low}&&highPrice=${query.high}&&sort=${query.sortPrice}&&currentPage=${query.currentPage}`,
+        `/home/product-query?category=${query.searchCategory}&&rating=${
+          query.rating
+        }&&lowPrice=${query.low}&&highPrice=${query.high}&&sort=${
+          query.sortPrice
+        }&&currentPage=${query.currentPage}&&value=${
+          query.searchValue ? query.searchValue : ""
+        }`,
         {
           withCredentials: true,
         }
       );
+      console.log(data)
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);

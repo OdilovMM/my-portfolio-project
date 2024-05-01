@@ -10,6 +10,8 @@ import ProductDetail from "./ProductDetail";
 import RegisterPage from "./RegisterPage";
 import LoginPage from "./LoginPage";
 import CategoryProducts from "./CategoryProducts";
+import SearchPage from "./SearchPage";
+
 
 
 export {
@@ -24,5 +26,6 @@ export {
   ProductDetail,
   RegisterPage,
   LoginPage,
-  CategoryProducts
+  CategoryProducts,
+  SearchPage
 };

@@ -12,16 +12,15 @@ import {
   RegisterPage,
   ShippingPage,
   Shop,
+  SearchPage,
 } from "./pages";
 import { MainLayout } from "./layout";
 
-
 const App = () => {
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainLayout  />}>
+        <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
@@ -32,6 +31,7 @@ const App = () => {
           <Route path="my-cart" element={<AddedProductCart />} />
           <Route path="shipping" element={<ShippingPage />} />
           <Route path="product/details/:slug" element={<ProductDetail />} />
+          <Route path="products/search?" element={<SearchPage />} />
           <Route path="products?" element={<CategoryProducts />} />
         </Route>
       </Routes>

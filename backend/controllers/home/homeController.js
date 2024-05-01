@@ -106,6 +106,7 @@ class homeController {
         .queryCategory()
         .queryRating()
         .queryPrice()
+        .querySearch()
         .querySortPrice()
         .getProductsCount();
 
@@ -113,6 +114,7 @@ class homeController {
         .queryCategory()
         .queryRating()
         .queryPrice()
+        .querySearch()
         .querySortPrice()
         .paginate()
         .limitField()

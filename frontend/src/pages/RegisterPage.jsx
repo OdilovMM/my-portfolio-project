@@ -1,17 +1,40 @@
 import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { registerUserCustomer } from "../store/reducers/authReducer";
+import { ScaleLoader } from "react-spinners";
 
 const RegisterPage = () => {
+  const dispatch = useDispatch();
+  const { loader } = useSelector((state) => state.customerAuth);
+
   const [visible, setVisible] = useState(false);
+  const [state, setState] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleInput = (e) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    dispatch(registerUserCustomer(state));
+  };
 
   return (
     <div className="min-w-screen h-full py-9 my-5 bg-[#e5e1e1] flex items-center justify-center">
       <div className="w-[350px] text-[#fffFFF] bg-[#a1cbd9] p-7 rounded-md">
         <h2 className="text-xl mb-3 font-bold">Register</h2>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleRegister}>
           <div>
             <label
               htmlFor="name"
@@ -21,6 +44,8 @@ const RegisterPage = () => {
             </label>
             <div className="mt-1">
               <input
+                onChange={handleInput}
+                value={state.name}
                 type="text"
                 name="name"
                 autoComplete="name"
@@ -39,6 +64,8 @@ const RegisterPage = () => {
             </label>
             <div className="mt-1">
               <input
+                onChange={handleInput}
+                value={state.email}
                 type="email"
                 name="email"
                 autoComplete="email"
@@ -57,6 +84,8 @@ const RegisterPage = () => {
             </label>
             <div className="mt-1 relative">
               <input
+                onChange={handleInput}
+                value={state.password}
                 type={visible ? "text" : "password"}
                 name="password"
                 autoComplete="current-password"
@@ -93,10 +122,15 @@ const RegisterPage = () => {
 
           <div>
             <button
+              disabled={loader ? true : false}
               type="submit"
               className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700"
             >
-              Register
+              {loader ? (
+                <ScaleLoader color="#fff" height={22} width={5} radius={2} />
+              ) : (
+                "Sign in"
+              )}
             </button>
           </div>
           <div className="flex gap-4">

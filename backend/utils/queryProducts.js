@@ -24,6 +24,17 @@ class queryProducts {
     return this;
   };
 
+  querySearch = () => {
+    this.products = this.query.searchValue
+      ? this.products.filter(
+          (p) =>
+            p.name.toUpperCase().indexOf(this.query.searchValue.toUpperCase()) >
+            -1
+        )
+      : this.products;
+    return this;
+  };
+
   queryPrice = () => {
     this.products = this.products.filter(
       (p) => p.price >= this.query.lowPrice && p.price <= this.query.highPrice
