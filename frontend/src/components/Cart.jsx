@@ -1,34 +1,18 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import { AiFillHeart, AiOutlineEye, AiOutlineHeart } from "react-icons/ai";
 import Rating from "./Rating";
 import saleIcon from "./../assets/icon/icons8-sale.gif";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, addToWishlist } from "../store/reducers/cartReducer";
+import { addToCart } from "../store/reducers/cartReducer";
 import toast from "react-hot-toast";
 
 const Cart = ({ product, index }) => {
   const dispatch = useDispatch();
-  const { productCart, productCount, wishlistCount, wishlist, price } =
-    useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.customerAuth);
 
-  const handleAddWishlist = (id) => {
-    console.log(id);
-    if (userInfo) {
-      dispatch(
-        addToWishlist({
-          userId: userInfo.id,
-          quantity: 1,
-          productId: id,
-        })
-      );
-    } else {
-      toast.error("Please, Login first");
-    }
-  };
+  const handleAddWishlist = (id) => {};
 
-  
   const handleAddToCart = (id) => {
     console.log(id);
     if (userInfo) {

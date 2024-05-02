@@ -24,9 +24,10 @@ const Header = () => {
 
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.home);
-  const { productCount, wishlistCount } = useSelector((state) => state.cart);
+  const { card_product_count } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.customerAuth);
 
+  console.log(card_product_count)
   useEffect(() => {
     dispatch(getAllCategories());
   }, [dispatch]);
@@ -42,6 +43,14 @@ const Header = () => {
 
   const searchItem = () => {
     navigate(`/products/search?category=${category}&&value=${searchValue}`);
+  };
+
+  const redirectCart = () => {
+    if (userInfo) {
+      navigate("/my-cart");
+    } else {
+      navigate("/login");
+    }
   };
 
   return (
@@ -213,18 +222,21 @@ const Header = () => {
                         <IoHeart color="black" />
                       </span>
                       <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                        {wishlistCount}
+                        {/* {wishlistCount} */}5
                       </div>
                     </div>
 
                     <div className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]">
-                      <span className="text-xl text-green-500">
-                        <Link to="/my-cart">
+                      <span
+                        onClick={redirectCart}
+                        className="text-xl text-green-500"
+                      >
+                        <Link>
                           <SiShopify color="black" />
                         </Link>
                       </span>
                       <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                        {productCount}
+                        {card_product_count}
                       </div>
                     </div>
                   </div>
@@ -388,9 +400,11 @@ const Header = () => {
                 <span className="text-xl text-green-500">
                   <IoHeart color="black" />
                 </span>
-                <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                  {wishlist_count}
-                </div>
+                {card_product_count !== 0 && (
+                  <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
+                    {card_product_count}
+                  </div>
+                )}
               </div>
 
               <div className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]">
