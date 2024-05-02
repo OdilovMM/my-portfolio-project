@@ -1,6 +1,7 @@
 import React from "react";
 import Cart from "../Cart";
 
+
 const FeaturedProducts = ({ products }) => {
   return (
     <div className="w-[85%] flex flex-wrap mx-auto">

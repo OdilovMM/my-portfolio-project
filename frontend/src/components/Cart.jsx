@@ -1,13 +1,48 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiFillHeart, AiOutlineEye, AiOutlineHeart } from "react-icons/ai";
 import Rating from "./Rating";
 import saleIcon from "./../assets/icon/icons8-sale.gif";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, addToWishlist } from "../store/reducers/cartReducer";
+import toast from "react-hot-toast";
 
 const Cart = ({ product, index }) => {
-  const [click, setClick] = useState(false);
-  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { productCart, productCount, wishlistCount, wishlist, price } =
+    useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.customerAuth);
 
+  const handleAddWishlist = (id) => {
+    console.log(id);
+    if (userInfo) {
+      dispatch(
+        addToWishlist({
+          userId: userInfo.id,
+          quantity: 1,
+          productId: id,
+        })
+      );
+    } else {
+      toast.error("Please, Login first");
+    }
+  };
+
+  
+  const handleAddToCart = (id) => {
+    console.log(id);
+    if (userInfo) {
+      dispatch(
+        addToCart({
+          userId: userInfo.id,
+          quantity: 1,
+          productId: id,
+        })
+      );
+    } else {
+      toast.error("Please, Login first");
+    }
+  };
 
   return (
     <>
@@ -41,14 +76,12 @@ const Cart = ({ product, index }) => {
           {/* link */}
           <div className="absolute top-2 right-1 flex flex-col gap-2 transform translate-x-9  opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition duration-500">
             <button
-              onClick={() => setClick(!click)}
+              onClick={() => handleAddWishlist(product._id)}
               className="p-2 bg-white  hover:bg-pink-500 transition ease-in-out"
             >
-              {click ? (
-                <AiFillHeart color="red" size={22} />
-              ) : (
-                <AiOutlineHeart size={22} />
-              )}
+              <AiFillHeart color="red" size={22} />
+
+              {/* <AiOutlineHeart size={22} /> */}
             </button>
             <Link
               to={`/product/details/${product?._id}`}
@@ -65,7 +98,10 @@ const Cart = ({ product, index }) => {
             }}
             className="absolute  bottom-0 w-full transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-500"
           >
-            <button className="flex h-[40px] bg-[#952626] hover:bg-pink-500 transition duration-900 ease-in-out w-full flex-row gap-2 items-center justify-center">
+            <button
+              onClick={() => handleAddToCart(product._id)}
+              className="flex h-[40px] bg-[#952626] hover:bg-pink-500 transition duration-900 ease-in-out w-full flex-row gap-2 items-center justify-center"
+            >
               <span className="text-white font-Poppins">Add To Cart</span>
             </button>
           </div>

@@ -1,17 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { ScaleLoader } from "react-spinners";
+import { loginUserCustomer } from "../store/reducers/authReducer";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
+  const { loader, errorMessage, successMessage, userInfo } = useSelector(
+    (state) => state.customerAuth
+  );
+
+  const [credentials, setCredentials] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInput = (e) => {
+    e.preventDefault();
+    setCredentials({
+      ...credentials,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmitData = (e) => {
+    e.preventDefault();
+    dispatch(loginUserCustomer(credentials));
+  };
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
+    } else {
+      return;
+    }
+  }, [dispatch, navigate, userInfo]);
 
   return (
     <div className="min-w-screen h-full py-9 my-5 bg-[#e5e1e1] flex items-center justify-center">
       <div className="w-[350px] text-[#fffFFF] bg-[#a1cbd9] p-7 rounded-md">
         <h2 className="text-xl mb-3 font-bold">Login</h2>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmitData}>
           <div>
             <label
               htmlFor="email"
@@ -21,6 +55,8 @@ const LoginPage = () => {
             </label>
             <div className="mt-1">
               <input
+                onChange={handleInput}
+                value={credentials.email}
                 type="email"
                 name="email"
                 autoComplete="email"
@@ -39,6 +75,8 @@ const LoginPage = () => {
             </label>
             <div className="mt-1 relative">
               <input
+                onChange={handleInput}
+                value={credentials.password}
                 type={visible ? "text" : "password"}
                 name="password"
                 autoComplete="current-password"
@@ -65,10 +103,15 @@ const LoginPage = () => {
 
           <div>
             <button
+              disabled={loader ? true : false}
               type="submit"
               className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700"
             >
-              Log in
+              {loader ? (
+                <ScaleLoader color="#fff" height={22} width={5} radius={2} />
+              ) : (
+                "Sign in"
+              )}
             </button>
           </div>
           <div className="flex gap-4">

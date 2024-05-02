@@ -27,6 +27,9 @@ const RegisterPage = () => {
   const handleRegister = (e) => {
     e.preventDefault();
     dispatch(registerUserCustomer(state));
+    
+    
+    
   };
 
   return (

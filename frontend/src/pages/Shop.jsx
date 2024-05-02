@@ -168,8 +168,9 @@ const Shop = () => {
                       {children}
                     </div>
                   )}
-                  renderThumb={({ props }) => (
+                  renderThumb={({ props, key }) => (
                     <div
+                      key="1"
                       className="w-[12px] cursor-default h-[12px] bg-[#059473] rounded-full"
                       {...props}
                     />
@@ -297,8 +298,6 @@ const Shop = () => {
                       <CiStar />{" "}
                     </span>
                   </div>
-
-                 
                 </div>
               </div>
               {/* latest */}
@@ -349,7 +348,7 @@ const Shop = () => {
                 ) : (
                   <div className="flex flex-row gap-[8px] flex-wrap">
                     {products.map((product, index) => (
-                      <Cart product={product} index={index} />
+                      <Cart product={product} index={index} key={product._id} />
                     ))}
                   </div>
                 )}

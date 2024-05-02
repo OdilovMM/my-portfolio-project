@@ -24,12 +24,13 @@ const Header = () => {
 
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.home);
+  const { productCount, wishlistCount } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.customerAuth);
 
   useEffect(() => {
     dispatch(getAllCategories());
   }, [dispatch]);
 
-  const user = false;
   const [showBar, setShowBar] = useState(true);
   const [showCategory, setShowCategory] = useState(true);
 
@@ -93,7 +94,7 @@ const Header = () => {
                   </ul>
                 </div>
 
-                {user ? (
+                {userInfo ? (
                   <>
                     <Link
                       className="flex cursor-pointer justify-center items-center gap-2 text-sm text-black"
@@ -103,7 +104,7 @@ const Header = () => {
                         {" "}
                         <FaUserCircle />{" "}
                       </span>
-                      <span>Madamin</span>
+                      <span>{userInfo.name.split(" ")[0]}</span>
                     </Link>
                   </>
                 ) : (
@@ -212,7 +213,7 @@ const Header = () => {
                         <IoHeart color="black" />
                       </span>
                       <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                        {wishlist_count}
+                        {wishlistCount}
                       </div>
                     </div>
 
@@ -223,7 +224,7 @@ const Header = () => {
                         </Link>
                       </span>
                       <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                        {wishlist_count}
+                        {productCount}
                       </div>
                     </div>
                   </div>
@@ -267,7 +268,7 @@ const Header = () => {
               </div>
 
               <div>
-                {user ? (
+                {userInfo ? (
                   <>
                     <Link
                       className="flex cursor-pointer justify-center items-center gap-2 text-sm text-black"
@@ -277,7 +278,7 @@ const Header = () => {
                         {" "}
                         <FaUserCircle />{" "}
                       </span>
-                      <span>Madamin</span>
+                      <span>{userInfo.name.split(" ")[0]}</span>
                     </Link>
                   </>
                 ) : (

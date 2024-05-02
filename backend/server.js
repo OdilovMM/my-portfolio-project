@@ -10,6 +10,7 @@ const categoryRouter = require("./routes/dashboard/categoryRoutes");
 const productRouter = require("./routes/dashboard/productRoutes");
 const sellerRouter = require("./routes/dashboard/sellerRoutes");
 const homeRouter = require("./routes/home/homeRoutes");
+const cartRouter = require("./routes/frontend/cartRoutes");
 const customerRouter = require("./routes/frontend/customerAuthRoutes");
 
 app.use(
@@ -33,6 +34,7 @@ app.use("/api/v1/products", productRouter);
 app.use("/api/v1/seller", sellerRouter);
 app.use("/api/v1/home", homeRouter);
 app.use("/api/v1/customer", customerRouter);
+app.use("/api/v1/cart", cartRouter);
 
 const port = process.env.PORT || 8000;
 dbConnect();
