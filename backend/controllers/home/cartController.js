@@ -1,4 +1,4 @@
-const cartModel = require("../../models/cartModel");
+const Cart = require("../../models/cartModel");
 const { responseReturn } = require("../../utils/response");
 const {
   mongo: { ObjectId },
@@ -9,7 +9,7 @@ class cartController {
     console.log(req.body);
     const { userId, productId, quantity } = req.body;
     try {
-      const product = await cartModel.findOne({
+      const product = await Cart.findOne({
         $and: [
           {
             productId: {
@@ -25,9 +25,9 @@ class cartController {
       });
 
       if (product) {
-        responseReturn(res, 404, { error: "Product Already Added To Card" });
+        responseReturn(res, 404, { error: "Already Added To Card" });
       } else {
-        const product = await cartModel.create({
+        const product = await Cart.create({
           userId,
           productId,
           quantity,
@@ -47,7 +47,7 @@ class cartController {
     const co = 5;
     const { userId } = req.params;
     try {
-      const card_products = await cartModel.aggregate([
+      const card_products = await Cart.aggregate([
         {
           $match: {
             userId: {
@@ -147,113 +147,53 @@ class cartController {
     }
   };
 
-  //   getCustomerCart = async (req, res) => {
-  //     const admin = 5;
-  //     const { userId } = req.params;
-  //     try {
-  //       const productCart = await cartModel.aggregate([
-  //         {
-  //           $match: {
-  //             userId: {
-  //               $eq: new ObjectId(userId),
-  //             },
-  //           },
-  //         },
-  //         {
-  //           $lookup: {
-  //             from: "products",
-  //             localField: "productId",
-  //             foreignField: "_id",
-  //             as: "products",
-  //           },
-  //         },
-  //       ]);
+  deleteProductFromCart = async (req, res) => {
+    const { productId } = req.params;
 
-  //       let buyProduct = 0;
-  //       let calculatePrice = 0;
-  //       let countProductCart = 0;
+    try {
+      const deletedProduct = await Cart.findByIdAndDelete(productId);
 
-  //       const outStockProduct = productCart.filter(
-  //         (p) => p.products[0].stock < p.quantity
-  //       );
-  //       for (let i = 0; i < outStockProduct.length; i++) {
-  //         countProductCart = countProductCart + outStockProduct[i].quantity;
-  //       }
-  //       const inStockProduct = productCart.filter(
-  //         (p) => p.products[0].stock >= p.quantity
-  //       );
-  //       for (let i = 0; i < inStockProduct.length; i++) {
-  //         const { quantity } = inStockProduct[i];
-  //         countProductCart = buyProduct + quantity;
-
-  //         buyProduct = buyProduct + quantity;
-  //         const { price, discount } = inStockProduct[i].products[0];
-  //         if (discount !== 0) {
-  //           calculatePrice =
-  //             calculatePrice +
-  //             quantity * (price - Math.floor((price * discount) / 100));
-  //         } else {
-  //           calculatePrice = calculatePrice + quantity * price;
-  //         }
-  //       }
-
-  //       let p = [];
-  //       let unique = [
-  //         ...new Set(
-  //           inStockProduct.map((p) => p.products[0].sellerId.toString())
-  //         ),
-  //       ];
-  //       for (let i = 0; i < unique.length; i++) {
-  //         let price = 0;
-  //         for (let j = 0; j < inStockProduct.length; j++) {
-  //           const tempProduct = inStockProduct[j].products[0];
-
-  //           if (unique[i] === tempProduct.sellerId.toString()) {
-  //             let price1 = 0;
-  //             if (tempProduct.discount !== 0) {
-  //               price1 =
-  //                 tempProduct.price -
-  //                 Math.floor((tempProduct.price * tempProduct.discount) / 100);
-  //             } else {
-  //               price1 = tempProduct.price1;
-  //             }
-  //             price1 = price1 - Math.floor((price1 * admin) / 100);
-  //             price = price + price1 * inStockProduct[j].quantity;
-  //             p[i] = {
-  //               sellerId: unique[i],
-  //               shopName: tempProduct.shopName,
-  //               price,
-  //               products: p[i]
-  //                 ? [
-  //                     ...p[i].products,
-  //                     {
-  //                       _id: inStockProduct[j]._id,
-  //                       quantity: inStockProduct[j].quantity,
-  //                       productInfo: tempProduct,
-  //                     },
-  //                   ]
-  //                 : [
-  //                     {
-  //                       _id: inStockProduct[j]._id,
-  //                       quantity: inStockProduct[j].quantity,
-  //                       productInfo: tempProduct,
-  //                     },
-  //                   ],
-  //             };
-  //           }
-  //         }
-  //       }
-
-  //       console.log(p);
-  //     } catch (error) {
-  //       responseReturn(res, 500, { error: error.message });
-  //     }
-  //   };
-  addToWishlist = async (req, res) => {
-    console.log(req.body);
+      responseReturn(res, 200, {
+        message: "A product deleted",
+      });
+    } catch (error) {
+      responseReturn(res, 404, { error: error.message });
+    }
   };
-  removeFromWishlist = async (req, res) => {
-    console.log(req.body);
+
+  incrementProductInCart = async (req, res) => {
+    const { productId } = req.params;
+    try {
+      const product = await Cart.findById(productId);
+      const { quantity } = product;
+      const updatedQtyProduct = await Cart.findByIdAndUpdate(productId, {
+        quantity: quantity + 1,
+      });
+      responseReturn(res, 200, {
+        message: "A product quantity update",
+        updatedQtyProduct,
+      });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+  decrementProductInCart = async (req, res) => {
+    const { productId } = req.params;
+    try {
+      const product = await Cart.findById(productId);
+      const { quantity } = product;
+      const updatedQtyProduct = await Cart.findByIdAndUpdate(productId, {
+        quantity: quantity - 1,
+      });
+      responseReturn(res, 200, {
+        message: "A product quantity update",
+        updatedQtyProduct,
+      });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { error: error.message });
+    }
   };
 }
 

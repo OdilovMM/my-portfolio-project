@@ -27,7 +27,6 @@ const Header = () => {
   const { card_product_count } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.customerAuth);
 
-  console.log(card_product_count)
   useEffect(() => {
     dispatch(getAllCategories());
   }, [dispatch]);
@@ -226,9 +225,9 @@ const Header = () => {
                       </div>
                     </div>
 
-                    <div className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]">
+                    <div onClick={redirectCart} className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]">
                       <span
-                        onClick={redirectCart}
+                        
                         className="text-xl text-green-500"
                       >
                         <Link>
@@ -448,7 +447,7 @@ const Header = () => {
               </div>
               <div
                 className={`${
-                  showCategory ? "h-0" : "h-[440px]"
+                  showCategory ? "h-0" : "h-[480px]"
                 } overflow-hidden transition-all md-lg:relative duration-100 absolute z-[99999] bg-[#bacfd9] w-full border-x`}
               >
                 <ul className="py-2 text-slate-600 font-semibold uppercase">

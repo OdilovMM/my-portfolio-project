@@ -4,5 +4,8 @@ const router = require("express").Router();
 
 router.post("/add-cart", cartController.addToCart);
 router.get("/get-customer-cart/:userId", cartController.getCustomerCart);
+router.delete("/remove-product-from-cart/:productId", cartController.deleteProductFromCart);
+router.patch("/increment-product-of-cart/:productId", cartController.incrementProductInCart);
+router.patch("/decrement-product-of-cart/:productId", cartController.decrementProductInCart);
 
 module.exports = router;

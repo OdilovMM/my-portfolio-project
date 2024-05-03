@@ -6,13 +6,11 @@ import { jwtDecode } from "jwt-decode";
 export const getCustomerCartProducts = createAsyncThunk(
   "cart/getCustomerCartProducts",
   async (userId, { rejectWithValue, fulfillWithValue }) => {
-    console.log(userId);
     try {
       const { data } = await api.get(`/cart/get-customer-cart/${userId}`, {
         withCredentials: true,
       });
 
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -23,13 +21,11 @@ export const getCustomerCartProducts = createAsyncThunk(
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async (id, { rejectWithValue, fulfillWithValue }) => {
-    console.log(id);
     try {
       const { data } = await api.post(`/cart/add-cart`, id, {
         withCredentials: true,
       });
 
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -37,55 +33,58 @@ export const addToCart = createAsyncThunk(
   }
 );
 
-// export const removeFromCart = createAsyncThunk(
-//   "cart/removeFromCart",
-//   async (id, { rejectWithValue, fulfillWithValue }) => {
-//     console.log(id);
-//     try {
-//       const { data } = await api.post(`/cart/remove-cart`, id, {
-//         withCredentials: true,
-//       });
+export const deleteProductFromCart = createAsyncThunk(
+  "cart/removeFromCart",
+  async (id, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.delete(
+        `/cart/remove-product-from-cart/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
 
-//       console.log(data);
-//       return fulfillWithValue(data);
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   }
-// );
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
-// export const addToWishlist = createAsyncThunk(
-//   "cart/addToWishlist",
-//   async (id, { rejectWithValue, fulfillWithValue }) => {
-//     console.log(id);
-//     try {
-//       const { data } = await api.post(`/cart/add-to-wishlist`, id, {
-//         withCredentials: true,
-//       });
-
-//       console.log(data);
-//       return fulfillWithValue(data);
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   }
-// );
-// export const removeFromWishlist = createAsyncThunk(
-//   "cart/removeFromWishlist",
-//   async (id, { rejectWithValue, fulfillWithValue }) => {
-//     console.log(id);
-//     try {
-//       const { data } = await api.post(`/cart/remove-from-wishlist`, id, {
-//         withCredentials: true,
-//       });
-
-//       console.log(data);
-//       return fulfillWithValue(data);
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   }
-// );
+export const incrementProductQuantity = createAsyncThunk(
+  "cart/incrementProductQuantity",
+  async (productId, { rejectWithValue, fulfillWithValue }) => {
+    console.log(productId);
+    try {
+      const { data } = await api.patch(
+        `/cart/increment-product-of-cart/${productId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const decrementProductQuantity = createAsyncThunk(
+  "cart/decrementProductQuantity",
+  async (productId, { rejectWithValue, fulfillWithValue }) => {
+    console.log(productId);
+    try {
+      const { data } = await api.patch(
+        `/cart/decrement-product-of-cart/${productId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const cartReducer = createSlice({
   name: "cart",
@@ -114,6 +113,10 @@ export const cartReducer = createSlice({
         state.card_product_count = state.card_product_count + 1;
         toast.success(payload.message);
       })
+      .addCase(addToCart.rejected, (state, { payload }) => {
+        state.card_product_count = state.card_product_count + 1;
+        toast.error(payload.error);
+      })
       .addCase(getCustomerCartProducts.pending, (state, { payload }) => {
         state.loading = true;
       })
@@ -128,6 +131,15 @@ export const cartReducer = createSlice({
       })
       .addCase(getCustomerCartProducts.rejected, (state, { payload }) => {
         state.loading = false;
+      })
+      .addCase(deleteProductFromCart.fulfilled, (state, { payload }) => {
+        state.successMessage = payload.message;
+      })
+      .addCase(incrementProductQuantity.fulfilled, (state, { payload }) => {
+        state.successMessage = payload.message;
+      })
+      .addCase(decrementProductQuantity.fulfilled, (state, { payload }) => {
+        state.successMessage = payload.message;
       });
   },
 });

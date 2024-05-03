@@ -2,30 +2,40 @@ import React, { useEffect } from "react";
 import { BreadCrumbs } from "../components";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getCustomerCartProducts } from "./../store/reducers/cartReducer.js";
+import {
+  getCustomerCartProducts,
+  deleteProductFromCart,
+  messageClear,
+  incrementProductQuantity,
+  decrementProductQuantity,
+} from "./../store/reducers/cartReducer.js";
+import toast from "react-hot-toast";
 
 const AddedProductCart = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
-    loading,
     card_products,
-    card_product_count,
-    wishlist_count,
-    wishlist,
     price,
-    errorMessage,
-    successMessage,
     shipping_fee,
     outofstock_products,
     buy_product_item,
+    card_product_count,
+    successMessage,
   } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.customerAuth);
-  console.log(card_products);
 
   useEffect(() => {
     dispatch(getCustomerCartProducts(userInfo.id));
   }, [dispatch, userInfo.id]);
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+      dispatch(getCustomerCartProducts(userInfo.id));
+    }
+  }, [dispatch, successMessage, userInfo.id]);
 
   const redirect = () => {
     navigate("/shipping", {
@@ -36,6 +46,19 @@ const AddedProductCart = () => {
         items: 2,
       },
     });
+  };
+
+  const handleIncrement = (productQuantity, productStock, productId) => {
+    const tempQuantity = productQuantity + 1;
+    if (tempQuantity <= productStock) {
+      dispatch(incrementProductQuantity(productId));
+    }
+  };
+  const handleDecrement = (productQuantity, productId) => {
+    const tempQuantity = productQuantity - 1;
+    if (tempQuantity !== 0) {
+      dispatch(decrementProductQuantity(productId));
+    }
   };
 
   return (
@@ -61,7 +84,7 @@ const AddedProductCart = () => {
 
       <div className="bg-[#eeeeee]">
         <div className="w-[85%] lg:w-[90%] md:w-[90%] sm:w-[90%] mx-auto py-14">
-          {card_products.length > 0 || outofstock_products > 0 ? (
+          {card_products.length > 0 || outofstock_products.length > 0 ? (
             <div className="flex flex-wrap">
               <div className="w-[67%] md-lg:w-full">
                 <div className="pr-3 md-lg:pr-0">
@@ -126,17 +149,39 @@ const AddedProductCart = () => {
                               {/* increment */}
                               <div className="flex gap-2 flex-col">
                                 <div className="flex  h-[30px] gap-1 justify-center items-start text-xl">
-                                  <button className="px-6 bg-slate-400 cursor-pointer">
+                                  <button
+                                    onClick={() =>
+                                      handleDecrement(
+                                        product.quantity,
+                                        product._id
+                                      )
+                                    }
+                                    className="px-6 bg-slate-400 cursor-pointer"
+                                  >
                                     -
                                   </button>
                                   <span className="px-3 bg-slate-400 ">
                                     {product.quantity}
                                   </span>
-                                  <button className="px-6 bg-slate-400 cursor-pointer">
+                                  <button
+                                    onClick={() =>
+                                      handleIncrement(
+                                        product.quantity,
+                                        product.productInfo.stock,
+                                        product._id
+                                      )
+                                    }
+                                    className="px-6 bg-slate-400 cursor-pointer"
+                                  >
                                     +
                                   </button>
                                 </div>
-                                <button className="px-12 bg-slate-400">
+                                <button
+                                  onClick={() =>
+                                    dispatch(deleteProductFromCart(product._id))
+                                  }
+                                  className="px-12 bg-slate-400"
+                                >
                                   Delete
                                 </button>
                               </div>
@@ -150,7 +195,7 @@ const AddedProductCart = () => {
                       <div className="flex flex-col gap-3">
                         <div className="bg-white p-4">
                           <h2 className="text-md text-red-500 font-semibold">
-                            Out of Stock {card_products.length}
+                            Out of Stock {card_products.length + 1}
                           </h2>
                         </div>
 
@@ -160,7 +205,7 @@ const AddedProductCart = () => {
                               <div className="flex sm:w-full gap-2 w-7/12">
                                 <div className="flex gap-2 justify-start items-center">
                                   <img
-                                    className="w-[80px] h-[80px]"
+                                    className="w-[80px] h-[80px] object-contain"
                                     src={product.products[0].images[0]}
                                     alt=""
                                   />
@@ -197,17 +242,35 @@ const AddedProductCart = () => {
                                 {/* increment */}
                                 <div className="flex gap-2 flex-col">
                                   <div className="flex  h-[30px] gap-1 justify-center items-start text-xl">
-                                    <button className="px-6 bg-slate-400  cursor-not-allowed">
+                                    <button
+                                      onClick={() =>
+                                        handleDecrement(
+                                          product.quantity,
+                                          product._id
+                                        )
+                                      }
+                                      className="px-6 bg-slate-400 "
+                                    >
                                       -
                                     </button>
                                     <span className="px-3 bg-slate-400 ">
                                       {product.quantity}
                                     </span>
-                                    <button className="px-6 bg-slate-400  cursor-not-allowed">
+                                    <button
+                                      title="product is out of stock"
+                                      className="px-6 bg-slate-400  cursor-not-allowed"
+                                    >
                                       +
                                     </button>
                                   </div>
-                                  <button className="px-12 bg-slate-400">
+                                  <button
+                                    onClick={() =>
+                                      dispatch(
+                                        deleteProductFromCart(product._id)
+                                      )
+                                    }
+                                    className="px-12 bg-slate-400"
+                                  >
                                     Delete
                                   </button>
                                 </div>
@@ -227,7 +290,7 @@ const AddedProductCart = () => {
                     <div className="bg-white p-3 text-slate-600 flex flex-col gap-3">
                       <h2 className="text-xl font-bold">Order Summary</h2>
                       <div className="flex justify-between items-center">
-                        <span>{card_product_count} Items </span>
+                        <span>{buy_product_item} Items </span>
                         <span>${price} </span>
                       </div>
                       <div className="flex justify-between items-center">
@@ -247,13 +310,15 @@ const AddedProductCart = () => {
 
                       <div className="flex justify-between items-center">
                         <span>Total</span>
-                        <span className="text-lg text-[#059473]">$430 </span>
+                        <span className="text-lg text-[#059473]">
+                          ${price + shipping_fee}{" "}
+                        </span>
                       </div>
                       <button
                         onClick={redirect}
                         className="px-5 py-[6px] rounded-sm hover:shadow-red-500/50 hover:shadow-lg bg-slate-400 text-sm text-white uppercase "
                       >
-                        Process to Checkout
+                        Process to Checkout ({buy_product_item})
                       </button>
                     </div>
                   )}
@@ -261,7 +326,10 @@ const AddedProductCart = () => {
               </div>
             </div>
           ) : (
-            <div>
+            <div className="flex flex-col w-[200px] gap-3">
+              <h2 className="block text-[20px] text-green-700 font-bold">
+                You cart is empty
+              </h2>
               <Link className="px-4 py-1 bg-slate-400 text-black" to="/shop">
                 Buy now
               </Link>

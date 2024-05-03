@@ -84,7 +84,7 @@ const Cart = ({ product, index }) => {
           >
             <button
               onClick={() => handleAddToCart(product._id)}
-              className="flex h-[40px] bg-[#952626] hover:bg-pink-500 transition duration-900 ease-in-out w-full flex-row gap-2 items-center justify-center"
+              className="flex h-[40px] bg-[#5b5555] hover:bg-[#141111] transition duration-900 ease-in-out w-full flex-row gap-2 items-center justify-center"
             >
               <span className="text-white font-Poppins">Add To Cart</span>
             </button>
