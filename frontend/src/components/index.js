@@ -11,6 +11,7 @@ import Pagination from "./Pagination";
 import ProductReviews from "./ProductReviews";
 import ProductDescription from "./ProductDescription";
 import RatingTemps from "./RatingTemps";
+import StripePayment from "./StripePayment";
 
 export {
   Banner,
@@ -25,5 +26,6 @@ export {
   Pagination,
   ProductReviews,
   ProductDescription,
-  RatingTemps
+  RatingTemps,
+  StripePayment,
 };

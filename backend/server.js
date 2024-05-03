@@ -12,10 +12,11 @@ const sellerRouter = require("./routes/dashboard/sellerRoutes");
 const homeRouter = require("./routes/home/homeRoutes");
 const cartRouter = require("./routes/frontend/cartRoutes");
 const customerRouter = require("./routes/frontend/customerAuthRoutes");
+const orderRouter = require("./routes/home/orderRoutes");
 
 app.use(
   cors({
-    origin: ["http://localhost:3000","http://localhost:3001"],
+    origin: ["http://localhost:3000", "http://localhost:3001"],
     credentials: true,
   })
 );
@@ -35,6 +36,7 @@ app.use("/api/v1/seller", sellerRouter);
 app.use("/api/v1/home", homeRouter);
 app.use("/api/v1/customer", customerRouter);
 app.use("/api/v1/cart", cartRouter);
+app.use("/api/v1/order", orderRouter);
 
 const port = process.env.PORT || 8000;
 dbConnect();

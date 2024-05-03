@@ -20,7 +20,6 @@ const AddedProductCart = () => {
     shipping_fee,
     outofstock_products,
     buy_product_item,
-    card_product_count,
     successMessage,
   } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.customerAuth);
@@ -39,11 +38,11 @@ const AddedProductCart = () => {
 
   const redirect = () => {
     navigate("/shipping", {
-      shippedData: {
-        products: [],
-        price: 500,
-        shippingFee: 120,
-        items: 2,
+      state: {
+        products: card_products,
+        price: price,
+        shippingFee: shipping_fee,
+        items: buy_product_item,
       },
     });
   };
@@ -137,13 +136,21 @@ const AddedProductCart = () => {
                                         100
                                     )}
                                 </h2>
-                                <p>
-                                  $
-                                  <span className="line-through text-red-600">
-                                    {product.productInfo.price}
-                                  </span>
-                                </p>
-                                <p>-{product.productInfo.discount}%</p>
+                                {product.productInfo.discount > 0 ? (
+                                  <p className="text-[13px]">
+                                    $
+                                    <span className="line-through text-red-600 ">
+                                      {product.productInfo.price}
+                                    </span>
+                                  </p>
+                                ) : (
+                                  <></>
+                                )}
+                                {product.productInfo.discount > 0 ? (
+                                  <p>-{product.productInfo.discount}%</p>
+                                ) : (
+                                  <p>No discount</p>
+                                )}
                               </div>
 
                               {/* increment */}
@@ -225,18 +232,25 @@ const AddedProductCart = () => {
                                   <h2 className="text-lg text-orange-500">
                                     $ {product.products[0].price}
                                   </h2>
-                                  <p>
-                                    ${" "}
-                                    <span className="line-through">
-                                      {product.products[0].price -
-                                        Math.floor(
-                                          (product.products[0].price *
-                                            product.products[0].discount) /
-                                            100
-                                        )}
-                                    </span>
-                                  </p>
-                                  <p>-{product.products[0].discount}%</p>
+
+                                  {product.products[0].discount > 0 ? (
+                                    <>
+                                      <p>
+                                        $
+                                        <span className="line-through">
+                                          {product.products[0].price -
+                                            Math.floor(
+                                              (product.products[0].price *
+                                                product.products[0].discount) /
+                                                100
+                                            )}
+                                        </span>
+                                      </p>
+                                      <p>-{product.products[0].discount}%</p>
+                                    </>
+                                  ) : (
+                                    <p>No discount</p>
+                                  )}
                                 </div>
 
                                 {/* increment */}

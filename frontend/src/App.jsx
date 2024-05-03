@@ -13,6 +13,7 @@ import {
   ShippingPage,
   Shop,
   SearchPage,
+  PaymentPage,
 } from "./pages";
 import { MainLayout } from "./layout";
 
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
           <Route path="my-cart" element={<AddedProductCart />} />
+          <Route path="payment" element={<PaymentPage />} />
           <Route path="shipping" element={<ShippingPage />} />
           <Route path="product/details/:slug" element={<ProductDetail />} />
           <Route path="products/search?" element={<SearchPage />} />
