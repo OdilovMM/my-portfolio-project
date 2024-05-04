@@ -114,7 +114,6 @@ export const cartReducer = createSlice({
         toast.success(payload.message);
       })
       .addCase(addToCart.rejected, (state, { payload }) => {
-        state.card_product_count = state.card_product_count + 1;
         toast.error(payload.error);
       })
       .addCase(getCustomerCartProducts.pending, (state, { payload }) => {

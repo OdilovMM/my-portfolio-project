@@ -14,7 +14,6 @@ const Cart = ({ product, index }) => {
   const handleAddWishlist = (id) => {};
 
   const handleAddToCart = (id) => {
-    console.log(id);
     if (userInfo) {
       dispatch(
         addToCart({

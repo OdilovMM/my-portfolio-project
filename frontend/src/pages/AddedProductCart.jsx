@@ -26,7 +26,7 @@ const AddedProductCart = () => {
 
   useEffect(() => {
     dispatch(getCustomerCartProducts(userInfo.id));
-  }, [dispatch, userInfo.id]);
+  }, [dispatch, userInfo]);
 
   useEffect(() => {
     if (successMessage) {

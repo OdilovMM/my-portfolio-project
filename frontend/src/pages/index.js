@@ -12,8 +12,7 @@ import LoginPage from "./LoginPage";
 import CategoryProducts from "./CategoryProducts";
 import SearchPage from "./SearchPage";
 import PaymentPage from "./PaymentPage";
-
-
+import DashboardPage from "./DashboardPage";
 
 export {
   Home,
@@ -29,5 +28,6 @@ export {
   LoginPage,
   CategoryProducts,
   SearchPage,
-  PaymentPage
+  PaymentPage,
+  DashboardPage,
 };

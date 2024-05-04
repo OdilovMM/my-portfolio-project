@@ -18,6 +18,7 @@ import { SiShopify } from "react-icons/si";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories } from "../store/reducers/homeReducer";
+import { getCustomerCartProducts } from "../store/reducers/cartReducer";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -25,7 +26,10 @@ const Header = () => {
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.home);
   const { card_product_count } = useSelector((state) => state.cart);
+  console.log(card_product_count)
   const { userInfo } = useSelector((state) => state.customerAuth);
+
+  console.log(card_product_count);
 
   useEffect(() => {
     dispatch(getAllCategories());
@@ -225,11 +229,11 @@ const Header = () => {
                       </div>
                     </div>
 
-                    <div onClick={redirectCart} className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]">
-                      <span
-                        
-                        className="text-xl text-green-500"
-                      >
+                    <div
+                      onClick={redirectCart}
+                      className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
+                    >
+                      <span className="text-xl text-green-500">
                         <Link>
                           <SiShopify color="black" />
                         </Link>
@@ -256,7 +260,7 @@ const Header = () => {
           } hidden md-lg:block w-screen h-screen bg-[rgba(0,0,0,0.5)] top-0 left-0 z-20`}
         ></div>
         <div
-          className={`w-[300px] z-[999] transition-all duration-300 fixed ${
+          className={`w-[300px] z-[9999] transition-all duration-300 fixed ${
             showBar ? "-left-[300px] top-0  z-[999]" : "left-0 top-0 z-[999]"
           } overflow-y-auto bg-white h-screen py-6 px-8 z-[999]`}
         >
