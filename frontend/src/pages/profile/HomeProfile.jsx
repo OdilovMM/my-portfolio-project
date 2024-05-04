@@ -3,6 +3,8 @@ import { RiShoppingCart2Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getDashboardIndexData } from "../../store/reducers/dashboardReducer";
+import { MdOutlineRemoveRedEye } from "react-icons/md";
+import { FaCreditCard } from "react-icons/fa";
 
 const HomeProfile = () => {
   const navigate = useNavigate();
@@ -68,7 +70,7 @@ const HomeProfile = () => {
         </div>
       </div>
 
-      <div className="bg-white shadow-lg p-5 mt-5 rounded-md">
+      <div className="bg-white shadow-lg p-5 mt-5 rounded-md min-h-[40vh]">
         <h2 className="font-semibold">Recent 5 Orders</h2>
         <div className="pt-4">
           <div className="relative overflow-x-auto">
@@ -85,6 +87,9 @@ const HomeProfile = () => {
                     Payment Status
                   </th>
                   <th scope="col" className=" px-6 py-3">
+                    date
+                  </th>
+                  <th scope="col" className=" px-6 py-3">
                     Order Status
                   </th>
                   <th scope="col" className=" px-6 py-3">
@@ -95,33 +100,47 @@ const HomeProfile = () => {
               <tbody>
                 {recentOrders.map((recent, ind) => {
                   return (
-                    <tr key={ind} className="bg-white border-b">
-                      <td className="px-6 py-4 font-medium whitespace-normal">
-                        #{recent._id}
+                    <tr
+                      key={ind}
+                      className="bg-white border-b hover:bg-slate-300 cursor-pointer"
+                    >
+                      <td className="px-4 py- font-medium whitespace-normal">
+                        ({ind + 1}) #{recent._id}
                       </td>
-                      <td className="px-6 py-4 font-medium whitespace-normal">
-                        $ {recent.price}
+                      <td className="px-4 py-3 font-medium whitespace-normal">
+                        ${recent.price}
                       </td>
-                      <td className="px-6 py-4 font-medium whitespace-normal">
+                      <td className="px-5 py-3 font-medium whitespace-normal">
                         {recent.paymentStatus}
                       </td>
-                      <td className="px-6 py-4 font-medium whitespace-normal">
+                      <td className="px-4 py-3 font-medium whitespace-normal">
+                        {recent.date}
+                      </td>
+                      <td className="px-5 py-3 font-medium whitespace-normal">
                         {recent.deliveryStatus}
                       </td>
-                      <td className="px-6 py-4 font-medium whitespace-normal flex flex-row gap-2">
+                      <td className="px-4 py-3 font-medium whitespace-normal flex flex-row gap-2">
                         <Link
                           to={`/dashboard/order/details/${recent._id}`}
-                          className="px-3 py-[2px] rounded-md bg-slate-300"
+                          className="px-2 py-[2px] rounded-md bg-slate-300 flex items-center justify-center"
                         >
-                          View
+                          <MdOutlineRemoveRedEye
+                            size={18}
+                            title="View Details"
+                            color="black"
+                          />
                         </Link>
 
                         {recent.paymentStatus !== "paid" ? (
                           <button
                             onClick={() => redirectToPay(recent)}
-                            className="px-3 py-[2px] rounded-md bg-slate-300"
+                            className="px-3 py-[2px] rounded-md bg-slate-300  flex items-center justify-center"
                           >
-                            Pay Now
+                            <FaCreditCard
+                              size={18}
+                              title="Pay Now"
+                              color="black"
+                            />
                           </button>
                         ) : (
                           <div className="px-3 py-[2px] rounded-md bg-slate-300">

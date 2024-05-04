@@ -1,18 +1,47 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllOrders } from "../../store/reducers/orderReducer";
+import { MdOutlineRemoveRedEye } from "react-icons/md";
+import { FaCreditCard } from "react-icons/fa";
 
 const MyOrderPage = () => {
+  const navigate = useNavigate();
+
+  const { orderId } = useParams();
+  const dispatch = useDispatch();
   const [state, setState] = useState("all");
+  const { myOrders } = useSelector((state) => state.order);
+  const { userInfo } = useSelector((state) => state.customerAuth);
+
+  useEffect(() => {
+    dispatch(getAllOrders({ status: state, userId: userInfo.id }));
+  }, [dispatch, orderId, state, userInfo.id]);
+
+  const redirectToPay = (recentOrder) => {
+    let items = 0;
+    for (let i = 0; i < recentOrder.length; i++) {
+      items = recentOrder.products[i].quantity + items;
+    }
+    navigate("/payment", {
+      state: {
+        price: recentOrder.price,
+        items,
+        orderId: recentOrder._id,
+      },
+    });
+  };
+
   return (
     <div>
-      <div className="bg-white shadow-lg p-5 rounded-md">
+      <div className="bg-white shadow-lg p-5 rounded-md min-h-[70vh]">
         <div className="flex justify-between items-center">
           <h2 className="font-medium">My Orders</h2>
           <select
             name=""
             value={state}
             onChange={(e) => setState(e.target.value)}
-            className="outline-none px-3 py-1 border rounded-md bg-red-200"
+            className="outline-none cursor-pointer px-3 py-1 border rounded-md bg-red-200"
             id=""
           >
             <option value="all">All Orders</option>
@@ -37,6 +66,9 @@ const MyOrderPage = () => {
                     Payment Status
                   </th>
                   <th scope="col" className=" px-6 py-3">
+                    Date
+                  </th>
+                  <th scope="col" className=" px-6 py-3">
                     Order Status
                   </th>
                   <th scope="col" className=" px-6 py-3">
@@ -45,182 +77,55 @@ const MyOrderPage = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="bg-white border-b">
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    #36514
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    $ 1236
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Pending
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Pending
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal flex flex-row gap-2">
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      View
-                    </Link>
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      Pay Now
-                    </Link>
-                  </td>
-                </tr>
-                <tr className="bg-white border-b">
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    #36514
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    $ 1236
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Paid
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Pending
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal flex flex-row gap-2">
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      View
-                    </Link>
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      Pay Now
-                    </Link>
-                  </td>
-                </tr>
-                <tr className="bg-white border-b">
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    #36514
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    $ 1236
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Pending
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Pending
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal flex flex-row gap-2">
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      View
-                    </Link>
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      Pay Now
-                    </Link>
-                  </td>
-                </tr>
-                <tr className="bg-white border-b">
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    #36514
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    $ 1236
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Paid
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Pending
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal flex flex-row gap-2">
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      View
-                    </Link>
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      Pay Now
-                    </Link>
-                  </td>
-                </tr>
-                <tr className="bg-white border-b">
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    #36514
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    $ 1236
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Pending
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Pending
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal flex flex-row gap-2">
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      View
-                    </Link>
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      Pay Now
-                    </Link>
-                  </td>
-                </tr>
-                <tr className="bg-white border-b">
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    #36514
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    $ 1236
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Paid
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Pending
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal flex flex-row gap-2">
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      View
-                    </Link>
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      Pay Now
-                    </Link>
-                  </td>
-                </tr>
-                <tr className="bg-white border-b">
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    #36514
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    $ 1236
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Pending
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Pending
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal flex flex-row gap-2">
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      View
-                    </Link>
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      Pay Now
-                    </Link>
-                  </td>
-                </tr>
-                <tr className="bg-white border-b">
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    #36514
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    $ 1236
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Paid
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal">
-                    Pending
-                  </td>
-                  <td className="px-6 py-4 font-medium whitespace-normal flex flex-row gap-2">
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      View
-                    </Link>
-                    <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                      Pay Now
-                    </Link>
-                  </td>
-                </tr>
+                {myOrders.map((myOrd, index) => {
+                  return (
+                    <tr
+                      key={index}
+                      className="bg-white border-b hover:bg-slate-300 cursor-pointer"
+                    >
+                      <td className="px-4 py-4 font-medium whitespace-normal">
+                        ({index + 1}) #{myOrd._id}
+                      </td>
+                      <td className="px-5 py-4 font-medium whitespace-normal">
+                        ${myOrd.price}
+                      </td>
+                      <td className="px-6 py-4 font-medium whitespace-normal">
+                        {myOrd.paymentStatus}
+                      </td>
+                      <td className="px-5 py-4 font-medium whitespace-normal">
+                        {myOrd.date}
+                      </td>
+                      <td className="px-5 py-4 font-medium whitespace-normal">
+                        {myOrd.deliveryStatus}
+                      </td>
+                      <td className="px-4 py-4 font-medium whitespace-normal flex flex-row gap-2">
+                        <Link className="px-1 py-[2px] flex items-center justify-center rounded-md bg-slate-300">
+                          <MdOutlineRemoveRedEye
+                            size={18}
+                            title="View Details"
+                            color="black"
+                          />
+                        </Link>
+                        {myOrd.paymentStatus !== "paid" ? (
+                          <button
+                            onClick={() => redirectToPay(myOrd)}
+                            className="px-3 py-[2px] rounded-md bg-slate-300  flex items-center justify-center"
+                          >
+                            <FaCreditCard
+                              size={18}
+                              title="Pay Now"
+                              color="black"
+                            />
+                          </button>
+                        ) : (
+                          <div className="px-3 py-[2px] rounded-md bg-slate-300">
+                            Completed
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

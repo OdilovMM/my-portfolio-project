@@ -7,4 +7,8 @@ router.get(
   "/get-dashboard-data/:userId",
   orderController.getCustomerDashboardData
 );
+router.get(
+  "/get-orders/:userId/:status",
+  orderController.getAllOrdersByStatus
+);
 module.exports = router;

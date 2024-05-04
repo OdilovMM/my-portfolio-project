@@ -101,8 +101,6 @@ class orderController {
   };
 
   getCustomerDashboardData = async (req, res) => {
-    console.log(req.params);
-
     try {
       const { userId } = req.params;
 
@@ -129,7 +127,6 @@ class orderController {
         })
         .countDocuments();
 
-      console.log(recentOrders);
       responseReturn(res, 200, {
         message: "success",
         recentOrders,
@@ -137,6 +134,27 @@ class orderController {
         totalOrder,
         cancelledOrder,
       });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+
+  getAllOrdersByStatus = async (req, res) => {
+    const { status, userId } = req.params;
+    try {
+      let orders = [];
+      if (status !== "all") {
+        orders = await customerOrder.find({
+          customerId: new ObjectId(userId),
+          deliveryStatus: status,
+        });
+      } else {
+        orders = await customerOrder.find({
+          customerId: new ObjectId(userId),
+        });
+      }
+      responseReturn(res, 200, { orders });
     } catch (error) {
       console.log(error);
       responseReturn(res, 500, { error: error.message });
