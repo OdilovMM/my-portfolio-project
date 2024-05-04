@@ -191,7 +191,6 @@ class cartController {
         updatedQtyProduct,
       });
     } catch (error) {
-      console.log(error);
       responseReturn(res, 500, { error: error.message });
     }
   };

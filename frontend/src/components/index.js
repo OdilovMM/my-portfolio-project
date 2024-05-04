@@ -12,6 +12,8 @@ import ProductReviews from "./ProductReviews";
 import ProductDescription from "./ProductDescription";
 import RatingTemps from "./RatingTemps";
 import StripePayment from "./StripePayment";
+import ProfileNav from "./profile/ProfileNav";
+
 
 export {
   Banner,
@@ -28,4 +30,5 @@ export {
   ProductDescription,
   RatingTemps,
   StripePayment,
+  ProfileNav
 };

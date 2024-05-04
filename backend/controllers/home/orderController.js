@@ -53,8 +53,7 @@ class orderController {
         }
       }
     }
-    console.log(customerOrderProduct);
-    console.log(cartId);
+   
 
     try {
       const order = await customerOrder.create({
@@ -99,7 +98,6 @@ class orderController {
 
       responseReturn(res, 200, { message: "Order placed", orderId: order.id });
     } catch (error) {
-      console.log(error);
       responseReturn(res, 500, { error: error.message });
     }
   };
