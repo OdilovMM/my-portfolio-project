@@ -82,7 +82,7 @@ const Cart = ({ product, index }) => {
             className="absolute  bottom-0 w-full transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-500"
           >
             <button
-              onClick={() => handleAddToCart(product._id)}
+              onClick={() => handleAddToCart(product?._id)}
               className="flex h-[40px] bg-[#5b5555] hover:bg-[#141111] transition duration-900 ease-in-out w-full flex-row gap-2 items-center justify-center"
             >
               <span className="text-white font-Poppins">Add To Cart</span>
@@ -101,8 +101,8 @@ const Cart = ({ product, index }) => {
               >
                 $ {product?.price}
                 <span className="pl-2 line-through text-red-600">
-                  {product.discount > 0 &&
-                    product.price +
+                  {product?.discount > 0 &&
+                    product?.price +
                       Math.floor((product.price * product.discount) / 100)}{" "}
                 </span>
               </p>

@@ -35,7 +35,7 @@ const ProfileNav = () => {
             </Link>
           </li>
           <li className="hover:bg-slate-300 w-full px-4 transition-all duration-200">
-            <Link className="flex items-center justify-start gap-3 py-1">
+            <Link to='/dashboard/my-wishlist' className="flex items-center justify-start gap-3 py-1">
               <span>
                 <IoHeartOutline size={20} />
               </span>
@@ -43,7 +43,7 @@ const ProfileNav = () => {
             </Link>
           </li>
           <li className="hover:bg-slate-300 w-full px-4 sm:px-2  transition-all duration-200">
-            <Link className="flex items-center justify-start gap-3 py-1">
+            <Link  className="flex items-center justify-start gap-3 py-1">
               <span>
                 <IoChatbubblesOutline size={20} />
               </span>
@@ -51,7 +51,7 @@ const ProfileNav = () => {
             </Link>
           </li>
           <li className="hover:bg-slate-300 w-full px-4 sm:px-2  transition-all duration-200">
-            <Link className="flex items-center justify-start gap-3 py-1">
+            <Link to='/dashboard/change-password' className="flex items-center justify-start gap-3 py-1">
               <span>
                 <FaLock size={20} />
               </span>

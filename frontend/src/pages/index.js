@@ -16,7 +16,8 @@ import DashboardPage from "./profile/DashboardPage";
 import HomeProfile from "./profile/HomeProfile";
 import ProfileContentLayout from "./profile/ProfileContentLayout";
 import MyOrderPage from "./profile/MyOrderPage.jsx";
-
+import WishlistPage from "./profile/WishlistPage.jsx";
+import ChangePasswordPage from "./profile/ChangePasswordPage.jsx";
 
 export {
   Home,
@@ -36,5 +37,7 @@ export {
   DashboardPage,
   ProfileContentLayout,
   HomeProfile,
-  MyOrderPage
+  MyOrderPage,
+  WishlistPage,
+  ChangePasswordPage,
 };
