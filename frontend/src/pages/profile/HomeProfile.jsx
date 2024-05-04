@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { RiShoppingCart2Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getDashboardIndexData } from "../../store/reducers/dashboardReducer";
 
 const HomeProfile = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.customerAuth);
   const { recentOrders, totalOrder, pendingOrder, cancelledOrder } =
@@ -14,6 +15,20 @@ const HomeProfile = () => {
   useEffect(() => {
     dispatch(getDashboardIndexData(userInfo.id));
   }, [dispatch, userInfo.id]);
+
+  const redirectToPay = (recentOrder) => {
+    let items = 0;
+    for (let i = 0; i < recentOrder.length; i++) {
+      items = recentOrder.products[i].quantity + items;
+    }
+    navigate("/payment", {
+      state: {
+        price: recentOrder.price,
+        items,
+        orderId: recentOrder._id,
+      },
+    });
+  };
 
   return (
     <div>
@@ -82,7 +97,7 @@ const HomeProfile = () => {
                   return (
                     <tr key={ind} className="bg-white border-b">
                       <td className="px-6 py-4 font-medium whitespace-normal">
-                       #{recent._id}
+                        #{recent._id}
                       </td>
                       <td className="px-6 py-4 font-medium whitespace-normal">
                         $ {recent.price}
@@ -94,12 +109,25 @@ const HomeProfile = () => {
                         {recent.deliveryStatus}
                       </td>
                       <td className="px-6 py-4 font-medium whitespace-normal flex flex-row gap-2">
-                        <Link className="px-3 py-[2px] rounded-md bg-slate-300">
+                        <Link
+                          to={`/dashboard/order/details/${recent._id}`}
+                          className="px-3 py-[2px] rounded-md bg-slate-300"
+                        >
                           View
                         </Link>
-                        <Link className="px-3 py-[2px] rounded-md bg-slate-300">
-                          Pay Now
-                        </Link>
+
+                        {recent.paymentStatus !== "paid" ? (
+                          <button
+                            onClick={() => redirectToPay(recent)}
+                            className="px-3 py-[2px] rounded-md bg-slate-300"
+                          >
+                            Pay Now
+                          </button>
+                        ) : (
+                          <div className="px-3 py-[2px] rounded-md bg-slate-300">
+                            Completed
+                          </div>
+                        )}
                       </td>
                     </tr>
                   );

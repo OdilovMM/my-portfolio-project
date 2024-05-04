@@ -7,11 +7,12 @@ const PaymentPage = () => {
     state: { price, items, orderId },
   } = useLocation();
   console.log(price, items, orderId);
+  console.log(items)
   const [paymentMethod, setPaymentMethod] = useState("stripe");
 
   return (
     <div>
-      <div className="bg-[#eeeeee]">
+      <div className="bg-[#eeeeee] h-[55vh]">
         <div className="w-[85%] lg:w-[90%] md:w-[90%] sm:w-[90%] mx-auto py-16 mt-4 ">
           <div className="flex flex-wrap md:flex-col-reverse">
             <div className="w-7/12 md:w-full">
