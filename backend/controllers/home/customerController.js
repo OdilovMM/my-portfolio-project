@@ -76,6 +76,7 @@ class authControllers {
       responseReturn(res, 500, { error: "Internal Server error" });
     }
   };
+  
 }
 
 module.exports = new authControllers();

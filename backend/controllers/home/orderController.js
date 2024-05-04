@@ -4,7 +4,6 @@ const { responseReturn } = require("../../utils/response");
 const authOrder = require("../../models/authOrderModel");
 const customerOrder = require("../../models/customerOrderModel");
 const Cart = require("../../models/cartModel");
-
 const {
   mongo: { ObjectId },
 } = require("mongoose");
@@ -53,7 +52,6 @@ class orderController {
         }
       }
     }
-   
 
     try {
       const order = await customerOrder.create({
@@ -98,6 +96,49 @@ class orderController {
 
       responseReturn(res, 200, { message: "Order placed", orderId: order.id });
     } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+
+  getCustomerDashboardData = async (req, res) => {
+    console.log(req.params);
+
+    try {
+      const { userId } = req.params;
+
+      const recentOrders = await customerOrder
+        .find({
+          customerId: new ObjectId(userId),
+        })
+        .limit(5);
+      const pendingOrder = await customerOrder
+        .find({
+          customerId: new ObjectId(userId),
+          deliveryStatus: "pending",
+        })
+        .countDocuments(5);
+      const totalOrder = await customerOrder
+        .find({
+          customerId: new ObjectId(userId),
+        })
+        .countDocuments();
+      const cancelledOrder = await customerOrder
+        .find({
+          customerId: new ObjectId(userId),
+          deliveryStatus: "canceled",
+        })
+        .countDocuments();
+
+      console.log(recentOrders);
+      responseReturn(res, 200, {
+        message: "success",
+        recentOrders,
+        pendingOrder,
+        totalOrder,
+        cancelledOrder,
+      });
+    } catch (error) {
+      console.log(error);
       responseReturn(res, 500, { error: error.message });
     }
   };
