@@ -15,6 +15,8 @@ import PaymentPage from "./PaymentPage";
 import DashboardPage from "./profile/DashboardPage";
 import HomeProfile from "./profile/HomeProfile";
 import ProfileContentLayout from "./profile/ProfileContentLayout";
+import MyOrderPage from "./profile/MyOrderPage.jsx";
+
 
 export {
   Home,
@@ -34,4 +36,5 @@ export {
   DashboardPage,
   ProfileContentLayout,
   HomeProfile,
+  MyOrderPage
 };

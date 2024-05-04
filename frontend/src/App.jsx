@@ -16,6 +16,7 @@ import {
   PaymentPage,
   DashboardPage,
   HomeProfile,
+  MyOrderPage,
 } from "./pages";
 import { MainLayout } from "./layout";
 import ProtectedRoute from "./utils/ProtectedRoute";
@@ -48,6 +49,7 @@ const App = () => {
             }
           >
             <Route index element={<HomeProfile />} />
+            <Route path="my-orders" element={<MyOrderPage />} />
           </Route>
         </Route>
       </Routes>

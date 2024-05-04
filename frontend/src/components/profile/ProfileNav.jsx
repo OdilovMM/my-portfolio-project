@@ -9,11 +9,14 @@ import { AiOutlineLogout } from "react-icons/ai";
 
 const ProfileNav = () => {
   return (
-    <div className="w-3/12 md:w-full    bg-[#fff] rounded-md shadow-lg ">
-      <div className="py-3 w-full ">
-        <ul className="flex flex-col md:flex-row justify-between items-start text-slate-600 font-bold ">
+    <div className="w-3/12 md:w-full h-[100%] shadow-lg">
+      <div className="py-3 w-full  bg-[#fff] rounded-md">
+        <ul className="flex flex-col h-[100%]  md:flex-row justify-between items-start text-slate-600 font-bold ">
           <li className="hover:bg-slate-300 w-full px-4 sm:px-2 transition-all duration-200">
-            <Link className="flex items-center justify-start gap-3 py-1">
+            <Link
+              to="/dashboard"
+              className="flex items-center justify-start gap-3 py-1"
+            >
               <span>
                 <RxDashboard size={20} />
               </span>
@@ -21,7 +24,10 @@ const ProfileNav = () => {
             </Link>
           </li>
           <li className="hover:bg-slate-300 w-full px-4 sm:px-2  transition-all duration-200">
-            <Link className="flex items-center justify-start gap-3 py-1">
+            <Link
+              to="/dashboard/my-orders"
+              className="flex items-center justify-start gap-3 py-1"
+            >
               <span>
                 <SiShopee size={20} />
               </span>
