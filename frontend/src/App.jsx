@@ -14,9 +14,10 @@ import {
   Shop,
   SearchPage,
   PaymentPage,
+  DashboardPage,
 } from "./pages";
 import { MainLayout } from "./layout";
-
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 const App = () => {
   return (
@@ -36,6 +37,14 @@ const App = () => {
           <Route path="product/details/:slug" element={<ProductDetail />} />
           <Route path="products/search?" element={<SearchPage />} />
           <Route path="products?" element={<CategoryProducts />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          ></Route>
         </Route>
       </Routes>
     </BrowserRouter>
