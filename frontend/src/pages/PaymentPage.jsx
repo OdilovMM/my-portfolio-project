@@ -6,8 +6,7 @@ const PaymentPage = () => {
   const {
     state: { price, items, orderId },
   } = useLocation();
-  console.log(price, items, orderId);
-  console.log(items)
+ 
   const [paymentMethod, setPaymentMethod] = useState("stripe");
 
   return (

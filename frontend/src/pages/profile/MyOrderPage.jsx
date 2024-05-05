@@ -99,7 +99,7 @@ const MyOrderPage = () => {
                         {myOrd.deliveryStatus}
                       </td>
                       <td className="px-4 py-4 font-medium whitespace-normal flex flex-row gap-2">
-                        <Link className="px-1 py-[2px] flex items-center justify-center rounded-md bg-slate-300">
+                        <Link to={`/dashboard/order/details/${myOrd._id}`} className="px-1 hover:bg-slate-400 py-[2px] flex items-center justify-center rounded-md bg-slate-300">
                           <MdOutlineRemoveRedEye
                             size={18}
                             title="View Details"
@@ -109,12 +109,13 @@ const MyOrderPage = () => {
                         {myOrd.paymentStatus !== "paid" ? (
                           <button
                             onClick={() => redirectToPay(myOrd)}
-                            className="px-3 py-[2px] rounded-md bg-slate-300  flex items-center justify-center"
+                            className="px-3 py-[2px] rounded-md bg-slate-300  flex items-center justify-center hover:bg-slate-400"
                           >
                             <FaCreditCard
                               size={18}
                               title="Pay Now"
                               color="black"
+                             
                             />
                           </button>
                         ) : (

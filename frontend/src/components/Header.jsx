@@ -22,22 +22,18 @@ import { getCustomerCartProducts } from "../store/reducers/cartReducer";
 
 const Header = () => {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.home);
   const { card_product_count } = useSelector((state) => state.cart);
-  console.log(card_product_count)
   const { userInfo } = useSelector((state) => state.customerAuth);
 
-  console.log(card_product_count);
-
   useEffect(() => {
+    dispatch(getCustomerCartProducts(userInfo.id));
     dispatch(getAllCategories());
-  }, [dispatch]);
+  }, [dispatch, userInfo.id]);
 
   const [showBar, setShowBar] = useState(true);
   const [showCategory, setShowCategory] = useState(true);
-
   const { pathname } = useLocation();
   const wishlist_count = 3;
 
@@ -238,9 +234,11 @@ const Header = () => {
                           <SiShopify color="black" />
                         </Link>
                       </span>
-                      <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                        {card_product_count}
-                      </div>
+                      {card_product_count > 0 && (
+                        <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
+                          {card_product_count}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -530,7 +528,7 @@ const Header = () => {
                   </div>
                   <div className="flex justify-end flex-col gap-1">
                     <h2 className="text-md font-medium text-slate-700">
-                      +070 0880
+                      061185
                     </h2>
                     <span className="text-sm">Online 24/7</span>
                   </div>

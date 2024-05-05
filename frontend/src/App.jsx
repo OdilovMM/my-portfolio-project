@@ -22,6 +22,7 @@ import {
 } from "./pages";
 import { MainLayout } from "./layout";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import { OrderDetails } from "./components";
 
 const App = () => {
   return (
@@ -54,6 +55,7 @@ const App = () => {
             <Route path="my-orders" element={<MyOrderPage />} />
             <Route path="my-wishlist" element={<WishlistPage />} />
             <Route path="change-password" element={<ChangePasswordPage />} />
+            <Route path="order/details/:orderId" element={<OrderDetails />} />
           </Route>
         </Route>
       </Routes>

@@ -116,9 +116,6 @@ export const cartReducer = createSlice({
       .addCase(addToCart.rejected, (state, { payload }) => {
         toast.error(payload.error);
       })
-      .addCase(getCustomerCartProducts.pending, (state, { payload }) => {
-        state.loading = true;
-      })
       .addCase(getCustomerCartProducts.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.card_products = payload.card_products;

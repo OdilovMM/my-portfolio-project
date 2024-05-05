@@ -12,7 +12,6 @@ const HomeProfile = () => {
   const { userInfo } = useSelector((state) => state.customerAuth);
   const { recentOrders, totalOrder, pendingOrder, cancelledOrder } =
     useSelector((state) => state.dashboard);
-  console.log(userInfo.id);
 
   useEffect(() => {
     dispatch(getDashboardIndexData(userInfo.id));
@@ -122,7 +121,7 @@ const HomeProfile = () => {
                       <td className="px-4 py-3 font-medium whitespace-normal flex flex-row gap-2">
                         <Link
                           to={`/dashboard/order/details/${recent._id}`}
-                          className="px-2 py-[2px] rounded-md bg-slate-300 flex items-center justify-center"
+                          className="px-2 py-[2px] hover:bg-slate-400 rounded-md bg-slate-300 flex items-center justify-center"
                         >
                           <MdOutlineRemoveRedEye
                             size={18}
@@ -134,7 +133,7 @@ const HomeProfile = () => {
                         {recent.paymentStatus !== "paid" ? (
                           <button
                             onClick={() => redirectToPay(recent)}
-                            className="px-3 py-[2px] rounded-md bg-slate-300  flex items-center justify-center"
+                            className="px-3 py-[2px] hover:bg-slate-400 rounded-md bg-slate-300  flex items-center justify-center"
                           >
                             <FaCreditCard
                               size={18}

@@ -29,7 +29,7 @@ const Cart = ({ product, index }) => {
 
   return (
     <>
-      <div className="w-[232px] h-[400px] flex flex-col justify-between md:w-[210px] overflow-hidden border-[0.5px] border-grey-200 md-lg:w-[290px] group  rounded-[6px] shadow-sm  relative cursor-pointer">
+      <div className="w-[232px] h-[400px] flex flex-col justify-between md:w-[210px] overflow-hidden border-[0.5px] border-grey-200 md-lg:w-[290px] group  rounded-[6px] shadow-md  relative cursor-pointer">
         <div className="relative h-[300px] overflow-hidden   ">
           <Link className=" h-full w-full   flex justify-center items-center transition-transform duration-500 transform scale-105 group-hover:scale-110">
             <img

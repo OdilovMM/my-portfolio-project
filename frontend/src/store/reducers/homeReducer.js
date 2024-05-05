@@ -46,7 +46,6 @@ export const getProductsPriceRange = createAsyncThunk(
 export const queryProduct = createAsyncThunk(
   "home/queryProduct",
   async (query, { rejectWithValue, fulfillWithValue }) => {
-    console.log(query)
     try {
       const { data } = await api.get(
         `/home/product-query?category=${query.searchCategory}&&rating=${
@@ -60,7 +59,6 @@ export const queryProduct = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log(data)
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);

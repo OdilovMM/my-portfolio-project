@@ -80,7 +80,7 @@ const Footer = () => {
                 Subscribe
               </button>
 
-              <ul className="flex justify-start items-center gap-3">
+              <ul className="flex justify-start items-center mt-3 gap-3">
                 <li>
                   <Link
                     className="w-[38px] h-[38px] hover:bg-[#059473] hover:text-white flex justify-center items-center bg-white rounded-full"

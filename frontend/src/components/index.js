@@ -13,6 +13,7 @@ import ProductDescription from "./ProductDescription";
 import RatingTemps from "./RatingTemps";
 import StripePayment from "./StripePayment";
 import ProfileNav from "./profile/ProfileNav";
+import OrderDetails from "./profile/OrderDetails";
 
 
 export {
@@ -30,5 +31,6 @@ export {
   ProductDescription,
   RatingTemps,
   StripePayment,
-  ProfileNav
+  ProfileNav,
+  OrderDetails
 };

@@ -160,6 +160,18 @@ class orderController {
       responseReturn(res, 500, { error: error.message });
     }
   };
+
+  getOrderDetail = async (req, res) => {
+    const { orderId } = req.params;
+
+    try {
+      const myOrder = await customerOrder.findById(orderId);
+      responseReturn(res, 200, { myOrder });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
 }
 
 module.exports = new orderController();
