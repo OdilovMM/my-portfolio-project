@@ -101,6 +101,21 @@ export const addToWishlist = createAsyncThunk(
     }
   }
 );
+export const getAllMyWishlists = createAsyncThunk(
+  "wishlist/getAllMyWishlists",
+  async (userId, { rejectWithValue, fulfillWithValue }) => {
+    console.log(userId);
+    try {
+      const { data } = await api.get(`/cart/get-all-wishlist/${userId}`, {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const cartReducer = createSlice({
   name: "cart",
@@ -164,6 +179,22 @@ export const cartReducer = createSlice({
         toast.success(payload.message);
       })
       .addCase(addToWishlist.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.errorMessage = payload.message;
+        toast.error(payload.error);
+      })
+      .addCase(getAllMyWishlists.pending, (state, { payload }) => {
+        state.loading = true;
+      })
+      .addCase(getAllMyWishlists.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.successMessage = payload.message;
+        state.wishlist = payload.wishlist
+        state.wishlist_count =
+          state.wishlist_count > 0 ? state.wishlist_count + 1 : 1;
+        toast.success(payload.message);
+      })
+      .addCase(getAllMyWishlists.rejected, (state, { payload }) => {
         state.loading = false;
         state.errorMessage = payload.message;
         toast.error(payload.error);
