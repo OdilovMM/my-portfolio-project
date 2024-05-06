@@ -116,6 +116,21 @@ export const getAllMyWishlists = createAsyncThunk(
     }
   }
 );
+export const removeWishlist = createAsyncThunk(
+  "wishlist/removeWishlist",
+  async (wishlistId, { rejectWithValue, fulfillWithValue }) => {
+    console.log(wishlistId);
+    try {
+      const { data } = await api.delete(`/cart/remove-wishlist/${wishlistId}`, {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const cartReducer = createSlice({
   name: "cart",
@@ -192,6 +207,17 @@ export const cartReducer = createSlice({
         state.wishlist_count = payload.wishlistCount;
       })
       .addCase(getAllMyWishlists.rejected, (state, { payload }) => {
+        state.loading = false;
+      })
+      .addCase(removeWishlist.pending, (state, { payload }) => {
+        state.loading = true;
+      })
+      .addCase(removeWishlist.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.wishlist = payload.wishlist;
+        state.wishlist_count = payload.wishlistCount;
+      })
+      .addCase(removeWishlist.rejected, (state, { payload }) => {
         state.loading = false;
       });
   },

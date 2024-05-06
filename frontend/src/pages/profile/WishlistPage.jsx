@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import { Rating } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllMyWishlists } from "../../store/reducers/cartReducer";
+import {
+  getAllMyWishlists,
+  removeWishlist,
+} from "../../store/reducers/cartReducer";
 import { AiFillHeart, AiOutlineEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import saleIcon from "../../assets/icon/icons8-sale.gif";
@@ -56,7 +59,7 @@ const WishlistPage = ({ product, index }) => {
               {/* link */}
               <div className="absolute top-2 right-1 flex flex-col gap-2 transform translate-x-9  opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition duration-500">
                 <button
-                  // onClick={() => handleAddWishlist(product)}
+                  onClick={() => dispatch(removeWishlist(product._id))}
                   className="p-2 bg-white  hover:bg-pink-500 transition ease-in-out"
                 >
                   <RxCross2 color="black" size={22} />
@@ -64,7 +67,7 @@ const WishlistPage = ({ product, index }) => {
                   {/* <AiOutlineHeart size={22} /> */}
                 </button>
                 <Link
-                  to={`/product/details/${product?._id}`}
+                  to={`/product/details/${product?.slug}`}
                   className="p-2 bg-white  hover:bg-pink-500 transition ease-in-out"
                 >
                   <AiOutlineEye size={22} />

@@ -101,7 +101,7 @@ const Cart = ({ product, index }) => {
               {/* <AiOutlineHeart size={22} /> */}
             </button>
             <Link
-              to={`/product/details/${product?._id}`}
+              to={`/product/details/${product?.slug}`}
               className="p-2 bg-white  hover:bg-pink-500 transition ease-in-out"
             >
               <AiOutlineEye size={22} />
