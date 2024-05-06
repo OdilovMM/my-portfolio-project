@@ -1,4 +1,5 @@
 const Cart = require("../../models/cartModel");
+const Wishlist = require("../../models/wishlistModel");
 const { responseReturn } = require("../../utils/response");
 const {
   mongo: { ObjectId },
@@ -6,7 +7,6 @@ const {
 
 class cartController {
   addToCart = async (req, res) => {
-    console.log(req.body);
     const { userId, productId, quantity } = req.body;
     try {
       const product = await Cart.findOne({
@@ -32,7 +32,6 @@ class cartController {
           productId,
           quantity,
         });
-        console.log(product);
         responseReturn(res, 201, {
           message: "Added To Card",
           product,
@@ -194,6 +193,28 @@ class cartController {
       responseReturn(res, 500, { error: error.message });
     }
   };
+
+  addToWishlist = async (req, res) => {
+    console.log(req.body);
+    const { slug } = req.body;
+    try {
+      const product = await Wishlist.findOne({ slug });
+      if (product) {
+        responseReturn(res, 404, {
+          error: "Product Is Already In Wishlist",
+        });
+      } else {
+        await Wishlist.create(req.body);
+        responseReturn(res, 201, {
+          message: "Product Add to Wishlist Success",
+        });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  deleteFromWishlist = async (req, res) => {};
+  getAllMyWishlist = async (req, res) => {};
 }
 
 module.exports = new cartController();

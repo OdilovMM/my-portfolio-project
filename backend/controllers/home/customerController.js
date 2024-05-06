@@ -33,7 +33,6 @@ class authControllers {
         res.cookie("customerToken", token, {
           expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         });
-        console.log(newCustomer, token);
         responseReturn(res, 201, {
           message: "User Registered Successful",
           token,

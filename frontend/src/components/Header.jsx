@@ -24,7 +24,7 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.home);
-  const { card_product_count } = useSelector((state) => state.cart);
+  const { card_product_count, wishlist_count } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.customerAuth);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const Header = () => {
   const [showBar, setShowBar] = useState(true);
   const [showCategory, setShowCategory] = useState(true);
   const { pathname } = useLocation();
-  const wishlist_count = 3;
+  // const wishlist_count = 3;
 
   const [searchValue, setSearchValue] = useState("");
   const [category, setCategory] = useState();
@@ -221,7 +221,7 @@ const Header = () => {
                         <IoHeart color="black" />
                       </span>
                       <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                        {/* {wishlistCount} */}5
+                        {wishlist_count}
                       </div>
                     </div>
 

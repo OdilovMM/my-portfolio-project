@@ -88,14 +88,16 @@ class homeController {
         priceRange,
       });
     } catch (error) {
-      console.log(error.message);
+      responseReturn(res, 500, {
+        error: error.message,
+      });
     }
   };
 
   getProductQuery = async (req, res) => {
     const parPage = 8;
     req.query.parPage = parPage;
-    console.log(req.query);
+
 
     try {
       const products = await Products.find({}).sort({
@@ -120,7 +122,7 @@ class homeController {
         .limitField()
         .getProducts();
 
-      console.log(result);
+  
 
       responseReturn(res, 200, {
         products: result,

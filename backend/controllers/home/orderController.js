@@ -28,7 +28,9 @@ class orderController {
       }
       return true;
     } catch (error) {
-      console.log(error);
+      responseReturn(res, 500, {
+        error: error.message,
+      });
     }
   };
 
@@ -135,7 +137,6 @@ class orderController {
         cancelledOrder,
       });
     } catch (error) {
-      console.log(error);
       responseReturn(res, 500, { error: error.message });
     }
   };
@@ -156,7 +157,6 @@ class orderController {
       }
       responseReturn(res, 200, { orders });
     } catch (error) {
-      console.log(error);
       responseReturn(res, 500, { error: error.message });
     }
   };
@@ -168,7 +168,6 @@ class orderController {
       const myOrder = await customerOrder.findById(orderId);
       responseReturn(res, 200, { myOrder });
     } catch (error) {
-      console.log(error);
       responseReturn(res, 500, { error: error.message });
     }
   };

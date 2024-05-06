@@ -1,17 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AiFillHeart, AiOutlineEye, AiOutlineHeart } from "react-icons/ai";
 import Rating from "./Rating";
 import saleIcon from "./../assets/icon/icons8-sale.gif";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../store/reducers/cartReducer";
+import {
+  addToCart,
+  addToWishlist,
+  messageClear,
+} from "../store/reducers/cartReducer";
 import toast from "react-hot-toast";
 
 const Cart = ({ product, index }) => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.customerAuth);
+  const { successMessage, errorMessage } = useSelector((state) => state.cart);
 
-  const handleAddWishlist = (id) => {};
+  const handleAddWishlist = (product) => {
+    dispatch(
+      addToWishlist({
+        userId: userInfo.id,
+        productId: product._id,
+        name: product.name,
+        brand: product.brand,
+        category: product.category,
+        description: product.description,
+        discount: product.discount,
+        images: product.images,
+        price: product.price,
+        rating: product.rating,
+        shopName: product.shopName,
+        slug: product.slug,
+        stock: product.stock,
+      })
+    );
+  };
 
   const handleAddToCart = (id) => {
     if (userInfo) {
@@ -26,6 +49,17 @@ const Cart = ({ product, index }) => {
       toast.error("Please, Login first");
     }
   };
+
+  // useEffect(() => {
+  //   if (successMessage) {
+  //     toast.success(successMessage);
+  //     dispatch(messageClear());
+  //   }
+  //   if (errorMessage) {
+  //     toast.error(errorMessage);
+  //     dispatch(messageClear());
+  //   }
+  // }, [successMessage, errorMessage, dispatch]);
 
   return (
     <>
@@ -59,7 +93,7 @@ const Cart = ({ product, index }) => {
           {/* link */}
           <div className="absolute top-2 right-1 flex flex-col gap-2 transform translate-x-9  opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition duration-500">
             <button
-              onClick={() => handleAddWishlist(product._id)}
+              onClick={() => handleAddWishlist(product)}
               className="p-2 bg-white  hover:bg-pink-500 transition ease-in-out"
             >
               <AiFillHeart color="red" size={22} />

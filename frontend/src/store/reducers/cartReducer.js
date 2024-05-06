@@ -86,6 +86,22 @@ export const decrementProductQuantity = createAsyncThunk(
   }
 );
 
+export const addToWishlist = createAsyncThunk(
+  "wishlist/addToWishlist",
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    console.log(info);
+    try {
+      const { data } = await api.post("/cart/add-wishlist", info, {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const cartReducer = createSlice({
   name: "cart",
   initialState: {
@@ -136,6 +152,21 @@ export const cartReducer = createSlice({
       })
       .addCase(decrementProductQuantity.fulfilled, (state, { payload }) => {
         state.successMessage = payload.message;
+      })
+      .addCase(addToWishlist.pending, (state, { payload }) => {
+        state.loading = true;
+      })
+      .addCase(addToWishlist.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.successMessage = payload.message;
+        state.wishlist_count =
+          state.wishlist_count > 0 ? state.wishlist_count + 1 : 1;
+        toast.success(payload.message);
+      })
+      .addCase(addToWishlist.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.errorMessage = payload.message;
+        toast.error(payload.error);
       });
   },
 });
