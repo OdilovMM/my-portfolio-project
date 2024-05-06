@@ -18,13 +18,18 @@ import { SiShopify } from "react-icons/si";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories } from "../store/reducers/homeReducer";
-import { getCustomerCartProducts } from "../store/reducers/cartReducer";
+import {
+  getCustomerCartProducts,
+  messageClear,
+} from "../store/reducers/cartReducer";
+import toast from "react-hot-toast";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.home);
-  const { card_product_count, wishlist_count } = useSelector((state) => state.cart);
+  const { card_product_count, wishlist_count, successMessage, errorMessage } =
+    useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.customerAuth);
 
   useEffect(() => {
@@ -51,6 +56,16 @@ const Header = () => {
       navigate("/login");
     }
   };
+  // useEffect(() => {
+  //   if (successMessage) {
+  //     toast.success(successMessage);
+  //     dispatch(messageClear());
+  //   }
+  //   if (errorMessage) {
+  //     toast.error(errorMessage);
+  //     dispatch(messageClear());
+  //   }
+  // }, [successMessage, errorMessage, dispatch]);
 
   return (
     <div className="w-full bg-white">
@@ -216,14 +231,17 @@ const Header = () => {
 
                 <div className="flex md-lg:hidden justify-center items-center gap-5">
                   <div className="flex justify-center gap-5">
-                    <div className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]">
+                    <Link
+                      to="/dashboard/my-wishlist"
+                      className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
+                    >
                       <span className="text-xl text-green-500">
                         <IoHeart color="black" />
                       </span>
                       <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
                         {wishlist_count}
                       </div>
-                    </div>
+                    </Link>
 
                     <div
                       onClick={redirectCart}

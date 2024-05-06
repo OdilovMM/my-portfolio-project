@@ -49,7 +49,17 @@ const Cart = ({ product, index }) => {
       toast.error("Please, Login first");
     }
   };
-  
+
+  // useEffect(() => {
+  //   if (successMessage) {
+  //     toast.success(successMessage);
+  //     dispatch(messageClear());
+  //   }
+  //   if (errorMessage) {
+  //     toast.error(errorMessage);
+  //     dispatch(messageClear());
+  //   }
+  // }, [successMessage, errorMessage, dispatch]);
 
   return (
     <>

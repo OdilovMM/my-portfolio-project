@@ -188,16 +188,11 @@ export const cartReducer = createSlice({
       })
       .addCase(getAllMyWishlists.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.successMessage = payload.message;
-        state.wishlist = payload.wishlist
-        state.wishlist_count =
-          state.wishlist_count > 0 ? state.wishlist_count + 1 : 1;
-        toast.success(payload.message);
+        state.wishlist = payload.wishlist;
+        state.wishlist_count = payload.wishlistCount;
       })
       .addCase(getAllMyWishlists.rejected, (state, { payload }) => {
         state.loading = false;
-        state.errorMessage = payload.message;
-        toast.error(payload.error);
       });
   },
 });

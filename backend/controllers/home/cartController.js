@@ -211,10 +211,26 @@ class cartController {
       }
     } catch (error) {
       console.log(error.message);
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+  getAllMyWishlist = async (req, res) => {
+    console.log(req.params);
+    const { userId } = req.params;
+    try {
+      const wishlist = await Wishlist.find({
+        userId,
+      });
+      responseReturn(res, 200, {
+        message: "all wishlist",
+        wishlistCount: wishlist.length,
+        wishlist,
+      });
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
     }
   };
   deleteFromWishlist = async (req, res) => {};
-  getAllMyWishlist = async (req, res) => {};
 }
 
 module.exports = new cartController();

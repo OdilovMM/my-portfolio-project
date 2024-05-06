@@ -8,5 +8,6 @@ router.delete("/remove-product-from-cart/:productId", cartController.deleteProdu
 router.patch("/increment-product-of-cart/:productId", cartController.incrementProductInCart);
 router.patch("/decrement-product-of-cart/:productId", cartController.decrementProductInCart);
 router.post("/add-wishlist", cartController.addToWishlist);
+router.get("/get-all-wishlist/:userId", cartController.getAllMyWishlist);
 
 module.exports = router;
