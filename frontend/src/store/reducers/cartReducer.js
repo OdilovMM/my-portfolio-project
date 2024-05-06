@@ -214,8 +214,12 @@ export const cartReducer = createSlice({
       })
       .addCase(removeWishlist.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.wishlist = payload.wishlist;
-        state.wishlist_count = payload.wishlistCount;
+        state.wishlist = state.wishlist.filter(
+          (p) => p._id !== payload.wishlistId
+        );
+        console.log(payload)
+        state.wishlist_count = state.wishlist_count - 1;
+        toast.success(payload.message);
       })
       .addCase(removeWishlist.rejected, (state, { payload }) => {
         state.loading = false;

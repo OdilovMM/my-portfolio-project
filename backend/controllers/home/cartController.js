@@ -230,7 +230,16 @@ class cartController {
       responseReturn(res, 500, { error: error.message });
     }
   };
-  deleteFromWishlist = async (req, res) => {};
+  deleteFromWishlist = async (req, res) => {
+    const { wishlistId } = req.params;
+
+    try {
+      const wishlist = await Wishlist.findByIdAndDelete(wishlistId);
+      responseReturn(res, 200, { message: "Removed from wishlist", wishlistId });
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
 }
 
 module.exports = new cartController();

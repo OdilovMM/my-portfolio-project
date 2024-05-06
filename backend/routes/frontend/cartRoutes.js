@@ -9,5 +9,6 @@ router.patch("/increment-product-of-cart/:productId", cartController.incrementPr
 router.patch("/decrement-product-of-cart/:productId", cartController.decrementProductInCart);
 router.post("/add-wishlist", cartController.addToWishlist);
 router.get("/get-all-wishlist/:userId", cartController.getAllMyWishlist);
+router.delete("/remove-wishlist/:wishlistId", cartController.deleteFromWishlist);
 
 module.exports = router;
