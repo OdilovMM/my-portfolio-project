@@ -28,7 +28,7 @@ const ProductDetail = () => {
   const [state, setState] = useState("reviews");
   const [qty, setQty] = useState(1);
   const [alarm, setAlarm] = useState(false);
-  const { product, categoryRelatedProducts, sellerRelatedProducts } =
+  const { product, products, categoryRelatedProducts, sellerRelatedProducts } =
     useSelector((state) => state.home);
   const { userInfo } = useSelector((state) => state.customerAuth);
   const { successMessage, errorMessage, card_products } = useSelector(
@@ -37,8 +37,6 @@ const ProductDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { slug } = useParams();
-
-  console.log(product)
 
   useEffect(() => {
     dispatch(getProductDetail(slug));
@@ -115,6 +113,38 @@ const ProductDetail = () => {
   //       dispatch(messageClear());
   //     }
   //   }, [successMessage, errorMessage, dispatch]);
+
+  const buyNow = () => {
+    let price = 0;
+    if (product.discount !== 0) {
+      price =
+        product.price - Math.floor((product.price * product.discount) / 100);
+    } else {
+      price = product.price;
+    }
+
+    const obj = [
+      {
+        sellerId: product.sellerId,
+        shopName: product.shopName,
+        price: qty * (price - Math.floor((price * 5) / 100)),
+        products: [
+          {
+            qty,
+            productInfo: product,
+          },
+        ],
+      },
+    ];
+    navigate("/shipping", {
+      state: {
+        products: obj,
+        price: price * qty,
+        shippingFee: 10,
+        items: qty,
+      },
+    });
+  };
 
   return (
     <>
@@ -317,7 +347,9 @@ const ProductDetail = () => {
 
             <div className="flex gap-4 py-5 border-b">
               <div className="flex h-[50px] justify-center items-center text-xl gap-1">
-                <button className="px-8 py-2 bg-green-400">Buy Now</button>
+                <button onClick={buyNow} className="px-8 py-2 bg-green-400">
+                  Buy Now
+                </button>
 
                 <button className="px-8 py-2 bg-green-600">Chat Seller</button>
               </div>
