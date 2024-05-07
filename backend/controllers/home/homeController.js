@@ -27,12 +27,12 @@ class homeController {
     const { slug } = req.params;
     console.log(slug);
     try {
-      const product = await Products.find({ slug });
-      const categoryRelatedProducts = await Category.find({
+      const product = await Products.findOne({ slug });
+      const categoryRelatedProducts = await Products.find({
         $and: [
           {
             _id: {
-              $ne: product.id,
+              $ne: product._id,
             },
           },
           {
@@ -47,7 +47,7 @@ class homeController {
         $and: [
           {
             _id: {
-              $ne: product.id,
+              $ne: product._id,
             },
           },
           {
@@ -57,15 +57,13 @@ class homeController {
           },
         ],
       }).limit(5);
-      
+      console.log("Seller Related products==>", sellerRelatedProducts, sellerRelatedProducts.length);
 
-      responseReturn(
-        res,
-        200,
+      responseReturn(res, 200, {
         product,
         categoryRelatedProducts,
-        sellerRelatedProducts
-      );
+        sellerRelatedProducts,
+      });
     } catch (error) {
       responseReturn(res, 500, { error: error.message });
     }

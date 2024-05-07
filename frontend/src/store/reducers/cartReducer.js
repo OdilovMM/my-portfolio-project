@@ -155,12 +155,14 @@ export const cartReducer = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(addToCart.rejected, (state, { payload }) => {
+        toast.error(payload.error);
+        state.errorMessage = payload.error;
+      })
       .addCase(addToCart.fulfilled, (state, { payload }) => {
         state.card_product_count = state.card_product_count + 1;
         toast.success(payload.message);
-      })
-      .addCase(addToCart.rejected, (state, { payload }) => {
-        toast.error(payload.error);
+        state.successMessage = payload.message;
       })
       .addCase(getCustomerCartProducts.fulfilled, (state, { payload }) => {
         state.loading = false;
@@ -217,7 +219,7 @@ export const cartReducer = createSlice({
         state.wishlist = state.wishlist.filter(
           (p) => p._id !== payload.wishlistId
         );
-        console.log(payload)
+        console.log(payload);
         state.wishlist_count = state.wishlist_count - 1;
         toast.success(payload.message);
       })

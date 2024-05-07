@@ -3,7 +3,6 @@ import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-
 import {
   BreadCrumbs,
   Cart,
@@ -18,28 +17,34 @@ import { FaArrowTrendDown } from "react-icons/fa6";
 import { IoHeart } from "react-icons/io5";
 import { FaCartPlus } from "react-icons/fa";
 import { MdEventAvailable } from "react-icons/md";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getProductDetail } from "../store/reducers/homeReducer";
 import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { addToCart, messageClear } from "../store/reducers/cartReducer";
 
 const ProductDetail = () => {
+  const [image, setImage] = useState("");
+  const [state, setState] = useState("reviews");
+  const [qty, setQty] = useState(1);
+  const [alarm, setAlarm] = useState(false);
+  const { product, categoryRelatedProducts, sellerRelatedProducts } =
+    useSelector((state) => state.home);
+  const { userInfo } = useSelector((state) => state.customerAuth);
+  const { successMessage, errorMessage, card_products } = useSelector(
+    (state) => state.cart
+  );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { slug } = useParams();
-  console.log(slug);
+
+  console.log(product)
+
   useEffect(() => {
     dispatch(getProductDetail(slug));
   }, [dispatch, slug]);
 
-
-  
-  const images = [1, 2, 3, 4, 5, 6];
-  const [image, setImage] = useState("");
-  const [state, setState] = useState("reviews");
-
-  const discount = 8;
   const stock = 2;
-
-  const price = 600;
 
   const responsive = {
     superLargeDesktop: {
@@ -72,6 +77,45 @@ const ProductDetail = () => {
     },
   };
 
+  const increment = () => {
+    if (qty >= product.stock) {
+      setAlarm(true);
+    } else {
+      setQty(qty + 1);
+    }
+  };
+  const decrement = () => {
+    if (qty > 1) {
+      setQty(qty - 1);
+      setAlarm(false);
+    }
+  };
+
+  const handleAddToCart = (id) => {
+    if (userInfo) {
+      dispatch(
+        addToCart({
+          userId: userInfo.id,
+          quantity: qty,
+          productId: product._id,
+        })
+      );
+    } else {
+      navigate("/login");
+    }
+  };
+
+  //  useEffect(() => {
+  //     if (successMessage) {
+  //       toast.success(successMessage);
+  //       dispatch(messageClear());
+  //     }
+  //     if (errorMessage) {
+  //       toast.error(errorMessage);
+  //       dispatch(messageClear());
+  //     }
+  //   }, [successMessage, errorMessage, dispatch]);
+
   return (
     <>
       <div className="bg-[url('http://localhost:3000/images/banner/shop.png')]  h-[220px] mt-6 bg-cover bg-no-repeat bg-left">
@@ -80,10 +124,10 @@ const ProductDetail = () => {
           <div className="flex justify-center items-center gap-2 text-2xl w-full">
             <BreadCrumbs
               from="/"
-              fromPage="Home"
+              fromPage={product?.category}
               to="/product/details/:defea"
               iconSize={27}
-              toPage="Product Details"
+              toPage={product?.name}
               iconColor="black"
             />
           </div>
@@ -97,17 +141,13 @@ const ProductDetail = () => {
             <div className="p-5 border">
               <img
                 className="h-[400px] w-full object-contain"
-                src={
-                  image
-                    ? `http://localhost:3000/images/products/${image}.webp`
-                    : `http://localhost:3000/images/products/${images[2]}.webp`
-                }
+                src={image ? image : product?.images?.[0]}
                 alt=""
               />
             </div>
             {/* product carousel */}
             <div className="py-3">
-              {images && (
+              {product?.images && (
                 <Carousel
                   autoPlay={false}
                   infinite={true}
@@ -115,12 +155,12 @@ const ProductDetail = () => {
                   draggable={false}
                   transitionDuration={500}
                 >
-                  {images.map((img, i) => {
+                  {product?.images?.map((img, i) => {
                     return (
                       <div key={i} onClick={() => setImage(img)}>
                         <img
                           className="h-[120px] cursor-pointer"
-                          src={`http://localhost:3000/images/products/${img}.webp`}
+                          src={img}
                           alt=""
                         />
                       </div>
@@ -132,32 +172,39 @@ const ProductDetail = () => {
           </div>
           <div className="flex flex-col gap-5">
             <div className="text-3xl capitalize text-slate-400 font-bold">
-              <h2>Product name</h2>
+              <h2>{product?.name}</h2>
             </div>
 
             {/* rating */}
             <div className="flex justify-start items-center gap-4">
               <div className="flex text-xl">
-                <Rating ratings={4.5} />
+                <Rating ratings={product?.rating} />
               </div>
               <span>(23 reviews)</span>
             </div>
 
             {/* product price */}
             <div className="text-2xl text-red-600 font-bold flex gap-3">
-              {discount !== 0 ? (
+              {product?.discount !== 0 ? (
                 <div className="flex flex-row gap-2 items-center">
                   <h2>
-                    Price: $<span className="line-through ">{price}</span>
+                    Price: $
+                    <span className="line-through ">{product?.price}</span>
                   </h2>
                   <h2 className="flex items-center gap-2 justify-between">
-                    ${price - Math.floor((price * discount) / 100)}{" "}
+                    $
+                    {product?.price -
+                      Math.floor(
+                        (product?.price * product?.discount) / 100
+                      )}{" "}
                     <RiDiscountPercentFill
                       color="green"
                       size={28}
                       title="discount"
                     />
-                    <span className="text-blue-500">(-{discount}%)</span>
+                    <span className="text-blue-500">
+                      (-{product?.discount}%)
+                    </span>
                     <FaArrowTrendDown
                       color="red"
                       title="price decreased"
@@ -167,42 +214,70 @@ const ProductDetail = () => {
                 </div>
               ) : (
                 <>
-                  <h2>Price: $200</h2>
+                  <h2>Price: ${product?.price}</h2>
                 </>
               )}
             </div>
 
             {/* description */}
 
-            <div className="text-black">
+            <div className="text-black h-[180px] bg-slate-200 p-2">
               <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odit
-                perferendis error minima, cumque aliquam odio illum commodi
-                dolor iusto magnam excepturi pariatur? Sint aperiam esse rerum,
-                iure natus ab recusandae?
+                {product?.description?.substring(0, 250)}
+                {"..."}
               </p>
             </div>
+            <span className="h-[30px] text-2xl text-red-600 font-bold flex gap-3">
+              {alarm ? <p>We have only {product.stock} items</p> : ""}
+            </span>
 
             {/* actions */}
 
             <div className="flex gap-3 pb-10 border-b items-center">
-              {stock ? (
-                <>
-                  <div className="flex h-[50px] justify-center items-center text-xl gap-1">
-                    <button className="px-8 py-2 bg-slate-400">-</button>
-                    <span className="w-[55px] text-center bg-slate-300  py-2">
-                      {" "}
-                      1
-                    </span>
-                    <button className="px-8 py-2 bg-slate-400">+</button>
+              {product?.stock ? (
+                <div className="flex flex-col items-start">
+                  <div className="flex gap-3">
+                    <div className="flex h-[50px] flex-row justify-center items-center text-xl gap-1">
+                      <button
+                        onClick={decrement}
+                        className="px-8 py-2 bg-slate-400 "
+                      >
+                        -
+                      </button>
+                      <span className="w-[55px] text-center bg-slate-300  py-2">
+                        {" "}
+                        {qty}
+                      </span>
+                      <button
+                        title={alarm ? `Out of stock` : ``}
+                        onClick={increment}
+                        className={` ${
+                          alarm ? "cursor-not-allowed" : ""
+                        } px-8 py-2 bg-slate-400`}
+                      >
+                        -
+                      </button>
+
+                      {userInfo ? (
+                        <button
+                          onClick={handleAddToCart}
+                          className=" w-[205px]  bg-slate-300 py-2 flex items-center justify-center gap-2"
+                        >
+                          <span>Add To Cart</span>
+                          <FaCartPlus />
+                        </button>
+                      ) : (
+                        <Link
+                          to="/login"
+                          className=" w-[205px]  bg-slate-300 py-2 flex items-center justify-center gap-2"
+                        >
+                          Login To Add Cart
+                        </Link>
+                      )}
+                    </div>
+                    <div className="flex h-[50px] justify-center items-center text-xl gap-1"></div>
                   </div>
-                  <div className="flex h-[50px] justify-center items-center text-xl gap-1">
-                    <button className=" w-[145px] bg-slate-300 py-2 flex items-center justify-center gap-2">
-                      <span>Add To Cart</span>
-                      <FaCartPlus />
-                    </button>
-                  </div>
-                </>
+                </div>
               ) : (
                 <div className="flex items-center justify-center gap-2 h-[41px]">
                   <div className="flex bg-slate-300  h-full justify-center items-center text-xl gap-1">
@@ -233,7 +308,9 @@ const ProductDetail = () => {
                 <span
                   className={`text-${stock ? "green" : "red"} font-semibold`}
                 >
-                  {stock ? `In Stock: (${stock})` : `Out Of Stock: (${stock})`}
+                  {product?.stock
+                    ? `In Stock: (${product?.stock})`
+                    : `Out Of Stock: (${product?.stock})`}
                 </span>
               </div>
             </div>
@@ -287,16 +364,24 @@ const ProductDetail = () => {
           </div>
           {/* related products from shop */}
           <div className="w-[28%] md-lg:w-full">
-            <div className="pl-4 md-lg:pl-0">
-              <div className="px-3 py-2 text-slate-600 bg-slate-200">
-                <h2 className="font-bold">From Makro Market</h2>
+            {sellerRelatedProducts && (
+              <div className="pl-4 md-lg:pl-0">
+                <div className="px-3 py-2 text-slate-600 bg-slate-200">
+                  <h2 className="font-bold">From {product?.shopName}</h2>
+                </div>
+                <div className="flex flex-col md:flex-wrap md:flex-row gap-5 mt-3 border p-3">
+                  {sellerRelatedProducts ? (
+                    sellerRelatedProducts?.map((product, index) => {
+                      return (
+                        <Cart product={product} index={index} key={index} />
+                      );
+                    })
+                  ) : (
+                    <h2>No products from this seller</h2>
+                  )}
+                </div>
               </div>
-              <div className="flex flex-col md:flex-wrap md:flex-row gap-5 mt-3 border p-3">
-                {[1, 2, 3].map((p, i) => {
-                  return <Cart key={i} />;
-                })}
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -304,7 +389,9 @@ const ProductDetail = () => {
       {/* related products */}
 
       <div className="w-[85%] py-4 md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto pb-12">
-        <h2 className="text-2xl py-8 text-slate-600">Related Products</h2>
+        <h2 className="text-2xl py-8 text-slate-600">
+          Category Related Products
+        </h2>
         {/* swiper */}
         <div>
           <Swiper
@@ -326,10 +413,10 @@ const ProductDetail = () => {
             modules={[Pagination]}
             className="mySwiper"
           >
-            {[1, 2, 3, 4, 5, 6].map((p, i) => {
+            {categoryRelatedProducts?.map((product, index) => {
               return (
-                <SwiperSlide key={i}>
-                  <Cart />
+                <SwiperSlide key={index}>
+                  <Cart product={product} index={index} />
                 </SwiperSlide>
               );
             })}

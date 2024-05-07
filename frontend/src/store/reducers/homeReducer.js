@@ -31,7 +31,7 @@ export const getProductsByType = createAsyncThunk(
 export const getProductDetail = createAsyncThunk(
   "home/getProductDetail",
   async (slug, { rejectWithValue, fulfillWithValue }) => {
-    console.log(slug)
+    console.log(slug);
     try {
       const { data } = await api.get(`/home/get-product/${slug}`, {
         withCredentials: true,
@@ -95,6 +95,9 @@ export const homeReducer = createSlice({
       low: 0,
       high: 100,
     },
+    product: {},
+    categoryRelatedProducts: [],
+    sellerRelatedProducts: [],
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -120,6 +123,21 @@ export const homeReducer = createSlice({
         state.products = payload.products;
         state.totalProducts = payload.totalProducts;
         state.parPage = payload.parPage;
+      })
+      // detailed product
+      .addCase(getProductDetail.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(getProductDetail.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        // state.categories = payload.categories;
+        state.product = payload.product;
+        state.categoryRelatedProducts = payload.categoryRelatedProducts;
+        state.sellerRelatedProducts = payload.sellerRelatedProducts;
+      })
+      .addCase(getProductDetail.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        // state.categories = payload.categories;
       });
   },
 });

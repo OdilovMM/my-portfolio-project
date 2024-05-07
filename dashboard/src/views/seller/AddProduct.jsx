@@ -30,6 +30,7 @@ const AddProduct = () => {
     price: "",
     brand: "",
     stock: "",
+    shopName: "",
   });
 
   const inputHandler = (e) => {
@@ -115,7 +116,7 @@ const AddProduct = () => {
     formData.append("price", product.price);
     formData.append("discount", product.discount);
     formData.append("stock", product.stock);
-    formData.append("shopName", "MascoMarket");
+    formData.append("shopName", product.shopName);
     formData.append("category", category);
 
     for (let i = 0; i < imgFiles.length; i++) {
@@ -131,6 +132,7 @@ const AddProduct = () => {
       price: "",
       brand: "",
       stock: "",
+      shopName: "",
     });
     setCategory("");
     setImgFiles([]);
@@ -277,6 +279,22 @@ const AddProduct = () => {
               </div>
             </div>
 
+            <div className="flex flex-col mb-2 md:flex-row gap-3 w-full text-white">
+              <div className="flex flex-col w-full gap-1">
+                <label htmlFor="shopName">Shop name</label>
+                <input
+                  type="text"
+                  name="shopName"
+                  id="shopName"
+                  placeholder="Your Shop Name"
+                  required
+                  onChange={inputHandler}
+                  value={product.shopName}
+                  className="px-4 py-2 focus:border-[#4b535a] outline-none bg-[#E2DDDD] border border-slate-700 rounded-md text-[#333]"
+                />
+              </div>
+            </div>
+
             <div className="flex mb-4 flex-col w-full gap-1">
               <label htmlFor="description" className=" text-white">
                 Description
@@ -347,12 +365,7 @@ const AddProduct = () => {
                 className="group relative w-[250px] h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-500 hover:bg-gray-600"
               >
                 {loader ? (
-                  <ScaleLoader
-                    color="#fff"
-                    height={22}
-                    width={5}
-                    radius={2}
-                  />
+                  <ScaleLoader color="#fff" height={22} width={5} radius={2} />
                 ) : (
                   "Add Product"
                 )}

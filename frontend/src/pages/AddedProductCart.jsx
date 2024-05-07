@@ -168,7 +168,7 @@ const AddedProductCart = () => {
                                   >
                                     -
                                   </button>
-                                  <span className="px-3 bg-slate-400 ">
+                                  <span className="text-center w-[60px] bg-slate-400 ">
                                     {product.quantity}
                                   </span>
                                   <button
