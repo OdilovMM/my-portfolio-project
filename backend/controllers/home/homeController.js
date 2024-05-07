@@ -27,9 +27,45 @@ class homeController {
     const { slug } = req.params;
     console.log(slug);
     try {
-      const product = await Products.find({});
-      console.log(product)
-      responseReturn(res, 200, product);
+      const product = await Products.find({ slug });
+      const categoryRelatedProducts = await Category.find({
+        $and: [
+          {
+            _id: {
+              $ne: product.id,
+            },
+          },
+          {
+            category: {
+              $eq: product.category,
+            },
+          },
+        ],
+      }).limit(20);
+
+      const sellerRelatedProducts = await Products.find({
+        $and: [
+          {
+            _id: {
+              $ne: product.id,
+            },
+          },
+          {
+            sellerId: {
+              $eq: product.sellerId,
+            },
+          },
+        ],
+      }).limit(5);
+      
+
+      responseReturn(
+        res,
+        200,
+        product,
+        categoryRelatedProducts,
+        sellerRelatedProducts
+      );
     } catch (error) {
       responseReturn(res, 500, { error: error.message });
     }
