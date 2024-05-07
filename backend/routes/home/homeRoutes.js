@@ -6,5 +6,6 @@ router.get("/get-categories", homeController.getAllCategories);
 router.get("/get-products", homeController.getProducts);
 router.get("/get-products-price-range", homeController.getProductsByPriceRange);
 router.get("/product-query", homeController.getProductQuery);
+router.get("/get-product/:slug", homeController.getProduct);
 
 module.exports = router;

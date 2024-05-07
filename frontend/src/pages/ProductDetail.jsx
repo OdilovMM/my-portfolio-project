@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -18,9 +18,20 @@ import { FaArrowTrendDown } from "react-icons/fa6";
 import { IoHeart } from "react-icons/io5";
 import { FaCartPlus } from "react-icons/fa";
 import { MdEventAvailable } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { getProductDetail } from "../store/reducers/homeReducer";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductDetail = () => {
+  const dispatch = useDispatch();
+  const { slug } = useParams();
+  console.log(slug);
+  useEffect(() => {
+    dispatch(getProductDetail(slug));
+  }, [dispatch, slug]);
+
+
+  
   const images = [1, 2, 3, 4, 5, 6];
   const [image, setImage] = useState("");
   const [state, setState] = useState("reviews");
@@ -282,7 +293,7 @@ const ProductDetail = () => {
               </div>
               <div className="flex flex-col md:flex-wrap md:flex-row gap-5 mt-3 border p-3">
                 {[1, 2, 3].map((p, i) => {
-                  return <Cart />;
+                  return <Cart key={i} />;
                 })}
               </div>
             </div>

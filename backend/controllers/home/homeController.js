@@ -23,6 +23,17 @@ class homeController {
     return productArray;
   };
 
+  getProduct = async (req, res) => {
+    const { slug } = req.params;
+    console.log(slug);
+    try {
+      const product = await Products.find({});
+      console.log(product)
+      responseReturn(res, 200, product);
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
   getAllCategories = async (req, res) => {
     try {
       const categories = await Category.find({});
@@ -98,7 +109,6 @@ class homeController {
     const parPage = 8;
     req.query.parPage = parPage;
 
-
     try {
       const products = await Products.find({}).sort({
         createdAt: -1,
@@ -121,8 +131,6 @@ class homeController {
         .paginate()
         .limitField()
         .getProducts();
-
-  
 
       responseReturn(res, 200, {
         products: result,

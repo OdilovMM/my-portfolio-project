@@ -28,6 +28,20 @@ export const getProductsByType = createAsyncThunk(
     }
   }
 );
+export const getProductDetail = createAsyncThunk(
+  "home/getProductDetail",
+  async (slug, { rejectWithValue, fulfillWithValue }) => {
+    console.log(slug)
+    try {
+      const { data } = await api.get(`/home/get-product/${slug}`, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const getProductsPriceRange = createAsyncThunk(
   "home/getProductsByPriceRange",
