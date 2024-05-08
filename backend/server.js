@@ -5,6 +5,10 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
+const socket = require("socket.io");
+const http = require("http");
+const server = http.createServer(app);
+
 const authRouter = require("./routes/authRoutes");
 const categoryRouter = require("./routes/dashboard/categoryRoutes");
 const productRouter = require("./routes/dashboard/productRoutes");
@@ -20,6 +24,17 @@ app.use(
     credentials: true,
   })
 );
+const io = socket(server, {
+  cors: {
+    origin: "*",
+    credentials: true,
+  },
+});
+
+io.on("connection", (sock) => {
+  console.log("Socket server is running successfully");
+});
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -40,6 +55,6 @@ app.use("/api/v1/order", orderRouter);
 
 const port = process.env.PORT || 8000;
 dbConnect();
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

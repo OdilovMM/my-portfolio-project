@@ -1,11 +1,16 @@
 import { AiOutlineMessage, AiOutlinePlus } from "react-icons/ai";
 import { GrEmoji } from "react-icons/gr";
 import { IoSend } from "react-icons/io5";
-import { Link } from "react-router-dom";
-
-import React from "react";
+import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import io from "socket.io-client";
+const socket = io("http://localhost:5000");
 
 const Chat = () => {
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.customerAuth);
+  const { sellerId } = useParams();
+
   return (
     <div className="bg-white p-3 rounded-md">
       <div className="w-full flex">
