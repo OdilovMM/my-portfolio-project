@@ -31,8 +31,26 @@ const io = socket(server, {
   },
 });
 
+var allCustomer = [];
+const addUser = (customerId, socketId, userInfo) => {
+  const checkUser = allCustomer.some(
+    (userData) => userData.customerId === customerId
+  );
+  if (!checkUser) {
+    allCustomer.push({
+      customerId,
+      socketId,
+      userInfo,
+    });
+  }
+};
+
 io.on("connection", (sock) => {
   console.log("Socket server is running successfully");
+
+  sock.on("addUser", (customerId, userInfo) => {
+    addUser(customerId, sock.id, userInfo);
+  });
 });
 
 app.use(bodyParser.json());

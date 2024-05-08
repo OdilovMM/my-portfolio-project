@@ -4,12 +4,17 @@ import { IoSend } from "react-icons/io5";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
+import { useEffect } from "react";
 const socket = io("http://localhost:5000");
 
 const Chat = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.customerAuth);
   const { sellerId } = useParams();
+
+  useEffect(() => {
+    socket.emit("addUser", userInfo.id, userInfo);
+  }, [userInfo]);
 
   return (
     <div className="bg-white p-3 rounded-md">
