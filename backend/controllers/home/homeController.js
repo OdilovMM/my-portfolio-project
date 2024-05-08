@@ -57,7 +57,11 @@ class homeController {
           },
         ],
       }).limit(5);
-      console.log("Seller Related products==>", sellerRelatedProducts, sellerRelatedProducts.length);
+      console.log(
+        "Seller Related products==>",
+        sellerRelatedProducts,
+        sellerRelatedProducts.length
+      );
 
       responseReturn(res, 200, {
         product,
@@ -176,6 +180,10 @@ class homeController {
         error: error.message,
       });
     }
+  };
+
+  addProductReview = async (req, res) => {
+    console.log(req.body)
   };
 }
 
