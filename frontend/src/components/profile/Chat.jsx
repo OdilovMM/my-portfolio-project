@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
 import { useEffect } from "react";
+import { addFriendChat } from "../../store/reducers/chatReducer";
 const socket = io("http://localhost:5000");
 
 const Chat = () => {
@@ -15,6 +16,15 @@ const Chat = () => {
   useEffect(() => {
     socket.emit("addUser", userInfo.id, userInfo);
   }, [userInfo]);
+
+  useEffect(() => {
+    dispatch(
+      addFriendChat({
+        sellerId: sellerId || "",
+        userId: userInfo.id,
+      })
+    );
+  }, [dispatch, sellerId, userInfo]);
 
   return (
     <div className="bg-white p-3 rounded-md">
