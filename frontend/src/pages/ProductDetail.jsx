@@ -387,7 +387,7 @@ const ProductDetail = () => {
 
               <div>
                 {state === "reviews" ? (
-                  <ProductReviews />
+                  <ProductReviews product={product} />
                 ) : (
                   <ProductDescription />
                 )}

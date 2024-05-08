@@ -6,14 +6,31 @@ import Pagination from "./Pagination";
 import { FaStar } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { customerReviewSend } from "../store/reducers/homeReducer";
 
-const ProductReviews = () => {
+const ProductReviews = ({ product }) => {
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.customerAuth);
+  const { products, categoryRelatedProducts, sellerRelatedProducts } =
+    useSelector((state) => state.home);
+
   const [parPage, setParPage] = useState(1);
   const [pageNumber, setPageNumber] = useState(10);
-  const userInfo = {};
 
-  const [rat, setRat] = useState("");
-  const [re, setRe] = useState("");
+  const [enterRating, setEnterRating] = useState("");
+  const [enterReview, setEnterReview] = useState("");
+
+  const handleSubmitReview = (e) => {
+    e.preventDefault();
+    const userEnteredProductReview = {
+      name: userInfo.name,
+      review: enterReview,
+      rating: enterRating,
+      productId: product._id,
+    };
+    dispatch(customerReviewSend(userEnteredProductReview));
+  };
 
   return (
     <div className="mt-8">
@@ -130,8 +147,9 @@ const ProductReviews = () => {
           <div className="flex flex-col gap-3">
             <div className="flex gap-1">
               <RatingReact
-                onChange={(e) => setRat(e)}
-                initialRating={rat}
+                onChange={(e) => setEnterRating(e)}
+                value={enterRating}
+                initialRating={enterRating}
                 emptySymbol={
                   <span className="text-slate-600 text-4xl">
                     <CiStar />
@@ -144,8 +162,10 @@ const ProductReviews = () => {
                 }
               />
             </div>
-            <form>
+            <form onSubmit={handleSubmitReview}>
               <textarea
+                value={enterReview}
+                onChange={(e) => setEnterReview(e.target.value)}
                 required
                 className="border outline-0 p-3 w-full"
                 name=""
@@ -166,7 +186,6 @@ const ProductReviews = () => {
               to="/login"
               className="py-1 px-5 bg-red-500 text-white rounded-sm"
             >
-             
               Login First{" "}
             </Link>
           </div>

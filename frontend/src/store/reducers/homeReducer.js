@@ -80,6 +80,21 @@ export const queryProduct = createAsyncThunk(
   }
 );
 
+export const customerReviewSend = createAsyncThunk(
+  "review/customerReviewSend",
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    console.log(info);
+    try {
+      const { data } = await api.post("/home/add-customer-product-review", info, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const homeReducer = createSlice({
   name: "home",
   initialState: {
