@@ -341,7 +341,12 @@ const ProductDetail = () => {
                   Buy Now
                 </button>
 
-                <button className="px-8 py-2 bg-green-600">Chat Seller</button>
+                <Link
+                  to={`/dashboard/chat/${product.sellerId}`}
+                  className="px-8 py-2 bg-green-600"
+                >
+                  Chat Seller
+                </Link>
               </div>
             </div>
           </div>

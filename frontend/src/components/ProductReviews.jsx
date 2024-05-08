@@ -17,8 +17,9 @@ import { PulseLoader } from "react-spinners";
 const ProductReviews = ({ product }) => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.customerAuth);
-  const { products, totalReviews, ratingReview, reviews, isLoading } =
-    useSelector((state) => state.home);
+  const { totalReviews, ratingReview, reviews, isLoading } = useSelector(
+    (state) => state.home
+  );
 
   const [parPage, setParPage] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);

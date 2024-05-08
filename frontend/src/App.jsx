@@ -23,6 +23,7 @@ import {
 import { MainLayout } from "./layout";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import { OrderDetails } from "./components";
+import Chat from "./components/profile/Chat";
 
 const App = () => {
   return (
@@ -53,9 +54,11 @@ const App = () => {
           >
             <Route index element={<HomeProfile />} />
             <Route path="my-orders" element={<MyOrderPage />} />
+            <Route path="chat" element={<Chat />} />
             <Route path="my-wishlist" element={<WishlistPage />} />
             <Route path="change-password" element={<ChangePasswordPage />} />
             <Route path="order/details/:orderId" element={<OrderDetails />} />
+            <Route path="chat/:sellerId" element={<Chat />} />
           </Route>
         </Route>
       </Routes>
