@@ -99,6 +99,23 @@ export const customerReviewSend = createAsyncThunk(
     }
   }
 );
+export const getAllReviews = createAsyncThunk(
+  "review/getAllReviews",
+  async ({ productId, pageNumber }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(
+        `/home/get-all-reviews/${productId}?pageNumber=${pageNumber}`,
+
+        {
+          withCredentials: true,
+        }
+      );
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const homeReducer = createSlice({
   name: "home",
@@ -123,7 +140,6 @@ export const homeReducer = createSlice({
     totalReviews: 0,
     ratingReview: [],
     reviews: [],
-   
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -171,12 +187,25 @@ export const homeReducer = createSlice({
         state.isLoading = false;
         toast.success(payload.message);
         console.log(payload);
-    
       })
       .addCase(customerReviewSend.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload.error);
         console.log(payload);
+      })
+
+      .addCase(getAllReviews.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllReviews.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.reviews = payload.reviews;
+        state.totalReviews = payload.totalReview;
+        state.ratingReview = payload.ratingReview;
+      })
+      .addCase(getAllReviews.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload.error);
       });
   },
 });

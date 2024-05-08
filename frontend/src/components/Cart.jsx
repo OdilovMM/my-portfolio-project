@@ -4,17 +4,12 @@ import { AiFillHeart, AiOutlineEye, AiOutlineHeart } from "react-icons/ai";
 import Rating from "./Rating";
 import saleIcon from "./../assets/icon/icons8-sale.gif";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addToCart,
-  addToWishlist,
-  messageClear,
-} from "../store/reducers/cartReducer";
+import { addToCart, addToWishlist } from "../store/reducers/cartReducer";
 import toast from "react-hot-toast";
 
 const Cart = ({ product, index }) => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.customerAuth);
-  const { successMessage, errorMessage } = useSelector((state) => state.cart);
 
   const handleAddWishlist = (product) => {
     dispatch(
@@ -49,17 +44,6 @@ const Cart = ({ product, index }) => {
       toast.error("Please, Login first");
     }
   };
-
-  // useEffect(() => {
-  //   if (successMessage) {
-  //     toast.success(successMessage);
-  //     dispatch(messageClear());
-  //   }
-  //   if (errorMessage) {
-  //     toast.error(errorMessage);
-  //     dispatch(messageClear());
-  //   }
-  // }, [successMessage, errorMessage, dispatch]);
 
   return (
     <>

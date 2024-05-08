@@ -20,20 +20,21 @@ import { MdEventAvailable } from "react-icons/md";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getProductDetail } from "../store/reducers/homeReducer";
 import { useDispatch, useSelector } from "react-redux";
-import toast from "react-hot-toast";
-import { addToCart, messageClear } from "../store/reducers/cartReducer";
+import { addToCart } from "../store/reducers/cartReducer";
 
 const ProductDetail = () => {
   const [image, setImage] = useState("");
   const [state, setState] = useState("reviews");
   const [qty, setQty] = useState(1);
   const [alarm, setAlarm] = useState(false);
-  const { product, products, categoryRelatedProducts, sellerRelatedProducts } =
-    useSelector((state) => state.home);
+  const {
+    product,
+    categoryRelatedProducts,
+    totalReviews,
+    sellerRelatedProducts,
+  } = useSelector((state) => state.home);
   const { userInfo } = useSelector((state) => state.customerAuth);
-  const { successMessage, errorMessage, card_products } = useSelector(
-    (state) => state.cart
-  );
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { slug } = useParams();
@@ -102,17 +103,6 @@ const ProductDetail = () => {
       navigate("/login");
     }
   };
-
-  //  useEffect(() => {
-  //     if (successMessage) {
-  //       toast.success(successMessage);
-  //       dispatch(messageClear());
-  //     }
-  //     if (errorMessage) {
-  //       toast.error(errorMessage);
-  //       dispatch(messageClear());
-  //     }
-  //   }, [successMessage, errorMessage, dispatch]);
 
   const buyNow = () => {
     let price = 0;
@@ -210,7 +200,7 @@ const ProductDetail = () => {
               <div className="flex text-xl">
                 <Rating ratings={product?.rating} />
               </div>
-              <span>(2)</span>
+              <span>({totalReviews} reviews)</span>
             </div>
 
             {/* product price */}

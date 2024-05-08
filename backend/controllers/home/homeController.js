@@ -5,6 +5,9 @@ const formidable = require("formidable");
 const { responseReturn } = require("../../utils/response");
 const queryProducts = require("../../utils/queryProducts");
 const moment = require("moment");
+const {
+  mongo: { ObjectId },
+} = require("mongoose");
 
 class homeController {
   formateProduct = (products) => {
@@ -27,7 +30,6 @@ class homeController {
 
   getProduct = async (req, res) => {
     const { slug } = req.params;
-    console.log(slug);
     try {
       const product = await Products.findOne({ slug });
       const categoryRelatedProducts = await Products.find({
@@ -59,11 +61,6 @@ class homeController {
           },
         ],
       }).limit(5);
-      console.log(
-        "Seller Related products==>",
-        sellerRelatedProducts,
-        sellerRelatedProducts.length
-      );
 
       responseReturn(res, 200, {
         product,
@@ -110,7 +107,9 @@ class homeController {
         discountProduct,
       });
     } catch (error) {
-      console.log(error.message);
+      responseReturn(res, 500, {
+        error: error.message,
+      });
     }
   };
 
@@ -185,7 +184,6 @@ class homeController {
   };
 
   addProductReview = async (req, res) => {
-    console.log(req.body);
     const { productId, review, rating, name } = req.body;
 
     try {
@@ -217,6 +215,94 @@ class homeController {
       });
     } catch (error) {
       console.log(error);
+      responseReturn(res, 500, {
+        error: error.message,
+      });
+    }
+  };
+
+  getAllReviews = async (req, res) => {
+    const { productId } = req.params;
+    let { pageNumber } = req.query;
+    pageNumber = parseInt(pageNumber);
+    const limit = 5;
+    const skipPage = limit * (pageNumber - 1);
+
+    try {
+      let getRating = await Reviews.aggregate([
+        {
+          $match: {
+            productId: {
+              $eq: new ObjectId(productId),
+            },
+            rating: {
+              $not: {
+                $size: 0,
+              },
+            },
+          },
+        },
+        {
+          $unwind: "$rating",
+        },
+        {
+          $group: {
+            _id: "$rating",
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+      ]);
+
+      let ratingReview = [
+        {
+          rating: 5,
+          sum: 0,
+        },
+        {
+          rating: 4,
+          sum: 0,
+        },
+        {
+          rating: 3,
+          sum: 0,
+        },
+        {
+          rating: 2,
+          sum: 0,
+        },
+        {
+          rating: 1,
+          sum: 0,
+        },
+      ];
+
+      for (let i = 0; i < ratingReview.length; i++) {
+        for (let j = 0; j < getRating.length; j++) {
+          if (ratingReview[i].rating === getRating[j]._id) {
+            ratingReview[i].sum = getRating[j].count;
+            break;
+          }
+        }
+      }
+
+      const getAll = await Reviews.find({
+        productId,
+      });
+      const reviews = await Reviews.find({
+        productId,
+      })
+        .skip(skipPage)
+        .limit(limit)
+        .sort({ createdAt: -1 });
+
+      responseReturn(res, 200, {
+        reviews,
+        totalReview: getAll.length,
+        ratingReview,
+      });
+    } catch (error) {
       responseReturn(res, 500, {
         error: error.message,
       });

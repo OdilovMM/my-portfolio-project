@@ -7,7 +7,11 @@ import { FaStar } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { customerReviewSend } from "../store/reducers/homeReducer";
+import {
+  customerReviewSend,
+  getAllReviews,
+  getProductDetail,
+} from "../store/reducers/homeReducer";
 import { PulseLoader } from "react-spinners";
 
 const ProductReviews = ({ product }) => {
@@ -16,8 +20,8 @@ const ProductReviews = ({ product }) => {
   const { products, totalReviews, ratingReview, reviews, isLoading } =
     useSelector((state) => state.home);
 
-  const [parPage, setParPage] = useState(1);
-  const [pageNumber, setPageNumber] = useState(10);
+  const [parPage, setParPage] = useState(10);
+  const [pageNumber, setPageNumber] = useState(1);
 
   const [enterRating, setEnterRating] = useState("");
   const [enterReview, setEnterReview] = useState("");
@@ -31,27 +35,36 @@ const ProductReviews = ({ product }) => {
       productId: product._id,
     };
     dispatch(customerReviewSend(userEnteredProductReview));
+    setEnterRating("");
+    dispatch(getAllReviews({ productId: product._id, pageNumber }));
+    setEnterReview("");
+    dispatch(getAllReviews({ productId: product._id, pageNumber }));
+    dispatch(getProductDetail(product.slug));
   };
 
   useEffect(() => {
-    if (!isLoading) {
-      setEnterRating("");
-      setEnterReview("");
+    if (product._id) {
+      dispatch(
+        getAllReviews({
+          productId: product._id,
+          pageNumber,
+        })
+      );
     }
-  }, [isLoading]);
+  }, [dispatch, pageNumber, product]);
 
   return (
     <div className="mt-8">
       <div className="flex gap-10 md-lg:flex-col">
         <div className="flex flex-col gap-2 justify-start items-start py-4">
           <div>
-            <span className="text-6xl font-semibold">4.5</span>
+            <span className="text-6xl font-semibold">{product.rating}</span>
             <span className="text-3xl font-semibold text-slate-600">/5</span>
           </div>
           <div className="flex text-3xl">
-            <Rating ratings={4.5} />
+            <Rating ratings={product.rating} />
           </div>
-          <p className="text-sm text-slate-600">15 Reviews</p>
+          <p className="text-sm text-slate-600">({totalReviews}) Reviews</p>
         </div>
 
         <div className="flex gap-2 flex-col py-4">
@@ -60,9 +73,18 @@ const ProductReviews = ({ product }) => {
               <RatingTemps rating={5} />
             </div>
             <div className="w-[200px] h-[14px] bg-slate-200 relative">
-              <div className="h-full bg-[#Edbb0E] w-[60%]"></div>
+              <div
+                style={{
+                  width: `${Math.floor(
+                    (100 * (ratingReview[0]?.sum || 0)) / totalReviews
+                  )}%`,
+                }}
+                className="h-full bg-[#Edbb0E] w-[60%]"
+              ></div>
             </div>
-            <p className="text-sm text-slate-600 w-[0%]">10</p>
+            <p className="text-sm text-slate-600 w-[0%]">
+              {ratingReview[0]?.sum}
+            </p>
           </div>
 
           <div className="flex justify-start items-center gap-5">
@@ -70,9 +92,19 @@ const ProductReviews = ({ product }) => {
               <RatingTemps rating={4} />
             </div>
             <div className="w-[200px] h-[14px] bg-slate-200 relative">
-              <div className="h-full bg-[#Edbb0E] w-[70%]"></div>
+              <div
+                style={{
+                  width: `${Math.floor(
+                    (100 * (ratingReview[1]?.sum || 0)) / totalReviews
+                  )}%`,
+                }}
+                className="h-full bg-[#Edbb0E] w-[60%]"
+              ></div>
             </div>
-            <p className="text-sm text-slate-600 w-[0%]">20</p>
+            <p className="text-sm text-slate-600 w-[0%]">
+              {" "}
+              {ratingReview[1]?.sum}
+            </p>
           </div>
 
           <div className="flex justify-start items-center gap-5">
@@ -80,9 +112,18 @@ const ProductReviews = ({ product }) => {
               <RatingTemps rating={3} />
             </div>
             <div className="w-[200px] h-[14px] bg-slate-200 relative">
-              <div className="h-full bg-[#Edbb0E] w-[40%]"></div>
+              <div
+                style={{
+                  width: `${Math.floor(
+                    (100 * (ratingReview[2]?.sum || 0)) / totalReviews
+                  )}%`,
+                }}
+                className="h-full bg-[#Edbb0E] w-[60%]"
+              ></div>
             </div>
-            <p className="text-sm text-slate-600 w-[0%]">8</p>
+            <p className="text-sm text-slate-600 w-[0%]">
+              {ratingReview[2]?.sum}
+            </p>
           </div>
 
           <div className="flex justify-start items-center gap-5">
@@ -90,9 +131,18 @@ const ProductReviews = ({ product }) => {
               <RatingTemps rating={2} />
             </div>
             <div className="w-[200px] h-[14px] bg-slate-200 relative">
-              <div className="h-full bg-[#Edbb0E] w-[30%]"></div>
+              <div
+                style={{
+                  width: `${Math.floor(
+                    (100 * (ratingReview[3]?.sum || 0)) / totalReviews
+                  )}%`,
+                }}
+                className="h-full bg-[#Edbb0E] w-[60%]"
+              ></div>
             </div>
-            <p className="text-sm text-slate-600 w-[0%]">5</p>
+            <p className="text-sm text-slate-600 w-[0%]">
+              {ratingReview[3]?.sum}
+            </p>
           </div>
 
           <div className="flex justify-start items-center gap-5">
@@ -100,9 +150,18 @@ const ProductReviews = ({ product }) => {
               <RatingTemps rating={1} />
             </div>
             <div className="w-[200px] h-[14px] bg-slate-200 relative">
-              <div className="h-full bg-[#Edbb0E] w-[10%]"></div>
+              <div
+                style={{
+                  width: `${Math.floor(
+                    (100 * (ratingReview[4]?.sum || 0)) / totalReviews
+                  )}%`,
+                }}
+                className="h-full bg-[#Edbb0E] w-[60%]"
+              ></div>
             </div>
-            <p className="text-sm text-slate-600 w-[0%]">3</p>
+            <p className="text-sm text-slate-600 w-[0%]">
+              {ratingReview[4]?.sum}
+            </p>
           </div>
 
           <div className="flex justify-start items-center gap-5">
@@ -110,43 +169,48 @@ const ProductReviews = ({ product }) => {
               <RatingTemps rating={0} />
             </div>
             <div className="w-[200px] h-[14px] bg-slate-200 relative">
-              <div className="h-full bg-[#Edbb0E] w-[0%]"></div>
+              <div
+                style={{
+                  width: `${Math.floor(
+                    (100 * (ratingReview[5]?.sum || 0)) / totalReviews
+                  )}%`,
+                }}
+                className="h-full bg-[#Edbb0E] w-[60%]"
+              ></div>
             </div>
-            <p className="text-sm text-slate-600 w-[0%]">0</p>
+            <p className="text-sm text-slate-600 w-[0%]">
+              {ratingReview[5]?.sum}
+            </p>
           </div>
         </div>
       </div>
       <h2 className="text-slate-600 text-xl font-bold py-5">
-        Product Review 10
+        Product Review {totalReviews}
       </h2>
 
       <div className="flex flex-col gap-8 pb-10 pt-4">
-        {[1, 2, 3, 4, 5].map((r, i) => (
+        {reviews.map((r, i) => (
           <div key={i} className="flex flex-col gap-1">
             <div className="flex justify-between items-center">
               <div className="flex gap-1 text-xl">
-                <RatingTemps rating={4} />
+                <RatingTemps rating={r.rating} />
               </div>
-              <span className="text-slate-600">8 Apr 2024</span>
+              <span className="text-slate-600">{r.date}</span>
             </div>
-            <span className="text-slate-600 text-md">John Doe</span>
-            <p className="text-slate-600 text-sm">
-              Compact design, but lacking in durability. Easy to use, but the
-              battery life is disappointingly short. Overall, a decent product
-              for casual use, but not ideal for heavy-duty tasks
-            </p>
+            <span className="text-slate-600 text-md">{r.name}</span>
+            <p className="text-slate-600 text-sm">{r.review}</p>
           </div>
         ))}
         <div className="flex justify-end">
-          {
+          {totalReviews > 5 && (
             <Pagination
               pageNumber={pageNumber}
               setPageNumber={setPageNumber}
-              totalItem={10}
+              totalItem={totalReviews}
               parPage={parPage}
-              showItem={Math.floor(10 / 3)}
+              showItem={Math.floor(totalReviews / 3)}
             />
-          }
+          )}
         </div>
       </div>
 
