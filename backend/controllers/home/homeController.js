@@ -1,8 +1,10 @@
 const Category = require("./../../models/categoryModel");
 const Products = require("./../../models/productModel");
+const Reviews = require("./../../models/reviewModel");
 const formidable = require("formidable");
 const { responseReturn } = require("../../utils/response");
 const queryProducts = require("../../utils/queryProducts");
+const moment = require("moment");
 
 class homeController {
   formateProduct = (products) => {
@@ -183,7 +185,42 @@ class homeController {
   };
 
   addProductReview = async (req, res) => {
-    console.log(req.body)
+    console.log(req.body);
+    const { productId, review, rating, name } = req.body;
+
+    try {
+      await Reviews.create({
+        productId,
+        name,
+        rating,
+        review,
+        date: moment(Date.now()).format("LL"),
+      });
+
+      let rat = 0;
+      const reviews = await Reviews.find({
+        productId,
+      });
+      for (let i = 0; i < reviews.length; i++) {
+        rat = rat + reviews[i].rating;
+      }
+      let productRating = 0;
+      if (reviews.length !== 0) {
+        productRating = (rat / reviews.length).toFixed(1);
+      }
+      await Products.findByIdAndUpdate(productId, {
+        rating: productRating,
+      });
+
+      responseReturn(res, 201, {
+        message: "Your review added",
+      });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, {
+        error: error.message,
+      });
+    }
   };
 }
 

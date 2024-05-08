@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RatingTemps from "./RatingTemps";
 import Rating from "./Rating";
 import RatingReact from "react-rating";
@@ -8,11 +8,12 @@ import { CiStar } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { customerReviewSend } from "../store/reducers/homeReducer";
+import { PulseLoader } from "react-spinners";
 
 const ProductReviews = ({ product }) => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.customerAuth);
-  const { products, categoryRelatedProducts, sellerRelatedProducts } =
+  const { products, totalReviews, ratingReview, reviews, isLoading } =
     useSelector((state) => state.home);
 
   const [parPage, setParPage] = useState(1);
@@ -31,6 +32,13 @@ const ProductReviews = ({ product }) => {
     };
     dispatch(customerReviewSend(userEnteredProductReview));
   };
+
+  useEffect(() => {
+    if (!isLoading) {
+      setEnterRating("");
+      setEnterReview("");
+    }
+  }, [isLoading]);
 
   return (
     <div className="mt-8">
@@ -174,8 +182,12 @@ const ProductReviews = ({ product }) => {
                 rows="5"
               ></textarea>
               <div className="mt-2">
-                <button className="py-1 px-5 bg-slate-500 text-white rounded-sm">
-                  Submit
+                <button className="py-1 h-[35px] w-[100px] px-5 bg-slate-500 text-white rounded-sm">
+                  {isLoading ? (
+                    <PulseLoader color="white" margin={2} className="mt-1" />
+                  ) : (
+                    "Submit"
+                  )}
                 </button>
               </div>
             </form>

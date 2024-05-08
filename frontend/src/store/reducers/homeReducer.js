@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/api";
+import toast from "react-hot-toast";
 
 export const getAllCategories = createAsyncThunk(
   "home/getAllCategories",
@@ -85,9 +86,13 @@ export const customerReviewSend = createAsyncThunk(
   async (info, { rejectWithValue, fulfillWithValue }) => {
     console.log(info);
     try {
-      const { data } = await api.post("/home/add-customer-product-review", info, {
-        withCredentials: true,
-      });
+      const { data } = await api.post(
+        "/home/add-customer-product-review",
+        info,
+        {
+          withCredentials: true,
+        }
+      );
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -113,6 +118,12 @@ export const homeReducer = createSlice({
     product: {},
     categoryRelatedProducts: [],
     sellerRelatedProducts: [],
+    errorMessage: "",
+    successMessage: "",
+    totalReviews: 0,
+    ratingReview: [],
+    reviews: [],
+   
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -152,7 +163,20 @@ export const homeReducer = createSlice({
       })
       .addCase(getProductDetail.rejected, (state, { payload }) => {
         state.isLoading = false;
-        // state.categories = payload.categories;
+      })
+      .addCase(customerReviewSend.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(customerReviewSend.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        toast.success(payload.message);
+        console.log(payload);
+    
+      })
+      .addCase(customerReviewSend.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload.error);
+        console.log(payload);
       });
   },
 });

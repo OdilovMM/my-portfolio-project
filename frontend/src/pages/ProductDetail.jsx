@@ -210,7 +210,7 @@ const ProductDetail = () => {
               <div className="flex text-xl">
                 <Rating ratings={product?.rating} />
               </div>
-              <span>(23 reviews)</span>
+              <span>(2)</span>
             </div>
 
             {/* product price */}
