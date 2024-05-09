@@ -75,7 +75,13 @@ class authControllers {
       responseReturn(res, 500, { error: "Internal Server error" });
     }
   };
-  
+
+  customerLogout = async (req, res) => {
+    res.cookie("customerToken", "", {
+      expires: new Date(Date.now()),
+    });
+    responseReturn(res, 200, { message: "Logout" });
+  };
 }
 
 module.exports = new authControllers();
