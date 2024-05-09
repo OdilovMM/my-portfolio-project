@@ -1,13 +1,15 @@
-import authReducer from "./Reducers/authReducer";
-import categoryReducer from "./Reducers/categoryReducer";
-import productReducer from "./Reducers/productReducer";
-import sellerReducer from "./Reducers/sellerReducer";
+import authSlice from "./Reducers/authReducer";
+import categorySlice from "./Reducers/categoryReducer";
+import chatSlice from "./Reducers/chatReducer";
+import productSlice from "./Reducers/productReducer";
+import sellerSlice from "./Reducers/sellerReducer";
 
 const rootReducer = {
-  auth: authReducer,
-  category: categoryReducer,
-  product: productReducer,
-  seller: sellerReducer,
+  auth: authSlice,
+  category: categorySlice,
+  product: productSlice,
+  seller: sellerSlice,
+  chat: chatSlice,
 };
 
 export default rootReducer;
