@@ -18,6 +18,22 @@ export const addFriendChat = createAsyncThunk(
     }
   }
 );
+export const sendMessage = createAsyncThunk(
+  "chat/sendMessage",
+  async (message, { rejectWithValue, fulfillWithValue }) => {
+    console.log(message);
+    try {
+      const { data } = await api.post(`/chat/send-message-to-seller`, message, {
+        withCredentials: true,
+      });
+
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const chatReducer = createSlice({
   name: "chat",

@@ -4,9 +4,10 @@ import { IoSend } from "react-icons/io5";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
-import { useEffect } from "react";
-import { addFriendChat } from "../../store/reducers/chatReducer";
+import { useEffect, useState } from "react";
+import { addFriendChat, sendMessage } from "../../store/reducers/chatReducer";
 import { GrChatOption } from "react-icons/gr";
+import toast from "react-hot-toast";
 const socket = io("http://localhost:5000");
 
 const Chat = () => {
@@ -15,6 +16,8 @@ const Chat = () => {
   const { currentFriend, myFriend, friendMessages, isLoading } = useSelector(
     (state) => state.chat
   );
+  const [message, setMessage] = useState("");
+
   const { sellerId } = useParams();
 
   useEffect(() => {
@@ -29,6 +32,23 @@ const Chat = () => {
       })
     );
   }, [dispatch, sellerId, userInfo]);
+
+  const handleSendMessage = () => {
+    if (message) {
+      dispatch(
+        sendMessage({
+          userId: userInfo.id,
+          message,
+          sellerId,
+          name: userInfo.name,
+        })
+      );
+      setMessage("");
+    } else {
+      toast.error("Enter your message");
+      return;
+    }
+  };
 
   return (
     <div className="bg-white p-3 rounded-md">
@@ -113,7 +133,9 @@ const Chat = () => {
                 <div className="border h-[40px] p-0 ml-2 w-[calc(100%-90px)] rounded-full relative">
                   <input
                     type="text"
-                    placeholder="input message"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Enter your message"
                     className="w-full rounded-full h-full outline-none p-3"
                   />
                   <div className="text-2xl right-2 top-2 absolute cursor-auto">
@@ -123,9 +145,12 @@ const Chat = () => {
                   </div>
                 </div>
                 <div className="w-[40px] p-2 justify-center items-center rounded-full">
-                  <div className="text-2xl cursor-pointer">
+                  <button
+                    onClick={handleSendMessage}
+                    className="text-2xl cursor-pointer"
+                  >
                     <IoSend />
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
