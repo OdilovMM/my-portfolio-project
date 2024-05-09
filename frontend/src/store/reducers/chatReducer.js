@@ -5,13 +5,11 @@ import toast from "react-hot-toast";
 export const addFriendChat = createAsyncThunk(
   "chat/addFriend",
   async (info, { rejectWithValue, fulfillWithValue }) => {
-    console.log(info);
     try {
       const { data } = await api.post(`/chat/add-customer-chat`, info, {
         withCredentials: true,
       });
 
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -20,14 +18,17 @@ export const addFriendChat = createAsyncThunk(
 );
 export const sendMessage = createAsyncThunk(
   "chat/sendMessage",
-  async (message, { rejectWithValue, fulfillWithValue }) => {
-    console.log(message);
+  async (messageInfo, { rejectWithValue, fulfillWithValue }) => {
+    console.log(messageInfo);
     try {
-      const { data } = await api.post(`/chat/send-message-to-seller`, message, {
-        withCredentials: true,
-      });
+      const { data } = await api.post(
+        `/chat/send-message-to-seller`,
+        messageInfo,
+        {
+          withCredentials: true,
+        }
+      );
 
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -39,17 +40,15 @@ export const chatReducer = createSlice({
   name: "chat",
   initialState: {
     isLoading: false,
-    myFriend: [],
+    myFriends: [],
     friendMessages: [],
     currentFriend: "",
-    errorMessage: "",
-    successMessage: "",
   },
   reducers: {
-    messageClear: (state, _) => {
-      state.errorMessage = "";
-      state.successMessage = "";
-    },
+    // messageClear: (state, _) => {
+    //   state.errorMessage = "";
+    //   state.successMessage = "";
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -58,12 +57,36 @@ export const chatReducer = createSlice({
       })
       .addCase(addFriendChat.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        toast.success(payload.message);
-        state.friendMessages = payload.message;
+        state.friendMessages = payload.messages;
         state.currentFriend = payload.currentFriend;
-        state.myFriend = payload.MyFriends;
+        state.myFriends = payload.MyFriends;
+        toast.success(payload.message);
       })
       .addCase(addFriendChat.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload.error);
+      })
+      .addCase(sendMessage.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(sendMessage.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        let tempFriends = state.myFriends;
+        let index = tempFriends.findIndex(
+          (f) => f.fdId === payload.messageText.receiverId
+        );
+        while (index > 0) {
+          let temp = tempFriends[index];
+          tempFriends[index] = tempFriends[index - 1];
+          tempFriends[index - 1] = temp;
+          index--;
+        }
+        state.myFriends = tempFriends;
+        state.friendMessages = [...state.friendMessages, payload.messageText];
+        console.log(Array.isArray(payload.messageText));
+        console.log(state.friendMessages);
+      })
+      .addCase(sendMessage.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload.error);
       });

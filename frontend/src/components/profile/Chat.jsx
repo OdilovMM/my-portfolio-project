@@ -13,11 +13,10 @@ const socket = io("http://localhost:5000");
 const Chat = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.customerAuth);
-  const { currentFriend, myFriend, friendMessages, isLoading } = useSelector(
+  const { currentFriend, myFriends, friendMessages } = useSelector(
     (state) => state.chat
   );
   const [message, setMessage] = useState("");
-
   const { sellerId } = useParams();
 
   useEffect(() => {
@@ -61,7 +60,7 @@ const Chat = () => {
             <span>Message</span>
           </div>
           <ul className="w-full flex flex-col items-start justify-start text-slate-600 gap-1 h-[400px] pr-2 border-r right-2">
-            {myFriend.map((friend, ind) => (
+            {myFriends.map((friend, ind) => (
               <li
                 key={ind}
                 className="flex flex-row justify-start items-center py-1 border-b bottom-1 w-full"
@@ -101,26 +100,41 @@ const Chat = () => {
               </div>
               <div className="h-[400px] w-full bg-slate-100 p-3 rounded-md">
                 <div className="w-full h-full overflow-y-auto flex flex-col gap-3">
-                  <div className="w-full flex gap-2 justify-start items-center text-[14px]">
-                    <img
-                      className="w-[30px] h-[30px] "
-                      src="http://localhost:3000/images/user.png"
-                      alt=""
-                    />
-                    <div className="p-2 bg-purple-500 text-white rounded-md">
-                      <span>weewewewewewewe</span>
-                    </div>
-                  </div>
-                  <div className="w-full flex gap-2 justify-end items-center text-[14px]">
-                    <img
-                      className="w-[30px] h-[30px] "
-                      src="http://localhost:3000/images/user.png"
-                      alt=""
-                    />
-                    <div className="p-2 bg-cyan-500 text-white rounded-md">
-                      <span>ewwwwwwwww</span>
-                    </div>
-                  </div>
+                  {friendMessages?.map((m, i) => {
+                    if (currentFriend?.fdId !== m.receiverId) {
+                      return (
+                        <div
+                          key={i}
+                          className="w-full flex gap-2 justify-start items-center text-[14px]"
+                        >
+                          <img
+                            className="w-[30px] h-[30px] "
+                            src="http://localhost:3000/images/user.png"
+                            alt=""
+                          />
+                          <div className="p-2 bg-purple-500 text-white rounded-md">
+                            <span>{m?.message}</span>
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div
+                          key={i}
+                          className="w-full flex gap-2 justify-end items-center text-[14px]"
+                        >
+                          <img
+                            className="w-[30px] h-[30px] "
+                            src="http://localhost:3000/images/user.png"
+                            alt=""
+                          />
+                          <div className="p-2 bg-cyan-500 text-white rounded-md">
+                            <span>{m?.message}</span>
+                          </div>
+                        </div>
+                      );
+                    }
+                  })}
                 </div>
               </div>
               <div className="flex p-2 justify-between items-center w-full">

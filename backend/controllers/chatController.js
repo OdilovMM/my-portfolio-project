@@ -7,86 +7,6 @@ const Message = require("../models/chat/sellerCustomerMessageModel");
 const { responseReturn } = require("../utils/response");
 
 class chatController {
-  // addChatFriend = async (req, res) => {
-  //   const { sellerId, userId } = req.body;
-
-  //   try {
-  //     if (sellerId !== "") {
-  //       const seller = await Seller.findById(sellerId);
-  //       const customer = await Customer.findById(userId);
-
-  //       const checkSeller = await sellerCustomerModel.findOne({
-  //         $and: [
-  //           {
-  //             myId: {
-  //               $eq: userId,
-  //             },
-  //           },
-  //           {
-  //             myFriends: {
-  //               $elemMatch: {
-  //                 fdId: sellerId,
-  //               },
-  //             },
-  //           },
-  //         ],
-  //       });
-  //       if (!checkSeller) {
-  //         await sellerCustomerModel.updateOne(
-  //           {
-  //             myId: userId,
-  //           },
-  //           {
-  //             $push: {
-  //               myFriends: {
-  //                 fdId: sellerId,
-  //                 name: seller.shopInfo?.shopName,
-  //                 image: seller.image,
-  //               },
-  //             },
-  //           }
-  //         );
-  //       }
-  //       const checkCustomer = await sellerCustomerModel.findOne({
-  //         $and: [
-  //           {
-  //             myId: {
-  //               $eq: sellerId,
-  //             },
-  //           },
-  //           {
-  //             myFriends: {
-  //               $elemMatch: {
-  //                 fdId: userId,
-  //               },
-  //             },
-  //           },
-  //         ],
-  //       });
-  //       if (!checkSeller) {
-  //         await sellerCustomerModel.updateOne(
-  //           {
-  //             myId: sellerId,
-  //           },
-  //           {
-  //             $push: {
-  //               myFriends: {
-  //                 fdId: userId,
-  //                 name: customer.name,
-  //                 image: "",
-  //               },
-  //             },
-  //           }
-  //         );
-  //       }
-  //       console.log(checkCustomer);
-  //       console.log(checkSeller);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   addChatFriend = async (req, res) => {
     const { sellerId, userId } = req.body;
 
@@ -188,6 +108,7 @@ class chatController {
             },
           ],
         });
+        console.log('messages:',messages)
         const MyFriends = await sellerCustomerModel.findOne({
           myId: userId,
         });
@@ -216,19 +137,18 @@ class chatController {
   };
 
   sendMessageToSeller = async (req, res) => {
-    console.log(req.body);
     const { userId, message, sellerId, name } = req.body;
+
     try {
-      const newMessage = await Message.create({
+      const messageText = await Message.create({
         senderId: userId,
         senderName: name,
         receiverId: sellerId,
         message: message,
       });
 
-
       // for customer
-      const data = await sellerCustomerModel.findOne({myId: userId});
+      const data = await sellerCustomerModel.findOne({ myId: userId });
       let myFriends = data.myFriends;
       let index = myFriends.findIndex((fri) => fri.fdId === sellerId);
       while (index > 0) {
@@ -264,9 +184,11 @@ class chatController {
           myFriends1,
         }
       );
+      
 
-      responseReturn(res, 201, { newMessage });
+      responseReturn(res, 201, { messageText });
     } catch (error) {
+      console.log(error);
       responseReturn(res, 500, { error: error.message });
     }
   };
