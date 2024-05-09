@@ -63,11 +63,11 @@ const Chat = () => {
             {myFriends.map((friend, ind) => (
               <li
                 key={ind}
-                className="flex flex-row justify-start items-center py-1 border-b bottom-1 w-full"
+                className="flex hover:bg-slate-300  flex-row justify-start items-center py-1 border-b bottom-1 w-full"
               >
                 <Link
                   to={`/dashboard/chat/${friend.fdId}`}
-                  className={`flex gap-2 flex-row justify-start items-center pl-2`}
+                  className={`flex gap-2 flex-row active:bg-slate-300 justify-start items-center pl-2`}
                 >
                   <div className="relative">
                     <div className="w-[10px] h-[10px] rounded-full bg-green-500 absolute right-0 bottom-0"></div>
