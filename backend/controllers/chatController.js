@@ -205,7 +205,18 @@ class chatController {
       });
     } catch (error) {
       //
+      responseReturn(res, 500, {
+        error: error.message,
+      });
     }
+  };
+  getCustomerMessage = async (req, res) => {
+    const { customerId } = req.params;
+    const {id} = req
+    console.log(id);
+
+    try {
+    } catch (error) {}
   };
 }
 

@@ -2,21 +2,29 @@ import React, { useEffect, useState } from "react";
 import { FaList } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
-import { getCustomers } from "../../store/Reducers/chatReducer";
-import { Link } from "react-router-dom";
+import {
+  getCustomerMessage,
+  getCustomers,
+} from "../../store/Reducers/chatReducer";
+import { Link, useParams } from "react-router-dom";
 
 const SellerCustomerChat = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
   const { customers } = useSelector((state) => state.chat);
-  
-
+  const { customerId } = useParams();
   const [show, setShow] = useState(false);
   const sellerId = 65;
 
   useEffect(() => {
     dispatch(getCustomers(userInfo._id));
   }, [userInfo, dispatch]);
+
+  useEffect(() => {
+    if (customerId) {
+      dispatch(getCustomerMessage(customerId));
+    }
+  }, [customerId, dispatch]);
 
   return (
     <div className="px-2 lg:px-7 py-5">
@@ -40,7 +48,7 @@ const SellerCustomerChat = () => {
               {customers.map((customer, index) => {
                 return (
                   <Link
-                  key={index}
+                    key={index}
                     to={`/seller/dashboard/chat-customer/${customer.fdId}`}
                     className={`h-[60px] flex justify-start gap-0 items-center text-white px-2 py-2 rounded-sm cursor-pointer bg-[#979696]`}
                   >

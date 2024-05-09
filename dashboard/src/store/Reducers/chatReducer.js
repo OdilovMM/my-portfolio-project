@@ -16,25 +16,24 @@ export const getCustomers = createAsyncThunk(
     }
   }
 );
-// export const sendMessage = createAsyncThunk(
-//   "chat/sendMessage",
-//   async (messageInfo, { rejectWithValue, fulfillWithValue }) => {
-//     console.log(messageInfo);
-//     try {
-//       const { data } = await api.post(
-//         `/chat/send-message-to-seller`,
-//         messageInfo,
-//         {
-//           withCredentials: true,
-//         }
-//       );
 
-//       return fulfillWithValue(data);
-//     } catch (error) {
-//       return rejectWithValue(error.response.data);
-//     }
-//   }
-// );
+export const getCustomerMessage = createAsyncThunk(
+  "chat/getCustomerMessage",
+  async (customerId, { rejectWithValue, fulfillWithValue }) => {
+    console.log(customerId);
+    try {
+      const { data } = await api.get(
+        `/chat/get-customer-message/${customerId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const chatReducer = createSlice({
   name: "chat",
