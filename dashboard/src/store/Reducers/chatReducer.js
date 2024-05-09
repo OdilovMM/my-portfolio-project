@@ -64,31 +64,21 @@ export const chatReducer = createSlice({
       .addCase(getCustomers.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload.error);
+      })
+
+      .addCase(getCustomerMessage.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(getCustomerMessage.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.messages = payload.messages;
+        state.currentCustomer = payload.currentCustomer;
+        toast.success(payload.success);
+      })
+      .addCase(getCustomerMessage.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload.error);
       });
-    //   .addCase(sendMessage.pending, (state, { payload }) => {
-    //     state.isLoading = true;
-    //   })
-    //   .addCase(sendMessage.fulfilled, (state, { payload }) => {
-    //     state.isLoading = false;
-    //     let tempFriends = state.myFriends;
-    //     let index = tempFriends.findIndex(
-    //       (f) => f.fdId === payload.messageText.receiverId
-    //     );
-    //     while (index > 0) {
-    //       let temp = tempFriends[index];
-    //       tempFriends[index] = tempFriends[index - 1];
-    //       tempFriends[index - 1] = temp;
-    //       index--;
-    //     }
-    //     state.myFriends = tempFriends;
-    //     state.friendMessages = [...state.friendMessages, payload.messageText];
-    //     console.log(Array.isArray(payload.messageText));
-    //     console.log(state.friendMessages);
-    //   })
-    //   .addCase(sendMessage.rejected, (state, { payload }) => {
-    //     state.isLoading = false;
-    //     toast.error(payload.error);
-    //   });
   },
 });
 // export const { messageClear } = chatReducer.actions;

@@ -108,7 +108,7 @@ class chatController {
             },
           ],
         });
-        console.log("messages:", messages);
+
         const MyFriends = await sellerCustomerModel.findOne({
           myId: userId,
         });
@@ -212,11 +212,47 @@ class chatController {
   };
   getCustomerMessage = async (req, res) => {
     const { customerId } = req.params;
-    const {id} = req
-    console.log(id);
+    const { id } = req;
 
     try {
-    } catch (error) {}
+      const messages = await Message.find({
+        $or: [
+          {
+            $and: [
+              {
+                receiverId: { $eq: customerId },
+              },
+              {
+                senderId: {
+                  $eq: id,
+                },
+              },
+            ],
+          },
+          {
+            $and: [
+              {
+                receiverId: { $eq: id },
+              },
+              {
+                senderId: {
+                  $eq: customerId,
+                },
+              },
+            ],
+          },
+        ],
+      });
+      const currentCustomer = await Customer.findById(customerId);
+      console.log(customerId);
+      responseReturn(res, 200, {
+        status: "success",
+        messages,
+        currentCustomer,
+      });
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
   };
 }
 

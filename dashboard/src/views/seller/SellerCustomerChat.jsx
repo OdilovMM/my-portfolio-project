@@ -11,7 +11,9 @@ import { Link, useParams } from "react-router-dom";
 const SellerCustomerChat = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
-  const { customers } = useSelector((state) => state.chat);
+  const { customers, currentCustomer, messages } = useSelector(
+    (state) => state.chat
+  );
   const { customerId } = useParams();
   const [show, setShow] = useState(false);
   const sellerId = 65;
@@ -85,7 +87,7 @@ const SellerCustomerChat = () => {
 
                     <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
                   </div>
-                  <h2 className="text-white">John Doe</h2>
+                  <h2 className="text-white">{currentCustomer.name}</h2>
                 </div>
               )}
 
@@ -102,55 +104,51 @@ const SellerCustomerChat = () => {
             <div className="py-4">
               <div className="bg-[#98a3a4eb] h-[calc(100vh-290px)] rounded-[5px] p-3 overflow-y-auto">
                 {/* Left */}
-                <div className="w-full flex justify-start items-center ">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div>
-                      <img
-                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                        className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
-                        alt=""
-                      />
-                    </div>
-                    <div className="flex justify-center items-start  flex-col w-full bg-blue-300 text-white py-1 px-2 rounded-sm">
-                      <span>Hello there Admin, Are you her???</span>
-                    </div>
-                  </div>
-                </div>
 
-                {/* right */}
-                <div className="w-full flex justify-end items-center ">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div className="flex justify-center items-start  flex-col w-full bg-blue-600 text-white py-1 px-2 rounded-sm">
-                      <span>Hi??? How Can i help uu??</span>
-                    </div>
+                {customerId ? (
+                  messages.map((message, index) => {
+                    if (message.senderId === customerId) {
+                      return (
+                        <div className="w-full flex justify-start items-center ">
+                          <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
+                            <div>
+                              <img
+                                src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+                                className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
+                                alt=""
+                              />
+                            </div>
+                            <div className="flex justify-center items-start flex-col w-full bg-blue-300 text-[#333] py-1 px-2 rounded-tl-full rounded-tr-full rounded-br-full">
+                              <span>{message.message}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div className="w-full flex justify-end items-center ">
+                          <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
+                          <div className="flex justify-center items-start flex-col bg-blue-300 text-[#333] py-1 px-2 rounded-tl-full rounded-bl-full rounded-tr-full ">
+                              <span>{message}</span>
+                            </div>
 
-                    <div>
-                      <img
-                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                        className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
-                        alt=""
-                      />
-                    </div>
+                            <div>
+                              <img
+                                src={userInfo.image}
+                                className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
+                                alt=""
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+                  })
+                ) : (
+                  <div className="w-full h-full flex justify-center items-center bg-slate-50">
+                    <span className="text-[26px]">Select a customer</span>
                   </div>
-                </div>
-                {/* left */}
-
-                <div className="w-full flex justify-start items-center ">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div>
-                      <img
-                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                        className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
-                        alt=""
-                      />
-                    </div>
-                    <div className="flex justify-center items-start  flex-col w-full bg-blue-300 text-white py-1 px-2 rounded-sm">
-                      <span>
-                        I need some instructions about the Admin panel
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
 

@@ -123,14 +123,14 @@ const Chat = () => {
                           key={i}
                           className="w-full flex gap-2 justify-end items-center text-[14px]"
                         >
+                           <div className="flex justify-center items-start flex-col bg-blue-300 text-[#333] py-1 px-2 rounded-tl-full rounded-bl-full rounded-tr-full ">
+                            <span>{m?.message}</span>
+                          </div>
                           <img
                             className="w-[30px] h-[30px] "
                             src="http://localhost:3000/images/user.png"
                             alt=""
                           />
-                          <div className="p-2 bg-cyan-500 text-white rounded-md">
-                            <span>{m?.message}</span>
-                          </div>
                         </div>
                       );
                     }
