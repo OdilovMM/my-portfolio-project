@@ -214,6 +214,62 @@ class chatController {
       responseReturn(res, 500, { error: error.message });
     }
   };
+
+  sendMessageToSeller = async (req, res) => {
+    console.log(req.body);
+    const { userId, message, sellerId, name } = req.body;
+    try {
+      const newMessage = await Message.create({
+        senderId: userId,
+        senderName: name,
+        receiverId: sellerId,
+        message: message,
+      });
+
+
+      // for customer
+      const data = await sellerCustomerModel.findOne({myId: userId});
+      let myFriends = data.myFriends;
+      let index = myFriends.findIndex((fri) => fri.fdId === sellerId);
+      while (index > 0) {
+        let temp = myFriends[index];
+        myFriends[index] = myFriends[index - 1];
+        myFriends[index - 1] = temp;
+        index--;
+      }
+      await sellerCustomerModel.updateOne(
+        {
+          myId: userId,
+        },
+        {
+          myFriends,
+        }
+      );
+
+      // seller
+      const data1 = await sellerCustomerModel.findOne({ myId: sellerId });
+      let myFriends1 = data1.myFriends;
+      let index1 = myFriends1.findIndex((fri) => fri.fdId === userId);
+      while (index > 0) {
+        let temp1 = myFriends1[index1];
+        myFriends1[index1] = myFriends1[index1 - 1];
+        myFriends1[index1 - 1] = temp1;
+        index1--;
+      }
+      await sellerCustomerModel.updateOne(
+        {
+          myId: sellerId,
+        },
+        {
+          myFriends1,
+        }
+      );
+
+      responseReturn(res, 201, { newMessage });
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
 }
 
 module.exports = new chatController();
