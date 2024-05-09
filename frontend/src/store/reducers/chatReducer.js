@@ -7,7 +7,7 @@ export const addFriendChat = createAsyncThunk(
   async (info, { rejectWithValue, fulfillWithValue }) => {
     console.log(info);
     try {
-      const { data } = await api.post(`/customer/add-customer-chat`, info, {
+      const { data } = await api.post(`/chat/add-customer-chat`, info, {
         withCredentials: true,
       });
 
