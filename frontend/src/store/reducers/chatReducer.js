@@ -35,23 +35,23 @@ export const chatReducer = createSlice({
       state.successMessage = "";
     },
   },
-  //   extraReducers: (builder) => {
-  //     builder
-  //       .addCase(registerUserCustomer.pending, (state, { payload }) => {
-  //         state.loader = true;
-  //       })
-  //       .addCase(registerUserCustomer.fulfilled, (state, { payload }) => {
-  //         state.loader = false;
-  //         state.successMessage = payload.message;
-  //         toast.success(payload.message);
-  //       })
-  //       .addCase(registerUserCustomer.rejected, (state, { payload }) => {
-  //         state.loader = false;
-  //         state.errorMessage = payload.error;
-  //         toast.error(payload.error);
-  //       })
-
-  //   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(addFriendChat.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(addFriendChat.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        toast.success(payload.message);
+        state.friendMessages = payload.message;
+        state.currentFriend = payload.currentFriend;
+        state.myFriend = payload.MyFriends;
+      })
+      .addCase(addFriendChat.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload.error);
+      });
+  },
 });
 export const { messageClear } = chatReducer.actions;
 export default chatReducer.reducer;
