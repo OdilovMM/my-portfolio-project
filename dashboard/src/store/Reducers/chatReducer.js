@@ -59,9 +59,7 @@ export const chatReducer = createSlice({
       })
       .addCase(getCustomers.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        state.friendMessages = payload.messages;
-        state.currentFriend = payload.currentFriend;
-        state.myFriends = payload.MyFriends;
+        state.customers = payload.customers;
         toast.success(payload.message);
       })
       .addCase(getCustomers.rejected, (state, { payload }) => {

@@ -3,11 +3,13 @@ import { FaList } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
 import { getCustomers } from "../../store/Reducers/chatReducer";
+import { Link } from "react-router-dom";
 
 const SellerCustomerChat = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
-  // const { userInfo } = useSelector((state) => state.chat);
+  const { customers } = useSelector((state) => state.chat);
+  
 
   const [show, setShow] = useState(false);
   const sellerId = 65;
@@ -35,63 +37,30 @@ const SellerCustomerChat = () => {
                   <IoMdClose />{" "}
                 </span>
               </div>
+              {customers.map((customer, index) => {
+                return (
+                  <Link
+                  key={index}
+                    to={`/seller/dashboard/chat-customer/${customer.fdId}`}
+                    className={`h-[60px] flex justify-start gap-0 items-center text-white px-2 py-2 rounded-sm cursor-pointer bg-[#979696]`}
+                  >
+                    <div className="relative">
+                      <img
+                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+                        className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
+                        alt=""
+                      />
 
-              <div
-                className={`h-[60px] flex justify-start gap-0 items-center text-white px-2 py-2 rounded-sm cursor-pointer bg-[#979696]`}
-              >
-                <div className="relative">
-                  <img
-                    src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                    className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
-                    alt=""
-                  />
-
-                  <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
-                </div>
-                <div className="flex justify-center items-start flex-col w-full">
-                  <div className="flex justify-between pl-2 items-center w-full">
-                    <h2 className="font-bold">John One</h2>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className={`h-[60px] flex justify-start gap-0 items-center text-white px-2 py-2 rounded-sm cursor-pointer `}
-              >
-                <div className="relative">
-                  <img
-                    src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                    className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
-                    alt=""
-                  />
-
-                  <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
-                </div>
-                <div className="flex justify-center items-start flex-col w-full">
-                  <div className="flex justify-between pl-2 items-center w-full">
-                    <h2 className="font-bold">John Doe</h2>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className={`h-[60px] flex justify-start gap-0 items-center text-white px-2 py-2 rounded-sm cursor-pointer `}
-              >
-                <div className="relative">
-                  <img
-                    src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                    className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
-                    alt=""
-                  />
-
-                  <div className="w-[10px] h-[10px] bg-black  rounded-full absolute right-0 bottom-0"></div>
-                </div>
-                <div className="flex justify-center items-start flex-col w-full">
-                  <div className="flex justify-between pl-2 items-center w-full">
-                    <h2 className="font-bold">John Doe</h2>
-                  </div>
-                </div>
-              </div>
+                      <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
+                    </div>
+                    <div className="flex justify-center items-start flex-col w-full">
+                      <div className="flex justify-between pl-2 items-center w-full">
+                        <h2 className="font-bold">{customer.name}</h2>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
 
