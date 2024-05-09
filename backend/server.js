@@ -61,15 +61,50 @@ const addSeller = (sellerId, socketId, userInfo) => {
   }
 };
 
+const findCustomer = (customerId) => {
+  return allCustomer.find((c) => c.customerId === customerId);
+};
+const findSeller = (sellerId) => {
+  return allSeller.find((c) => c.sellerId === sellerId);
+};
+
+const remove = (socketId) => {
+  allCustomer = allCustomer.filter((c) => c.socketId !== socketId);
+  allSeller = allSeller.filter((c) => c.socketId !== socketId);
+};
+
 io.on("connection", (sock) => {
   console.log("Socket server is running successfully");
 
   sock.on("addUser", (customerId, userInfo) => {
     addUser(customerId, sock.id, userInfo);
+    io.emit("activeSeller", allSeller);
   });
 
   sock.on("addSeller", (sellerId, userInfo) => {
     addSeller(sellerId, sock.id, userInfo);
+    io.emit("activeSeller", allSeller);
+  });
+
+  sock.on("sendMessageSeller", (msg) => {
+    const customer = findCustomer(msg.receiverId);
+    console.log(customer);
+    if (customer !== undefined) {
+      sock.to(customer.socketId).emit("sellerMessage", msg);
+    }
+  });
+  sock.on("sendMessageCustomer", (msg) => {
+    const seller = findSeller(msg.receiverId);
+    console.log(seller);
+    if (seller !== undefined) {
+      sock.to(seller.socketId).emit("customerMessage", msg);
+    }
+  });
+
+  sock.on("disconnect", () => {
+    console.log("user disconnected");
+    remove(sock.id);
+    io.emit("activeSeller", allSeller);
   });
 });
 

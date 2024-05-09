@@ -4,6 +4,11 @@ const router = require("express").Router();
 
 router.post("/add-customer-chat", chatController.addChatFriend);
 router.post("/send-message-to-seller", chatController.sendMessageToSeller);
+router.post(
+  "/send-message-to-customer",
+  authMiddleware,
+  chatController.sendMessageToCustomer
+);
 router.get("/get-customers/:sellerId", chatController.getCustomers);
 router.get(
   "/get-customer-message/:customerId",

@@ -3,21 +3,31 @@ import { GrEmoji } from "react-icons/gr";
 import { IoSend } from "react-icons/io5";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import io from "socket.io-client";
 import { useEffect, useState } from "react";
-import { addFriendChat, sendMessage } from "../../store/reducers/chatReducer";
+import {
+  addFriendChat,
+  messageClear,
+  sendMessage,
+  updateMessage,
+} from "../../store/reducers/chatReducer";
 import { GrChatOption } from "react-icons/gr";
 import toast from "react-hot-toast";
+
+import io from "socket.io-client";
+import { useRef } from "react";
 const socket = io("http://localhost:5000");
 
 const Chat = () => {
+  const scrollRef = useRef()
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.customerAuth);
-  const { currentFriend, myFriends, friendMessages } = useSelector(
-    (state) => state.chat
-  );
+  const { currentFriend, successMessage, myFriends, friendMessages } =
+    useSelector((state) => state.chat);
   const [message, setMessage] = useState("");
   const { sellerId } = useParams();
+
+  const [incomingMessage, setIncomingMessage] = useState("");
+  const [activeSeller, setActiveSeller] = useState([]);
 
   useEffect(() => {
     socket.emit("addUser", userInfo.id, userInfo);
@@ -49,17 +59,54 @@ const Chat = () => {
     }
   };
 
+  useEffect(() => {
+    socket.on("sellerMessage", (msg) => {
+      setIncomingMessage(msg);
+    });
+    socket.on("activeSeller", (sellers) => {
+      setActiveSeller(sellers);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (successMessage) {
+      socket.emit(
+        "sendMessageCustomer",
+        friendMessages[friendMessages.length - 1]
+      );
+      dispatch(messageClear());
+    }
+  }, [successMessage, dispatch, friendMessages]);
+
+  useEffect(() => {
+    if (incomingMessage) {
+      if (
+        sellerId === incomingMessage.senderId &&
+        userInfo.id === incomingMessage.receiverId
+      ) {
+        dispatch(updateMessage(incomingMessage));
+      } else {
+        toast.success(incomingMessage.senderName + " " + "Send a message");
+        dispatch(messageClear());
+      }
+    }
+  }, [incomingMessage, dispatch, sellerId, userInfo]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [friendMessages]);
+
   return (
     <div className="bg-white p-3 rounded-md">
       <div className="w-full flex">
         <div className="w-[230px]">
-          <div className="flex justify-start gap-3 items-center px-2 text-slate-600 text-xl h-[30px] my-2">
+          <div className="flex justify-start gap-3 rounded-md items-center px-2 text-slate-600 text-xl h-[30px] my-2">
             <span>
               <GrChatOption size={24} />
             </span>
             <span>Message</span>
           </div>
-          <ul className="w-full flex flex-col items-start justify-start text-slate-600 gap-1 h-[400px] pr-2 border-r right-2">
+          <ul className="w-full flex flex-col items-start  justify-start text-slate-600 gap-1 h-[400px] pr-2 border-r right-2">
             {myFriends.map((friend, ind) => (
               <li
                 key={ind}
@@ -70,8 +117,12 @@ const Chat = () => {
                   className={`flex gap-2 flex-row active:bg-slate-300 justify-start items-center pl-2`}
                 >
                   <div className="relative">
-                    <div className="w-[10px] h-[10px] rounded-full bg-green-500 absolute right-0 bottom-0"></div>
-                    <div className="w-[35px] h-[35px] border-black">
+                    {activeSeller.some((c) => c.sellerId === friend.fdId) && (
+                      <div className="w-[10px] h-[10px] rounded-full bg-green-500 absolute right-0 bottom-0"></div>
+                    )}
+
+                    <div className="w-[35px] h-[35px] border-black relative">
+                      <div className="w-[10px] h-[10px] rounded-full bg-green-500 absolute right-0 bottom-0"></div>
                       <img
                         src={friend.image}
                         alt=""
@@ -90,7 +141,12 @@ const Chat = () => {
             <div className="w-full h-full">
               <div className="flex justify-between  bg-slate-200 items-center text-slate-600 text-xl h-[40px] px-2">
                 <span>{currentFriend.name}</span>
-                <div className="w-[38px] h-[38px]  border-black">
+                <div className="w-[38px] h-[38px]  border-black relative">
+                  {activeSeller.some(
+                    (c) => c.sellerId === currentFriend.fdId
+                  ) && (
+                    <div className="w-[10px] h-[10px] rounded-full bg-green-500 absolute right-0 bottom-0"></div>
+                  )}
                   <img
                     src={currentFriend.image}
                     className=" object-cover rounded-full shadow-lg w-[38px] h-[38px]"
@@ -98,21 +154,23 @@ const Chat = () => {
                   />
                 </div>
               </div>
-              <div className="h-[400px] w-full bg-slate-100 p-3 rounded-md">
+              <div className="h-[400px] w-full bg-slate-100 py-3 rounded-md">
                 <div className="w-full h-full overflow-y-auto flex flex-col gap-3">
                   {friendMessages?.map((m, i) => {
                     if (currentFriend?.fdId !== m.receiverId) {
                       return (
                         <div
+                        ref={scrollRef}
+
                           key={i}
                           className="w-full flex gap-2 justify-start items-center text-[14px]"
                         >
                           <img
-                            className="w-[30px] h-[30px] "
-                            src="http://localhost:3000/images/user.png"
+                            className="w-[30px] h-[30px] rounded-full "
+                            src={currentFriend.image}
                             alt=""
                           />
-                          <div className="p-2 bg-purple-500 text-white rounded-md">
+                          <div className="flex justify-center items-start flex-col bg-blue-300 text-[#333]  px-2 rounded-tl-full rounded-tr-full rounded-br-full">
                             <span>{m?.message}</span>
                           </div>
                         </div>
@@ -120,17 +178,18 @@ const Chat = () => {
                     } else {
                       return (
                         <div
+                        ref={scrollRef}
                           key={i}
                           className="w-full flex gap-2 justify-end items-center text-[14px]"
                         >
-                           <div className="flex justify-center items-start flex-col bg-blue-300 text-[#333] py-1 px-2 rounded-tl-full rounded-bl-full rounded-tr-full ">
+                          <div className="flex justify-center items-start flex-col bg-blue-300 text-[#333] px-2 rounded-tl-full rounded-bl-full rounded-tr-full ">
                             <span>{m?.message}</span>
                           </div>
-                          <img
+                          {/* <img
                             className="w-[30px] h-[30px] "
                             src="http://localhost:3000/images/user.png"
                             alt=""
-                          />
+                          /> */}
                         </div>
                       );
                     }
@@ -169,8 +228,8 @@ const Chat = () => {
               </div>
             </div>
           ) : (
-            <div className="w-full h-full flex justify-center items-center text-lg ont-bold text-slate-600">
-              <span>Select Seller to Chat</span>
+            <div className="w-full h-full flex justify-center items-center bg-slate-50">
+              <span className="text-[16px]">Select a Seller</span>
             </div>
           )}
         </div>

@@ -40,15 +40,19 @@ export const chatReducer = createSlice({
   name: "chat",
   initialState: {
     isLoading: false,
+    successMessage: "",
     myFriends: [],
     friendMessages: [],
     currentFriend: "",
   },
   reducers: {
-    // messageClear: (state, _) => {
-    //   state.errorMessage = "";
-    //   state.successMessage = "";
-    // },
+    messageClear: (state, _) => {
+      state.errorMessage = "";
+      state.successMessage = "";
+    },
+    updateMessage: (state, { payload }) => {
+      state.friendMessages = [...state.friendMessages, payload];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -60,11 +64,11 @@ export const chatReducer = createSlice({
         state.friendMessages = payload.messages;
         state.currentFriend = payload.currentFriend;
         state.myFriends = payload.MyFriends;
-        toast.success(payload.message);
+        // toast.success(payload.message);
       })
       .addCase(addFriendChat.rejected, (state, { payload }) => {
         state.isLoading = false;
-        toast.error(payload.error);
+        // toast.error(payload.error);
       })
       .addCase(sendMessage.pending, (state, { payload }) => {
         state.isLoading = true;
@@ -83,14 +87,13 @@ export const chatReducer = createSlice({
         }
         state.myFriends = tempFriends;
         state.friendMessages = [...state.friendMessages, payload.messageText];
-        console.log(Array.isArray(payload.messageText));
-        console.log(state.friendMessages);
+        state.successMessage = "success";
       })
       .addCase(sendMessage.rejected, (state, { payload }) => {
         state.isLoading = false;
-        toast.error(payload.error);
+        // toast.error(payload.error);
       });
   },
 });
-export const { messageClear } = chatReducer.actions;
+export const { messageClear, updateMessage } = chatReducer.actions;
 export default chatReducer.reducer;
