@@ -3,6 +3,8 @@ const Seller = require("../models/sellerModel");
 const Customer = require("../models/customerModel");
 const formidable = require("formidable");
 const sellerCustomerModel = require("../models/chat/sellerCustomerModel");
+const Message = require("../models/chat/sellerCustomerMessageModel");
+const { responseReturn } = require("../utils/response");
 
 class chatController {
   // addChatFriend = async (req, res) => {
@@ -157,12 +159,59 @@ class chatController {
             }
           );
         }
-      }
 
-      console.log(checkCustomer);
-      console.log(checkSeller);
+        const messages = await Message.find({
+          $or: [
+            {
+              $and: [
+                {
+                  receiverId: { $eq: sellerId },
+                },
+                {
+                  senderId: {
+                    $eq: userId,
+                  },
+                },
+              ],
+            },
+            {
+              $and: [
+                {
+                  receiverId: { $eq: userId },
+                },
+                {
+                  senderId: {
+                    $eq: sellerId,
+                  },
+                },
+              ],
+            },
+          ],
+        });
+        const MyFriends = await sellerCustomerModel.findOne({
+          myId: userId,
+        });
+
+        const currentFriend = MyFriends.myFriends.find(
+          (s) => s.fdId === sellerId
+        );
+
+        responseReturn(res, 200, {
+          MyFriends: MyFriends.myFriends,
+          currentFriend,
+          messages,
+        });
+      } else {
+        const MyFriends = await sellerCustomerModel.findOne({
+          myId: userId,
+        });
+        responseReturn(res, 200, {
+          MyFriends: MyFriends.myFriends,
+        });
+      }
     } catch (error) {
       console.log(error);
+      responseReturn(res, 500, { error: error.message });
     }
   };
 }
