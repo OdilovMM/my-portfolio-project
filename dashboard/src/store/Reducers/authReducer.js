@@ -108,6 +108,26 @@ export const addProfileInfo = createAsyncThunk(
   }
 );
 
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async ({ navigate, role }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get("/auth/logout", {
+        withCredentials: true,
+      });
+      localStorage.removeItem("accessToken", data.token);
+      if (role === "admin") {
+        navigate("/admin/login");
+      } else {
+        navigate("/login");
+      }
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const authReducer = createSlice({
   name: "auth",
   initialState: {
@@ -203,6 +223,11 @@ export const authReducer = createSlice({
         state.loader = false;
         state.errorMessage = payload.error;
         toast.error(payload.error);
+      })
+      .addCase(logout.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.userInfo = "";
+        toast.success(payload.message);
       });
   },
 });
