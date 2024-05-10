@@ -1,13 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
 import { FaEye } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { getDeactiveSellers } from "../../store/Reducers/sellerReducer";
 
 const DeactiveSeller = () => {
+  const dispatch = useDispatch();
+  const { role } = useSelector((state) => state.auth);
+  const { totalDeactives, deactiveSellers } = useSelector(
+    (state) => state.seller
+  );
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [parPage, setParPage] = useState(5);
+
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const obj = {
+      parPage: parseInt(parPage),
+      page: parseInt(currentPage),
+      searchValue,
+    };
+    dispatch(getDeactiveSellers(obj));
+  }, [searchValue, currentPage, parPage, dispatch]);
 
   return (
     <div className="px-2 lg:px-7 pt-5">
@@ -23,6 +41,7 @@ const DeactiveSeller = () => {
             <option value="20">20</option>
           </select>
           <input
+            onChange={(e) => setSearchValue(e.target.value)}
             className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#cacfd5] border border-slate-700 rounded-md text-[#333]"
             type="text"
             placeholder="search"
@@ -43,6 +62,9 @@ const DeactiveSeller = () => {
                   Name
                 </th>
                 <th scope="col" className="py-3 px-4">
+                  Shop Name
+                </th>
+                <th scope="col" className="py-3 px-4">
                   Email
                 </th>
                 <th scope="col" className="py-3 px-4">
@@ -60,57 +82,42 @@ const DeactiveSeller = () => {
             </thead>
 
             <tbody>
-              {[1, 2, 3, 4, 5].map((d, i) => (
+              {deactiveSellers.map((deActiveSeller, i) => (
                 <tr key={i}>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    {d}
+                <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {i + 1}
                   </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
                     <img
                       className="w-[45px] h-[45px]"
-                      src={`http://localhost:3000/images/category/${d}.jpg`}
+                      src={deActiveSeller.image}
                       alt=""
                     />
                   </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    John Doe{" "}
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {deActiveSeller.name}
                   </td>
 
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    johndoe@gmail.com{" "}
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {deActiveSeller?.shopInfo?.shopName}
                   </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    <span>Pending</span>{" "}
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {deActiveSeller.email}
+                  </td>
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {deActiveSeller.payment}
                   </td>
 
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    Deactive
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {deActiveSeller.status}
                   </td>
 
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
                     <div className="flex justify-start items-center gap-4">
-                      <Link className="p-[6px]  rounded  ">
+                      <Link
+                        to={`/admin/dashboard/seller/detail/${deActiveSeller._id}`}
+                        className="p-[6px]  rounded  "
+                      >
                         <FaEye />
                       </Link>
                     </div>
@@ -125,9 +132,9 @@ const DeactiveSeller = () => {
           <Pagination
             pageNumber={currentPage}
             setPageNumber={setCurrentPage}
-            totalItem={50}
+            totalItem={totalDeactives}
             parPage={parPage}
-            showItem={3}
+            showItem={4}
           />
         </div>
       </div>

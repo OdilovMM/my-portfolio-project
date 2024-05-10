@@ -1,13 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
 import { FaEye } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { getActiveSellers } from "../../store/Reducers/sellerReducer";
 
 const Sellers = () => {
+  const dispatch = useDispatch();
+  const { role } = useSelector((state) => state.auth);
+  const { sellers, totalSellers } = useSelector((state) => state.seller);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [parPage, setParPage] = useState(5);
+
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const obj = {
+      parPage: parseInt(parPage),
+      page: parseInt(currentPage),
+      searchValue,
+    };
+    dispatch(getActiveSellers(obj));
+  }, [searchValue, currentPage, parPage, dispatch]);
 
   return (
     <div className="px-2 lg:px-7 pt-5">
@@ -23,6 +39,7 @@ const Sellers = () => {
             <option value="20">20</option>
           </select>
           <input
+            onChange={(e) => setSearchValue(e.target.value)}
             className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#cacfd5] border border-slate-700 rounded-md text-[#333]"
             type="text"
             placeholder="search"
@@ -46,16 +63,14 @@ const Sellers = () => {
                   Shop Name
                 </th>
                 <th scope="col" className="py-3 px-4">
+                  Email
+                </th>
+                
+                <th scope="col" className="py-3 px-4">
                   Payment Status
                 </th>
                 <th scope="col" className="py-3 px-4">
-                  Email
-                </th>
-                <th scope="col" className="py-3 px-4">
-                  Devision
-                </th>
-                <th scope="col" className="py-3 px-4">
-                  District
+                  Status{" "}
                 </th>
                 <th scope="col" className="py-3 px-4">
                   Action
@@ -64,69 +79,43 @@ const Sellers = () => {
             </thead>
 
             <tbody>
-              {[1, 2, 3, 4, 5].map((d, i) => (
+              {sellers.map((seller, i) => (
                 <tr key={i}>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    {d}
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {i + 1}
                   </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
                     <img
                       className="w-[45px] h-[45px]"
-                      src={`http://localhost:3000/images/category/${d}.jpg`}
+                      src={seller.image}
                       alt=""
                     />
                   </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-msedium whitespace-nowrap"
-                  >
-                    John Doe
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {seller.name}
                   </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    Easy Shop
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {seller?.shopInfo?.shopName}
                   </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    <span>Pending</span>{" "}
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {seller.email}
                   </td>
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    johndoe@gmail.com
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {seller.payment}
                   </td>
 
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    Dhaka{" "}
+                  
+
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
+                    {seller?.status}
                   </td>
 
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
-                    Paltan{" "}
-                  </td>
-
-                  <td
-                    scope="row"
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
                     <div className="flex justify-start items-center gap-4">
-                      <Link className="p-[6px]  rounded  ">
+                      <Link
+                        to={`/admin/dashboard/seller/detail/${seller._id}`}
+                        className="p-[6px]  rounded  "
+                      >
                         <FaEye />
                       </Link>
                     </div>
@@ -138,13 +127,17 @@ const Sellers = () => {
         </div>
 
         <div className="w-full flex justify-end mt-4 bottom-4 right-4">
-          <Pagination
-            pageNumber={currentPage}
-            setPageNumber={setCurrentPage}
-            totalItem={50}
-            parPage={parPage}
-            showItem={3}
-          />
+          {totalSellers <= parPage ? (
+            <Pagination
+              pageNumber={currentPage}
+              setPageNumber={setCurrentPage}
+              totalItem={totalSellers}
+              parPage={parPage}
+              showItem={4}
+            />
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>
