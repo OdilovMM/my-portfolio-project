@@ -110,7 +110,7 @@ class sellerController {
           $text: { $search: search },
           status: "deactive",
         }).countDocuments();
-        responseReturn(res, 200, { totalSellers, sellers });
+        responseReturn(res, 200, { totalDeactives, deactiveSellers });
       } else {
         const deactiveSellers = await Seller.find({
           status: "deactive",

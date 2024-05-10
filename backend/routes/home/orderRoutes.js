@@ -10,4 +10,5 @@ router.get(
 router.get("/get-orders/:userId/:status", orderController.getAllOrdersByStatus);
 router.get("/get-orders/:userId/:status", orderController.getAllOrdersByStatus);
 router.get("/get-order-detail/:orderId", orderController.getOrderDetail);
+router.get("/get-admin-order", orderController.getAdminOrders);
 module.exports = router;

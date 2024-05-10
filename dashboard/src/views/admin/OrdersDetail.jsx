@@ -1,6 +1,10 @@
 import React from "react";
 
 const OrdersDetail = () => {
+
+
+
+  
   return (
     <div className="px-2 lg:px-7 pt-5">
       <div className="w-full p-4 bg-[#3D464D] rounded-md">
