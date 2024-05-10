@@ -6,11 +6,9 @@ export const addProduct = createAsyncThunk(
   "product/addCategory",
   async (product, { rejectWithValue, fulfillWithValue }) => {
     try {
-      console.log(product);
       const { data } = await api.post("/products/add-product", product, {
         withCredentials: true,
       });
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       console.log(error.response.data);
@@ -29,10 +27,8 @@ export const getProducts = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
-      console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
   }
@@ -47,10 +43,8 @@ export const getA_Product = createAsyncThunk(
       const { data } = await api.get(`/products/get-product/${productId}`, {
         withCredentials: true,
       });
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
-      console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
   }
@@ -63,10 +57,8 @@ export const updateProduct = createAsyncThunk(
       const { data } = await api.patch(`/products/update-product`, product, {
         withCredentials: true,
       });
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
-      console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
   }
@@ -92,10 +84,8 @@ export const productImageUpdate = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
-      console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
   }
@@ -147,8 +137,7 @@ export const productReducer = createSlice({
         state.successMessage = payload.message;
         state.product = payload.product;
         toast.success(payload.message);
-        console.log(payload);
-        console.log(payload.message);
+       
       })
       .addCase(updateProduct.rejected, (state, { payload }) => {
         state.loader = false;
@@ -166,8 +155,7 @@ export const productReducer = createSlice({
         state.successMessage = payload.message;
         state.product = payload.product;
         toast.success(payload.message);
-        console.log(payload);
-        console.log(payload.message);
+      
       });
   },
 });

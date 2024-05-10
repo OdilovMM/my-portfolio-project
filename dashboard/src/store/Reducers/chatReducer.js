@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/api";
-import toast from "react-hot-toast";
 
 export const getCustomers = createAsyncThunk(
   "chat/getCustomers",
@@ -17,10 +16,25 @@ export const getCustomers = createAsyncThunk(
   }
 );
 
+// for admin
+export const getSellers = createAsyncThunk(
+  "chat/getSellers",
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get("/chat/admin-get-sellers", {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const getCustomerMessage = createAsyncThunk(
   "chat/getCustomerMessage",
   async (customerId, { rejectWithValue, fulfillWithValue }) => {
-    console.log(customerId);
     try {
       const { data } = await api.get(
         `/chat/get-customer-message/${customerId}`,
@@ -38,7 +52,6 @@ export const getCustomerMessage = createAsyncThunk(
 export const sendMessageToCustomer = createAsyncThunk(
   "chat/sendMessageToCustomer",
   async (messageInfo, { rejectWithValue, fulfillWithValue }) => {
-    console.log(messageInfo);
     try {
       const { data } = await api.post(
         `/chat/send-message-to-customer`,
@@ -47,6 +60,51 @@ export const sendMessageToCustomer = createAsyncThunk(
           withCredentials: true,
         }
       );
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const adminMessageToSeller = createAsyncThunk(
+  "chat/adminMessageToSeller",
+  async (messageInfo, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post(
+        `/chat/admin-message-to-seller`,
+        messageInfo,
+        {
+          withCredentials: true,
+        }
+      );
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const getAdminMessages = createAsyncThunk(
+  "chat/getAdminMessages",
+  async (receiverId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/chat/get-admin-messages/${receiverId}`, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getSellerMessage = createAsyncThunk(
+  "chat/getSellerMessage",
+  async (receiverId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/chat/get-seller-messages`, {
+        withCredentials: true,
+      });
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -78,6 +136,18 @@ export const chatReducer = createSlice({
     updateMessage: (state, { payload }) => {
       state.messages = [...state.messages, payload];
     },
+    updateSellers: (state, { payload }) => {
+      state.activeSeller = payload;
+    },
+    updateCustomer: (state, { payload }) => {
+      state.activeCustomer = payload;
+    },
+    updateAdminMessage: (state, { payload }) => {
+      state.sellerAdminMessage = [...state.sellerAdminMessage, payload];
+    },
+    updateSellerMessage: (state, { payload }) => {
+      state.sellerAdminMessage = [...state.sellerAdminMessage, payload];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -87,11 +157,9 @@ export const chatReducer = createSlice({
       .addCase(getCustomers.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.customers = payload.customers;
-        // toast.success(payload.message);
       })
       .addCase(getCustomers.rejected, (state, { payload }) => {
         state.isLoading = false;
-        // toast.error(payload.error);
       })
 
       .addCase(getCustomerMessage.pending, (state, { payload }) => {
@@ -101,11 +169,9 @@ export const chatReducer = createSlice({
         state.isLoading = false;
         state.messages = payload.messages;
         state.currentCustomer = payload.currentCustomer;
-        // toast.success(payload.success);
       })
       .addCase(getCustomerMessage.rejected, (state, { payload }) => {
         state.isLoading = false;
-        // toast.error(payload.error);
       })
       .addCase(sendMessageToCustomer.pending, (state, { payload }) => {
         state.isLoading = true;
@@ -124,14 +190,52 @@ export const chatReducer = createSlice({
         }
         state.customers = tempFriends;
         state.messages = [...state.messages, payload.sentMessage];
-        // toast.success(payload.success);
         state.successMessage = "success";
       })
       .addCase(sendMessageToCustomer.rejected, (state, { payload }) => {
         state.isLoading = false;
-        // toast.error(payload.error);
+      })
+      .addCase(getSellers.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(getSellers.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.sellers = payload.sellers;
+      })
+      .addCase(getSellers.rejected, (state, { payload }) => {
+        state.isLoading = false;
+      })
+
+      .addCase(adminMessageToSeller.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(adminMessageToSeller.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.sellerAdminMessage = [
+          ...state.sellerAdminMessage,
+          payload.adminMessages,
+        ];
+
+        state.successMessage = "success";
+      })
+      .addCase(adminMessageToSeller.rejected, (state, { payload }) => {
+        state.isLoading = false;
+      })
+      .addCase(getAdminMessages.fulfilled, (state, { payload }) => {
+        state.sellerAdminMessage = payload.messages;
+        state.currentSeller = payload.currentSeller;
+      })
+      .addCase(getSellerMessage.fulfilled, (state, { payload }) => {
+        state.sellerAdminMessage = payload.messages;
       });
   },
 });
-export const { messageClear, updateMessage } = chatReducer.actions;
+export const {
+  messageClear,
+  updateMessage,
+  updateSellers,
+  updateCustomer,
+  updateAdminMessage,
+  updateSellerMessage,
+} = chatReducer.actions;
 export default chatReducer.reducer;

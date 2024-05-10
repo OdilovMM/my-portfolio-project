@@ -12,10 +12,8 @@ export const getSellerRequest = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
-      console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
   }
@@ -24,15 +22,12 @@ export const getSellerRequest = createAsyncThunk(
 export const getSellerDetail = createAsyncThunk(
   "seller/getSellerDetail",
   async (sellerId, { rejectWithValue, fulfillWithValue }) => {
-    console.log(sellerId);
     try {
       const { data } = await api.get(`/seller/get-seller-detail/${sellerId}`, {
         withCredentials: true,
       });
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
-      console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
   }
@@ -45,10 +40,8 @@ export const updateSellerStatus = createAsyncThunk(
       const { data } = await api.post(`/seller/update-seller-status`, info, {
         withCredentials: true,
       });
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
-      console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
   }

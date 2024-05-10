@@ -24,7 +24,6 @@ const SellerCustomerChat = () => {
   const { customerId } = useParams();
   const [show, setShow] = useState(false);
   const sellerId = 65;
-
   const [messageText, setMessageText] = useState("");
   const [incomingMessage, setIncomingMessage] = useState("");
 
@@ -61,6 +60,7 @@ const SellerCustomerChat = () => {
       setIncomingMessage(msg);
     });
   }, []);
+
 
   useEffect(() => {
     if (successMessage) {
@@ -106,30 +106,34 @@ const SellerCustomerChat = () => {
                   <IoMdClose />{" "}
                 </span>
               </div>
-              {customers.map((customer, index) => {
-                return (
-                  <Link
-                    key={index}
-                    to={`/seller/dashboard/chat-customer/${customer.fdId}`}
-                    className={`h-[60px] flex justify-start gap-0 items-center text-white px-2 py-2 rounded-sm cursor-pointer bg-[#979696]`}
-                  >
-                    <div className="relative">
-                      <img
-                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                        className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
-                        alt=""
-                      />
+              <ul className="flex flex-col gap-1 w-full">
+                {customers.map((customer, index) => {
+                  return (
+                    <li className="flex flex-row w-full hover:bg-slate-500 active:bg-slate-500">
+                      <Link
+                        key={index}
+                        to={`/seller/dashboard/chat-customer/${customer.fdId}`}
+                        className={`flex w-full justify-start gap-0 items-center text-white px-2 py-1 rounded-sm cursor-pointer`}
+                      >
+                        <div className="relative">
+                          <img
+                            src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+                            className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
+                            alt=""
+                          />
 
-                      <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
-                    </div>
-                    <div className="flex justify-center items-start flex-col w-full">
-                      <div className="flex justify-between pl-2 items-center w-full">
-                        <h2 className="font-bold">{customer.name}</h2>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
+                          <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
+                        </div>
+                        <div className="flex justify-center items-start flex-col w-full">
+                          <div className="flex justify-between pl-2 items-center w-full">
+                            <h2>{customer.name}</h2>
+                          </div>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           </div>
 
@@ -171,7 +175,10 @@ const SellerCustomerChat = () => {
                           ref={scrollRef}
                           className="w-full flex justify-start items-center "
                         >
-                          <div ref={scrollRef} className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
+                          <div
+                            ref={scrollRef}
+                            className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]"
+                          >
                             <div>
                               <img
                                 src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
