@@ -34,6 +34,7 @@ const io = socket(server, {
 
 var allCustomer = [];
 var allSeller = [];
+let admin = {};
 
 const addUser = (customerId, socketId, userInfo) => {
   const checkUser = allCustomer.some(
@@ -87,18 +88,40 @@ io.on("connection", (sock) => {
   });
 
   sock.on("sendMessageSeller", (msg) => {
-    const customer = findCustomer(msg.receiverId);
-    console.log(customer);
+    const customer =
+      msg && msg.receiverId ? findCustomer(msg.receiverId) : null;
+    // const customer = findCustomer(msg.receiverId);
+
     if (customer !== undefined) {
       sock.to(customer.socketId).emit("sellerMessage", msg);
     }
   });
   sock.on("sendMessageCustomer", (msg) => {
     const seller = findSeller(msg.receiverId);
-    console.log(seller);
     if (seller !== undefined) {
       sock.to(seller.socketId).emit("customerMessage", msg);
     }
+  });
+
+  sock.on("adminSendMessageSeller", (msg) => {
+    const seller = findSeller(msg.receiverId);
+    if (seller !== undefined) {
+      sock.to(seller.socketId).emit("adminMessage", msg);
+    }
+  });
+
+  sock.on("sellerSendMessageAdmin", (msg) => {
+    if (admin.socketId) {
+      sock.to(admin.socketId).emit("sellerMessage", msg);
+    }
+  });
+
+  sock.on("addAdmin", (adminInfo) => {
+    delete adminInfo.email;
+    delete adminInfo.password;
+    admin = adminInfo;
+    admin.socketId = sock.id;
+    io.emit("activeSeller", allSeller);
   });
 
   sock.on("disconnect", () => {

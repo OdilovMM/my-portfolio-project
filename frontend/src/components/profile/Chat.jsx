@@ -1,4 +1,4 @@
-import { AiOutlineMessage, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlinePlus } from "react-icons/ai";
 import { GrEmoji } from "react-icons/gr";
 import { IoSend } from "react-icons/io5";
 import { Link, useParams } from "react-router-dom";
@@ -18,14 +18,13 @@ import { useRef } from "react";
 const socket = io("http://localhost:5000");
 
 const Chat = () => {
-  const scrollRef = useRef()
+  const scrollRef = useRef();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.customerAuth);
   const { currentFriend, successMessage, myFriends, friendMessages } =
     useSelector((state) => state.chat);
   const [message, setMessage] = useState("");
   const { sellerId } = useParams();
-
   const [incomingMessage, setIncomingMessage] = useState("");
   const [activeSeller, setActiveSeller] = useState([]);
 
@@ -117,10 +116,6 @@ const Chat = () => {
                   className={`flex gap-2 flex-row active:bg-slate-300 justify-start items-center pl-2`}
                 >
                   <div className="relative">
-                    {activeSeller.some((c) => c.sellerId === friend.fdId) && (
-                      <div className="w-[10px] h-[10px] rounded-full bg-green-500 absolute right-0 bottom-0"></div>
-                    )}
-
                     <div className="w-[35px] h-[35px] border-black relative">
                       <div className="w-[10px] h-[10px] rounded-full bg-green-500 absolute right-0 bottom-0"></div>
                       <img
@@ -130,28 +125,51 @@ const Chat = () => {
                       />
                     </div>
                   </div>
-                  <span>{friend.name}</span>
+                  <div className="flex flex-col">
+                    <span>{friend.name}</span>
+                    <div>
+                      {activeSeller.some((c) => c.sellerId === friend.fdId) ? (
+                        <span className="text-[13px] text-blue-600 font-bold">
+                          Online
+                        </span>
+                      ) : (
+                        <span className="text-[13px] text-black font-bold">
+                          Offline
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </Link>
               </li>
             ))}
           </ul>
         </div>
-        <div className="w-[calc(100%-230px)]">
+        <div className="w-[calc(100%-230px)] ">
           {currentFriend ? (
             <div className="w-full h-full">
               <div className="flex justify-between  bg-slate-200 items-center text-slate-600 text-xl h-[40px] px-2">
                 <span>{currentFriend.name}</span>
-                <div className="w-[38px] h-[38px]  border-black relative">
-                  {activeSeller.some(
-                    (c) => c.sellerId === currentFriend.fdId
-                  ) && (
-                    <div className="w-[10px] h-[10px] rounded-full bg-green-500 absolute right-0 bottom-0"></div>
-                  )}
-                  <img
-                    src={currentFriend.image}
-                    className=" object-cover rounded-full shadow-lg w-[38px] h-[38px]"
-                    alt=""
-                  />
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    {activeSeller.some(
+                      (c) => c.sellerId === currentFriend.fdId
+                    ) ? (
+                      <span className="text-[13px] text-blue-600 font-bold">
+                        Online
+                      </span>
+                    ) : (
+                      <span className="text-[13px] text-black font-bold">
+                        Offline
+                      </span>
+                    )}
+                  </div>
+                  <div className="w-[38px] h-[38px]  border-black relative">
+                    <img
+                      src={currentFriend.image}
+                      className=" object-cover rounded-full shadow-lg w-[38px] h-[38px]"
+                      alt=""
+                    />
+                  </div>
                 </div>
               </div>
               <div className="h-[400px] w-full bg-slate-100 py-3 rounded-md">
@@ -160,8 +178,7 @@ const Chat = () => {
                     if (currentFriend?.fdId !== m.receiverId) {
                       return (
                         <div
-                        ref={scrollRef}
-
+                          ref={scrollRef}
                           key={i}
                           className="w-full flex gap-2 justify-start items-center text-[14px]"
                         >
@@ -178,7 +195,7 @@ const Chat = () => {
                     } else {
                       return (
                         <div
-                        ref={scrollRef}
+                          ref={scrollRef}
                           key={i}
                           className="w-full flex gap-2 justify-end items-center text-[14px]"
                         >

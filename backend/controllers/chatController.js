@@ -3,13 +3,13 @@ const Seller = require("../models/sellerModel");
 const Customer = require("../models/customerModel");
 const formidable = require("formidable");
 const sellerCustomerModel = require("../models/chat/sellerCustomerModel");
+const adminMessage = require("../models/chat/adminSellerMessageSchema");
 const Message = require("../models/chat/sellerCustomerMessageModel");
 const { responseReturn } = require("../utils/response");
 
 class chatController {
   addChatFriend = async (req, res) => {
     const { sellerId, userId } = req.body;
-
     try {
       if (sellerId !== "") {
         const seller = await Seller.findById(sellerId);
@@ -131,14 +131,12 @@ class chatController {
         });
       }
     } catch (error) {
-      console.log(error);
       responseReturn(res, 500, { error: error.message });
     }
   };
 
   sendMessageToSeller = async (req, res) => {
     const { userId, message, sellerId, name } = req.body;
-
     try {
       const messageText = await Message.create({
         senderId: userId,
@@ -187,7 +185,6 @@ class chatController {
 
       responseReturn(res, 201, { messageText });
     } catch (error) {
-      console.log(error);
       responseReturn(res, 500, { error: error.message });
     }
   };
@@ -304,7 +301,119 @@ class chatController {
 
       responseReturn(res, 201, { sentMessage });
     } catch (error) {
-      console.log(error);
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+
+  getSellersChatToAdmin = async (req, res) => {
+    try {
+      const sellers = await Seller.find({});
+      responseReturn(res, 200, { sellers });
+    } catch (error) {
+      responseReturn(res, 500, {
+        error: error.message,
+      });
+    }
+  };
+  adminMessageToSeller = async (req, res) => {
+    const { senderId, receiverId, message, senderName } = req.body;
+    try {
+      const adminMessages = await adminMessage.create({
+        senderId,
+        receiverId,
+        message,
+        senderName,
+      });
+      responseReturn(res, 201, { adminMessages });
+    } catch (error) {
+      responseReturn(res, 500, {
+        error: error.message,
+      });
+    }
+  };
+
+  getAdminMessages = async (req, res) => {
+    const { receiverId } = req.params;
+    const id = "";
+
+    try {
+      const messages = await adminMessage.find({
+        $or: [
+          {
+            $and: [
+              {
+                receiverId: { $eq: receiverId },
+              },
+              {
+                senderId: {
+                  $eq: id,
+                },
+              },
+            ],
+          },
+          {
+            $and: [
+              {
+                receiverId: { $eq: id },
+              },
+              {
+                senderId: {
+                  $eq: receiverId,
+                },
+              },
+            ],
+          },
+        ],
+      });
+      let currentSeller = {};
+      if (receiverId) {
+        currentSeller = await Seller.findById(receiverId);
+      }
+
+      responseReturn(res, 200, {
+        messages,
+        currentSeller,
+      });
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+  getSellerMessages = async (req, res) => {
+    const receiverId = "";
+    const { id } = req;
+
+    try {
+      const messages = await adminMessage.find({
+        $or: [
+          {
+            $and: [
+              {
+                receiverId: { $eq: receiverId },
+              },
+              {
+                senderId: {
+                  $eq: id,
+                },
+              },
+            ],
+          },
+          {
+            $and: [
+              {
+                receiverId: { $eq: id },
+              },
+              {
+                senderId: {
+                  $eq: receiverId,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      responseReturn(res, 200, { messages });
+    } catch (error) {
       responseReturn(res, 500, { error: error.message });
     }
   };
