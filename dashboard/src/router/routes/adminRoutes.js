@@ -62,7 +62,7 @@ export const adminRoutes = [
     role: "admin",
   },
   {
-    path: "admin/dashboard/order/details/:id",
+    path: "admin/dashboard/orders/details/:orderId",
     element: <OrdersDetail />,
     role: "admin",
   },

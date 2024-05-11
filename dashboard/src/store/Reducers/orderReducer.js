@@ -22,6 +22,47 @@ export const getAdminAllOrders = createAsyncThunk(
   }
 );
 
+export const getSingleOrderDetail = createAsyncThunk(
+  "order/getSingleOrderDetail",
+  async (orderId, { rejectWithValue, fulfillWithValue }) => {
+    console.log(orderId);
+
+    try {
+      const { data } = await api.get(
+        `/order/get-admin-order-detail/${orderId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateOrderStatus = createAsyncThunk(
+  "order/updateOrderStatus",
+  async ({ orderId, info }, { rejectWithValue, fulfillWithValue }) => {
+    console.log(orderId);
+
+    try {
+      const { data } = await api.patch(
+        `/order/admin-update-order-status/${orderId}`,
+        info,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const orderReducer = createSlice({
   name: "order",
   initialState: {
@@ -34,10 +75,25 @@ export const orderReducer = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getAdminAllOrders.fulfilled, (state, { payload }) => {
-      state.totalOrders = payload.totalOrder;
-      state.myOrders = payload.orders;
-    });
+    builder
+      .addCase(getAdminAllOrders.fulfilled, (state, { payload }) => {
+        state.totalOrders = payload.totalOrder;
+        state.myOrders = payload.orders;
+      })
+      .addCase(getSingleOrderDetail.fulfilled, (state, { payload }) => {
+        state.order = payload.order;
+      })
+      .addCase(updateOrderStatus.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(updateOrderStatus.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        toast.success(payload.message);
+      })
+      .addCase(updateOrderStatus.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload.error);
+      });
   },
 });
 

@@ -11,4 +11,12 @@ router.get("/get-orders/:userId/:status", orderController.getAllOrdersByStatus);
 router.get("/get-orders/:userId/:status", orderController.getAllOrdersByStatus);
 router.get("/get-order-detail/:orderId", orderController.getOrderDetail);
 router.get("/get-admin-order", orderController.getAdminOrders);
+router.patch(
+  "/admin-update-order-status/:orderId",
+  orderController.adminOrderUpdateStatus
+);
+router.get(
+  "/get-admin-order-detail/:orderId",
+  orderController.getSingleOrderDetail
+);
 module.exports = router;

@@ -211,6 +211,44 @@ class orderController {
       responseReturn(res, 500, { error: error.message });
     }
   };
+
+  getSingleOrderDetail = async (req, res) => {
+    const { orderId } = req.params;
+    try {
+      const order = await customerOrder.aggregate([
+        {
+          $match: { _id: new ObjectId(orderId) },
+        },
+        {
+          $lookup: {
+            from: "authorders",
+            localField: "_id",
+            foreignField: "orderId",
+            as: "suborder",
+          },
+        },
+      ]);
+      responseReturn(res, 200, { order: order[0] });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+
+  adminOrderUpdateStatus = async (req, res) => {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    try {
+      await customerOrder.findByIdAndUpdate(orderId, {
+        deliveryStatus: status,
+      });
+      responseReturn(res, 200, { message: "Customer Order Status Updated" });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
 }
 
 module.exports = new orderController();

@@ -77,7 +77,7 @@ const Orders = () => {
                 {myOrder.deliveryStatus}
               </div>
               <div className="py-3 w-[19%] font-medium ">
-                <Link to={`/admin/dashboard/order/details/${myOrder._id}`}>
+                <Link to={`/admin/dashboard/orders/details/${myOrder._id}`}>
                   View
                 </Link>
               </div>
