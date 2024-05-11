@@ -19,6 +19,7 @@ import {
   MyOrderPage,
   WishlistPage,
   ChangePasswordPage,
+  ConfirmOrder,
 } from "./pages";
 import { MainLayout } from "./layout";
 import ProtectedRoute from "./utils/ProtectedRoute";
@@ -40,6 +41,7 @@ const App = () => {
           <Route path="my-cart" element={<AddedProductCart />} />
           <Route path="payment" element={<PaymentPage />} />
           <Route path="shipping" element={<ShippingPage />} />
+          <Route path="confirm?" element={<ConfirmOrder />} />
           <Route path="product/details/:slug" element={<ProductDetail />} />
           <Route path="products/search?" element={<SearchPage />} />
           <Route path="products?" element={<CategoryProducts />} />

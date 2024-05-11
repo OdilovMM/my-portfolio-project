@@ -18,6 +18,7 @@ import ProfileContentLayout from "./profile/ProfileContentLayout";
 import MyOrderPage from "./profile/MyOrderPage.jsx";
 import WishlistPage from "./profile/WishlistPage.jsx";
 import ChangePasswordPage from "./profile/ChangePasswordPage.jsx";
+import ConfirmOrder from "./profile/ConfirmOrder.jsx";
 
 export {
   Home,
@@ -40,4 +41,5 @@ export {
   MyOrderPage,
   WishlistPage,
   ChangePasswordPage,
+  ConfirmOrder,
 };

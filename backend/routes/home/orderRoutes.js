@@ -24,6 +24,10 @@ router.get(
   "/get-admin-order-detail/:orderId",
   orderController.getSingleOrderDetail
 );
-router.get("/get-seller-single-order-detail/:orderId", orderController.getSellerSingleOrderDetail );
-router.post("/create-payment", orderController.customerOrderMake );
+router.get(
+  "/get-seller-single-order-detail/:orderId",
+  orderController.getSellerSingleOrderDetail
+);
+router.post("/create-payment", orderController.customerOrderMake);
+router.get("/confirm/:orderId", orderController.orderConfirm);
 module.exports = router;

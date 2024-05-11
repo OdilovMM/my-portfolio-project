@@ -1,12 +1,14 @@
 const Order = require("../../models/orderModel");
-const moment = require("moment");
-const { responseReturn } = require("../../utils/response");
 const authOrder = require("../../models/authOrderModel");
 const Payment = require("../../models/paymentModel");
-const stripe = require("stripe")(process.env.SECRET_KEY_STRIPE);
-
+const MyWallet = require("../../models/myWalletModel");
+const SellerWallet = require("../../models/sellerWalletModel");
 const customerOrder = require("../../models/customerOrderModel");
 const Cart = require("../../models/cartModel");
+const moment = require("moment");
+const stripe = require("stripe")(process.env.SECRET_KEY_STRIPE);
+const { responseReturn } = require("../../utils/response");
+
 const {
   mongo: { ObjectId },
 } = require("mongoose");
@@ -313,6 +315,7 @@ class orderController {
       responseReturn(res, 500, { error: error.message });
     }
   };
+
   customerOrderMake = async (req, res) => {
     const { price } = req.body;
 
@@ -323,13 +326,103 @@ class orderController {
         automatic_payment_methods: {
           enabled: true,
         },
-        
       });
-      
+
       responseReturn(res, 201, { clientSecret: payment.client_secret });
     } catch (error) {
       console.log("ERROR:", error);
       responseReturn(res, 500, { error: error.message });
+    }
+  };
+
+  // orderConfirm = async (req, res) => {
+  //   const { orderId } = req.params;
+  //   console.log(orderId);
+
+  //   try {
+  //     await customerOrder.findByIdAndUpdate(orderId, {
+  //       paymentStatus: "paid",
+  //     });
+  //     await authOrder.updateMany(
+  //       { orderId: new ObjectId(orderId) },
+  //       {
+  //         paymentStatus: "paid",
+  //         deliveryStatus: "pending",
+  //       }
+  //     );
+
+  //     const custOrder = await customerOrder.findById(orderId);
+  //     const authOrd = await authOrder.find({
+  //       orderId: new ObjectId(orderId),
+  //     });
+
+  //     const date = moment(Date.now()).format("l");
+  //     const splitDate = date.split("/");
+
+  //     await MyWallet.create({
+  //       amount: custOrder.price,
+  //       month: splitDate[0],
+  //       year: splitDate[2],
+  //     });
+
+  //     for (let i = 0; i < authOrd.length; i++) {
+  //       await SellerWallet.create({
+  //         sellerId: authOrd[i].sellerId.toString(),
+  //         amount: authOrd[i].price,
+  //         month: splitDate[0],
+  //         year: splitDate[2],
+  //       });
+  //     }
+
+  //     responseReturn(res, 201, { message: "Success" });
+  //   } catch (error) {
+  //     console.log("ERROR:", error.message);
+  //     responseReturn(res, 500, { error: error.message });
+  //   }
+  // };
+
+  orderConfirm = async (req, res) => {
+    const { orderId } = req.params;
+    console.log(orderId)
+    try {
+      await customerOrder.findByIdAndUpdate(orderId, {
+        paymentStatus: "paid",
+      });
+      await authOrder.updateMany(
+        { orderId: new ObjectId(orderId) },
+        {
+          paymentStatus: "paid",
+          deliveryStatus: "pending",
+        }
+      );
+      const cuOrder = await customerOrder.findById(orderId);
+
+      const auOrder = await authOrder.find({
+        orderId: new ObjectId(orderId),
+      });
+
+      const time = moment(Date.now()).format("l");
+      const splitTime = time.split("/");
+
+      await MyWallet.create({
+        amount: cuOrder.price,
+        month: splitTime[0],
+        year: splitTime[2],
+      });
+
+      for (let i = 0; i < auOrder.length; i++) {
+        await SellerWallet.create({
+          sellerId: auOrder[i].sellerId.toString(),
+          amount: auOrder[i].price,
+          month: splitTime[0],
+          year: splitTime[2],
+        });
+      }
+      responseReturn(res, 200, { message: "success" });
+    } catch (error) {
+      
+      console.log(error);
+      console.log(error.message);
     }
   };
 }

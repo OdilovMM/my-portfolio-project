@@ -1,9 +1,9 @@
 import React from "react";
-import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useState } from "react";
 import Checkout from "./Checkout";
+import { loadStripe } from "@stripe/stripe-js";
 const stripePromise = loadStripe(
   "pk_test_51PFLMyHlAJ34DQFenZIccsL7H9U5T9sPRmOjBL5dqyXy3BW1ghMDGYibLD19sL0i4H4wskhmLJb0DnEiksn9EOrd00WyDJ4x1x"
 );
