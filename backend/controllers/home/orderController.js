@@ -249,6 +249,64 @@ class orderController {
       responseReturn(res, 500, { error: error.message });
     }
   };
+
+  getSellerOrders = async (req, res) => {
+    const { sellerId } = req.params;
+    let { page, search, parPage } = req.query;
+    console.log(req.query);
+    page = parseInt(page);
+    parPage = parseInt(parPage);
+    const skipPage = parPage * (page - 1);
+
+    try {
+      if (search) {
+      } else {
+        const orders = await authOrder
+          .find({
+            sellerId,
+          })
+          .skip(skipPage)
+          .limit(parPage)
+          .sort({ createdAt: -1 });
+
+        const totalOrders = await authOrder
+          .find({
+            sellerId,
+          })
+          .countDocuments();
+        responseReturn(res, 200, { orders, totalOrder: totalOrders.length });
+      }
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+
+  getSellerSingleOrderDetail = async (req, res) => {
+    const { orderId } = req.params;
+    try {
+      const order = await authOrder.findById(orderId);
+      responseReturn(res, 200, { order });
+      console.log(order);
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+
+  sellerOrderUpdateStatus = async (req, res) => {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    try {
+      await customerOrder.findByIdAndUpdate(orderId, {
+        deliveryStatus: status,
+      });
+      responseReturn(res, 200, { message: "Customer Order Status Updated" });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
 }
 
 module.exports = new orderController();

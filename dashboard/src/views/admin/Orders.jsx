@@ -9,7 +9,7 @@ import { MdOutlineOpenWith } from "react-icons/md";
 
 const Orders = () => {
   const dispatch = useDispatch();
-  const { totalOrders, order, myOrders } = useSelector((state) => state.order);
+  const { totalOrders,  myOrders } = useSelector((state) => state.order);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");

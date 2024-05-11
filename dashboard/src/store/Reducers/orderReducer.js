@@ -21,6 +21,25 @@ export const getAdminAllOrders = createAsyncThunk(
     }
   }
 );
+export const getSellerAllOrders = createAsyncThunk(
+  "order/getSellerAllOrders",
+  async (
+    { parPage, page, searchValue, sellerId },
+    { rejectWithValue, fulfillWithValue }
+  ) => {
+    try {
+      const { data } = await api.get(
+        `/order/get-seller-order/${sellerId}?page=${page}&search=${searchValue}&parPage=${parPage}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const getSingleOrderDetail = createAsyncThunk(
   "order/getSingleOrderDetail",
@@ -41,6 +60,25 @@ export const getSingleOrderDetail = createAsyncThunk(
     }
   }
 );
+export const getSellerSingleOrderDetail = createAsyncThunk(
+  "order/getSellerSingleOrderDetail",
+  async (orderId, { rejectWithValue, fulfillWithValue }) => {
+    console.log(orderId);
+
+    try {
+      const { data } = await api.get(
+        `/order/get-seller-single-order-detail/${orderId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const updateOrderStatus = createAsyncThunk(
   "order/updateOrderStatus",
@@ -50,6 +88,26 @@ export const updateOrderStatus = createAsyncThunk(
     try {
       const { data } = await api.patch(
         `/order/admin-update-order-status/${orderId}`,
+        info,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const sellerUpdateOrderStatus = createAsyncThunk(
+  "order/sellerUpdateOrderStatus",
+  async ({ orderId, info }, { rejectWithValue, fulfillWithValue }) => {
+    console.log(orderId);
+
+    try {
+      const { data } = await api.patch(
+        `/order/seller-update-order-status/${orderId}`,
         info,
         {
           withCredentials: true,
@@ -93,7 +151,42 @@ export const orderReducer = createSlice({
       .addCase(updateOrderStatus.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload.error);
-      });
+      })
+      .addCase(getSellerAllOrders.pending, (state, { payload }) => {
+          state.isLoading = true;
+      })
+      .addCase(getSellerAllOrders.fulfilled, (state, { payload }) => {
+        state.myOrders = payload.orders;
+        state.totalOrders = payload.totalOrder;
+        // toast.success(payload.message);
+      })
+      .addCase(getSellerAllOrders.rejected, (state, { payload }) => {
+          state.isLoading = false;
+          toast.error(payload.error);
+        })
+        
+        .addCase(getSellerSingleOrderDetail.pending, (state, { payload }) => {
+            state.isLoading = true;
+        })
+        .addCase(getSellerSingleOrderDetail.fulfilled, (state, { payload }) => {
+            state.order = payload.order;
+            // toast.success(payload.message);
+        })
+        .addCase(getSellerSingleOrderDetail.rejected, (state, { payload }) => {
+            state.isLoading = false;
+            toast.error(payload.error);
+        })
+        .addCase(sellerUpdateOrderStatus.pending, (state, { payload }) => {
+          state.isLoading = true;
+        })
+        .addCase(sellerUpdateOrderStatus.fulfilled, (state, { payload }) => {
+          state.isLoading = false;
+          toast.success(payload.message);
+        })
+        .addCase(sellerUpdateOrderStatus.rejected, (state, { payload }) => {
+          state.isLoading = false;
+          toast.error(payload.error);
+        })
   },
 });
 
