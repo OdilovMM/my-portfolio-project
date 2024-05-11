@@ -2,6 +2,9 @@ const Order = require("../../models/orderModel");
 const moment = require("moment");
 const { responseReturn } = require("../../utils/response");
 const authOrder = require("../../models/authOrderModel");
+const Payment = require("../../models/paymentModel");
+const stripe = require("stripe")(process.env.SECRET_KEY_STRIPE);
+
 const customerOrder = require("../../models/customerOrderModel");
 const Cart = require("../../models/cartModel");
 const {
@@ -307,6 +310,25 @@ class orderController {
       responseReturn(res, 200, { message: "Customer Order Status Updated" });
     } catch (error) {
       console.log(error);
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+  customerOrderMake = async (req, res) => {
+    const { price } = req.body;
+
+    try {
+      const payment = await stripe.paymentIntents.create({
+        amount: price * 100,
+        currency: "usd",
+        automatic_payment_methods: {
+          enabled: true,
+        },
+        
+      });
+      
+      responseReturn(res, 201, { clientSecret: payment.client_secret });
+    } catch (error) {
+      console.log("ERROR:", error);
       responseReturn(res, 500, { error: error.message });
     }
   };

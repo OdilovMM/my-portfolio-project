@@ -14,6 +14,7 @@ import RatingTemps from "./RatingTemps";
 import StripePayment from "./StripePayment";
 import ProfileNav from "./profile/ProfileNav";
 import OrderDetails from "./profile/OrderDetails";
+import Checkout from "./Checkout";
 
 
 export {
@@ -32,5 +33,6 @@ export {
   RatingTemps,
   StripePayment,
   ProfileNav,
-  OrderDetails
+  OrderDetails,
+  Checkout
 };
