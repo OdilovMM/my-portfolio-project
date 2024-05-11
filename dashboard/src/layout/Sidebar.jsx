@@ -4,6 +4,7 @@ import { getMenu } from "../navigation";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/Reducers/authReducer";
+import logo from "../assets/png/logo-no-background.png";
 
 const Sidebar = ({ showBar, setShowBar }) => {
   const dispatch = useDispatch();
@@ -31,9 +32,9 @@ const Sidebar = ({ showBar, setShowBar }) => {
           showBar ? "left-0" : "-left-[260px] lg:left-0"
         }`}
       >
-        <div className="h-[75px] flex justify-center items-center">
+        <div className="h-[75px] flex justify-center items-center my-4">
           <Link to="/" className="w-[180px] h-[50px] text-white">
-            My Shop Admin
+            <img src={logo} alt="" />
           </Link>
         </div>
 

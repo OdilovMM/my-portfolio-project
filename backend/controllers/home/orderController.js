@@ -240,9 +240,10 @@ class orderController {
     const { status } = req.body;
 
     try {
-      await customerOrder.findByIdAndUpdate(orderId, {
+      const updated = await customerOrder.findByIdAndUpdate(orderId, {
         deliveryStatus: status,
       });
+      console.log("admin:", updated);
       responseReturn(res, 200, { message: "Customer Order Status Updated" });
     } catch (error) {
       console.log(error);
@@ -286,7 +287,6 @@ class orderController {
     try {
       const order = await authOrder.findById(orderId);
       responseReturn(res, 200, { order });
-      console.log(order);
     } catch (error) {
       console.log(error);
       responseReturn(res, 500, { error: error.message });
@@ -296,11 +296,14 @@ class orderController {
   sellerOrderUpdateStatus = async (req, res) => {
     const { orderId } = req.params;
     const { status } = req.body;
+    console.log(orderId);
 
     try {
-      await customerOrder.findByIdAndUpdate(orderId, {
+      const product = await authOrder.findById(orderId);
+      const updated = await authOrder.findByIdAndUpdate(orderId, {
         deliveryStatus: status,
       });
+      console.log("updated:", updated, "product:", product);
       responseReturn(res, 200, { message: "Customer Order Status Updated" });
     } catch (error) {
       console.log(error);

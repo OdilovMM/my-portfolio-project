@@ -88,6 +88,44 @@ export const getDeactiveSellers = createAsyncThunk(
   }
 );
 
+export const createStripeConnect = createAsyncThunk(
+  "payment/createStripeConnect",
+  async () => {
+    try {
+      const {
+        data: { url },
+      } = await api.get(`/payment/create-seller-stripe-account`, {
+        withCredentials: true,
+      });
+
+      window.location.href = url;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const activatePaymentAccount = createAsyncThunk(
+  "payment/activatePaymentAccount",
+  async (activeCode, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const {
+        data: { data },
+      } = await api.patch(
+        `/payment/activate-seller-stripe-account/${activeCode}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      return fulfillWithValue(data);
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const sellerReducer = createSlice({
   name: "seller",
   initialState: {
@@ -131,6 +169,30 @@ export const sellerReducer = createSlice({
         state.loader = false;
         state.deactiveSellers = payload.deactiveSellers;
         state.totalDeactives = payload.totalDeactives;
+      })
+
+      .addCase(createStripeConnect.pending, (state, { payload }) => {
+        state.loader = true;
+        toast.success("Redirecting to Stripe Dashboard");
+      })
+      .addCase(createStripeConnect.fulfilled, (state, { payload }) => {
+        state.loader = false;
+      })
+      .addCase(createStripeConnect.rejected, (state, { payload }) => {
+        state.loader = false;
+      })
+
+      .addCase(activatePaymentAccount.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(activatePaymentAccount.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        // toast.success(payload.message);
+        state.successMessage = "success";
+      })
+      .addCase(activatePaymentAccount.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = "error";
       });
   },
 });

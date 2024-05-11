@@ -153,7 +153,7 @@ export const orderReducer = createSlice({
         toast.error(payload.error);
       })
       .addCase(getSellerAllOrders.pending, (state, { payload }) => {
-          state.isLoading = true;
+        state.isLoading = true;
       })
       .addCase(getSellerAllOrders.fulfilled, (state, { payload }) => {
         state.myOrders = payload.orders;
@@ -161,32 +161,32 @@ export const orderReducer = createSlice({
         // toast.success(payload.message);
       })
       .addCase(getSellerAllOrders.rejected, (state, { payload }) => {
-          state.isLoading = false;
-          toast.error(payload.error);
-        })
-        
-        .addCase(getSellerSingleOrderDetail.pending, (state, { payload }) => {
-            state.isLoading = true;
-        })
-        .addCase(getSellerSingleOrderDetail.fulfilled, (state, { payload }) => {
-            state.order = payload.order;
-            // toast.success(payload.message);
-        })
-        .addCase(getSellerSingleOrderDetail.rejected, (state, { payload }) => {
-            state.isLoading = false;
-            toast.error(payload.error);
-        })
-        .addCase(sellerUpdateOrderStatus.pending, (state, { payload }) => {
-          state.isLoading = true;
-        })
-        .addCase(sellerUpdateOrderStatus.fulfilled, (state, { payload }) => {
-          state.isLoading = false;
-          toast.success(payload.message);
-        })
-        .addCase(sellerUpdateOrderStatus.rejected, (state, { payload }) => {
-          state.isLoading = false;
-          toast.error(payload.error);
-        })
+        state.isLoading = false;
+        toast.error(payload.error);
+      })
+
+      .addCase(getSellerSingleOrderDetail.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(getSellerSingleOrderDetail.fulfilled, (state, { payload }) => {
+        state.order = payload.order;
+        // toast.success(payload.message);
+      })
+      .addCase(getSellerSingleOrderDetail.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload.error);
+      })
+      .addCase(sellerUpdateOrderStatus.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(sellerUpdateOrderStatus.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        toast.success(payload.message);
+      })
+      .addCase(sellerUpdateOrderStatus.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload.error);
+      });
   },
 });
 
