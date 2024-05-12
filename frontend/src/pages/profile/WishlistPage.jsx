@@ -16,7 +16,7 @@ const WishlistPage = ({ product, index }) => {
   const { wishlist } = useSelector(
     (state) => state.cart
   );
-  console.log(wishlist);
+  
 
   useEffect(() => {
     dispatch(getAllMyWishlists(userInfo.id));

@@ -54,7 +54,6 @@ export const deleteProductFromCart = createAsyncThunk(
 export const incrementProductQuantity = createAsyncThunk(
   "cart/incrementProductQuantity",
   async (productId, { rejectWithValue, fulfillWithValue }) => {
-    console.log(productId);
     try {
       const { data } = await api.patch(
         `/cart/increment-product-of-cart/${productId}`,
@@ -71,7 +70,6 @@ export const incrementProductQuantity = createAsyncThunk(
 export const decrementProductQuantity = createAsyncThunk(
   "cart/decrementProductQuantity",
   async (productId, { rejectWithValue, fulfillWithValue }) => {
-    console.log(productId);
     try {
       const { data } = await api.patch(
         `/cart/decrement-product-of-cart/${productId}`,
@@ -89,7 +87,6 @@ export const decrementProductQuantity = createAsyncThunk(
 export const addToWishlist = createAsyncThunk(
   "wishlist/addToWishlist",
   async (info, { rejectWithValue, fulfillWithValue }) => {
-    console.log(info);
     try {
       const { data } = await api.post("/cart/add-wishlist", info, {
         withCredentials: true,
@@ -119,7 +116,6 @@ export const getAllMyWishlists = createAsyncThunk(
 export const removeWishlist = createAsyncThunk(
   "wishlist/removeWishlist",
   async (wishlistId, { rejectWithValue, fulfillWithValue }) => {
-    console.log(wishlistId);
     try {
       const { data } = await api.delete(`/cart/remove-wishlist/${wishlistId}`, {
         withCredentials: true,

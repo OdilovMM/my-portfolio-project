@@ -12,23 +12,27 @@ const Cart = ({ product, index }) => {
   const { userInfo } = useSelector((state) => state.customerAuth);
 
   const handleAddWishlist = (product) => {
-    dispatch(
-      addToWishlist({
-        userId: userInfo.id,
-        productId: product._id,
-        name: product.name,
-        brand: product.brand,
-        category: product.category,
-        description: product.description,
-        discount: product.discount,
-        images: product.images,
-        price: product.price,
-        rating: product.rating,
-        shopName: product.shopName,
-        slug: product.slug,
-        stock: product.stock,
-      })
-    );
+    if (userInfo) {
+      dispatch(
+        addToWishlist({
+          userId: userInfo.id,
+          productId: product._id,
+          name: product.name,
+          brand: product.brand,
+          category: product.category,
+          description: product.description,
+          discount: product.discount,
+          images: product.images,
+          price: product.price,
+          rating: product.rating,
+          shopName: product.shopName,
+          slug: product.slug,
+          stock: product.stock,
+        })
+      );
+    } else {
+      toast.error("Login First");
+    }
   };
 
   const handleAddToCart = (id) => {

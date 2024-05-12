@@ -25,8 +25,23 @@ import { MainLayout } from "./layout";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import { OrderDetails } from "./components";
 import Chat from "./components/profile/Chat";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllMyWishlists,
+  getCustomerCartProducts,
+} from "./store/reducers/cartReducer";
+import toast from "react-hot-toast";
+import { jwtDecode } from "jwt-decode";
 
 const App = () => {
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.customerAuth);
+
+  useEffect(() => {
+    console.log(userInfo);
+  }, [userInfo]);
+
   return (
     <BrowserRouter>
       <Routes>

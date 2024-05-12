@@ -20,17 +20,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories } from "../store/reducers/homeReducer";
 import {
   getCustomerCartProducts,
+  getAllMyWishlists,
   messageClear,
 } from "../store/reducers/cartReducer";
 import toast from "react-hot-toast";
 
 const Header = () => {
+  const { userInfo } = useSelector((state) => state.customerAuth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.home);
   const { card_product_count, wishlist_count, successMessage, errorMessage } =
     useSelector((state) => state.cart);
-  const { userInfo } = useSelector((state) => state.customerAuth);
 
   useEffect(() => {
     dispatch(getCustomerCartProducts(userInfo.id));
@@ -40,7 +41,6 @@ const Header = () => {
   const [showBar, setShowBar] = useState(true);
   const [showCategory, setShowCategory] = useState(true);
   const { pathname } = useLocation();
-  // const wishlist_count = 3;
 
   const [searchValue, setSearchValue] = useState("");
   const [category, setCategory] = useState();
@@ -56,16 +56,18 @@ const Header = () => {
       navigate("/login");
     }
   };
-  // useEffect(() => {
-  //   if (successMessage) {
-  //     toast.success(successMessage);
-  //     dispatch(messageClear());
-  //   }
-  //   if (errorMessage) {
-  //     toast.error(errorMessage);
-  //     dispatch(messageClear());
-  //   }
-  // }, [successMessage, errorMessage, dispatch]);
+  const redirectWishlist = () => {
+    if (userInfo) {
+      navigate("/my-wishlist");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    dispatch(getAllMyWishlists(userInfo.Id));
+    dispatch(getCustomerCartProducts(userInfo.id));
+  }, [dispatch, userInfo]);
 
   return (
     <div className="w-full bg-white">
@@ -232,15 +234,18 @@ const Header = () => {
                 <div className="flex md-lg:hidden justify-center items-center gap-5">
                   <div className="flex justify-center gap-5">
                     <Link
+                      onClick={redirectWishlist}
                       to="/dashboard/my-wishlist"
                       className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
                     >
                       <span className="text-xl text-green-500">
                         <IoHeart color="black" />
                       </span>
-                      <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                        {wishlist_count}
-                      </div>
+                      {wishlist_count > 0 && (
+                        <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
+                          {wishlist_count}
+                        </div>
+                      )}
                     </Link>
 
                     <div
