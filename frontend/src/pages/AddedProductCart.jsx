@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { BreadCrumbs } from "../components";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { MdDelete } from "react-icons/md";
 import {
   getCustomerCartProducts,
   deleteProductFromCart,
@@ -110,11 +111,13 @@ const AddedProductCart = () => {
                           <div key={index} className="w-full flex flex-wrap">
                             <div className="flex sm:w-full gap-2 w-7/12">
                               <div className="flex gap-2 justify-start items-center">
-                                <img
-                                  className="w-[80px] h-[80px] object-contain"
-                                  src={product.productInfo.images[0]}
-                                  alt=""
-                                />
+                                <Link >
+                                  <img
+                                    className="w-[80px] h-[80px] object-contain"
+                                    src={product.productInfo.images[0]}
+                                    alt=""
+                                  />
+                                </Link>
                                 <div className="pr-4 text-slate-600">
                                   <h2 className="text-md font-semibold">
                                     {product.productInfo.name}
@@ -156,7 +159,18 @@ const AddedProductCart = () => {
 
                               {/* increment */}
                               <div className="flex gap-2 flex-col">
-                                <div className="flex  h-[30px] gap-1 justify-center items-start text-xl">
+                                <div className="flex  h-[30px]  justify-center items-center text-xl">
+                                  <button
+                                    onClick={() =>
+                                      dispatch(
+                                        deleteProductFromCart(product._id)
+                                      )
+                                    }
+                                    className=" px-2 py-2"
+                                  >
+                                    <MdDelete size={22} color="blue" />
+                                  </button>
+
                                   <button
                                     onClick={() =>
                                       handleDecrement(
@@ -164,11 +178,11 @@ const AddedProductCart = () => {
                                         product._id
                                       )
                                     }
-                                    className="px-6 bg-slate-400 cursor-pointer"
+                                    className="px-6 py-1 shadow-md  cursor-pointer"
                                   >
                                     -
                                   </button>
-                                  <span className="text-center w-[60px] bg-slate-400 ">
+                                  <span className="text-center py-1 w-[60px] shadow-md  ">
                                     {product.quantity}
                                   </span>
                                   <button
@@ -179,19 +193,11 @@ const AddedProductCart = () => {
                                         product._id
                                       )
                                     }
-                                    className="px-6 bg-slate-400 cursor-pointer"
+                                    className="px-6 py-1 shadow-md  cursor-pointer"
                                   >
                                     +
                                   </button>
                                 </div>
-                                <button
-                                  onClick={() =>
-                                    dispatch(deleteProductFromCart(product._id))
-                                  }
-                                  className="px-12 bg-slate-400"
-                                >
-                                  Delete
-                                </button>
                               </div>
                             </div>
                           </div>

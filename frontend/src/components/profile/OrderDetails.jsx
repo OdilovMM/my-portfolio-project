@@ -8,7 +8,6 @@ const OrderDetails = () => {
   const { myOrder } = useSelector((state) => state.order);
   const { userInfo } = useSelector((state) => state.customerAuth);
   const { orderId } = useParams();
-  console.log(myOrder);
 
   useEffect(() => {
     dispatch(getMyOrderDetails(orderId));

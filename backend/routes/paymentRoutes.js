@@ -12,5 +12,10 @@ router.patch(
   authMiddleware,
   paymentController.activateAccount
 );
+router.get(
+  "/get-seller-payment-details/:sellerId",
+  authMiddleware,
+  paymentController.getSellerPaymentDetails
+);
 
 module.exports = router;

@@ -1,10 +1,6 @@
-const Admin = require("../models/adminModel");
 const Seller = require("../models/sellerModel");
-const Customer = require("../models/customerModel");
-const formidable = require("formidable");
-const sellerCustomerModel = require("../models/chat/sellerCustomerModel");
-const adminMessage = require("../models/chat/adminSellerMessageSchema");
-const Message = require("../models/chat/sellerCustomerMessageModel");
+const SellerWallet = require("../models/sellerWalletModel");
+const WithdrawRequest = require("../models/withdrawReqModel");
 const { responseReturn } = require("../utils/response");
 const paymentModel = require("../models/paymentModel");
 const { v4: uuidv4 } = require("uuid");
@@ -14,23 +10,17 @@ class paymentController {
   createSellerStripeAccount = async (req, res) => {
     const { id } = req;
     const uniqueId = uuidv4();
-
-    console.log(id);
-
     try {
       const paymentInfo = await paymentModel.findOne({ sellerId: id });
-
       if (paymentInfo) {
         await paymentModel.deleteOne({ sellerId: id });
         const account = await stripe.accounts.create({ type: "express" });
-
         const accountLink = await stripe.accountLinks.create({
           account: account.id,
           refresh_url: "http://localhost:3000/refresh",
           return_url: `http://localhost:3000/success?activeCode=${uniqueId}`,
           type: "account_onboarding",
         });
-
         await paymentModel.create({
           sellerId: id,
           stripeId: account.id,
@@ -45,7 +35,6 @@ class paymentController {
           return_url: `http://localhost:3000/success?activeCode=${uniqueId}`,
           type: "account_onboarding",
         });
-
         await paymentModel.create({
           sellerId: id,
           stripeId: account.id,
@@ -58,13 +47,12 @@ class paymentController {
       responseReturn(res, 500, { error: error.message });
     }
   };
+
   activateAccount = async (req, res) => {
     const { activeCode } = req.params;
     const { id } = req;
-
     try {
       const userStripeInfo = await paymentModel.findOne({ code: activeCode });
-
       if (userStripeInfo) {
         await Seller.findByIdAndUpdate(id, {
           payment: "active",
@@ -76,6 +64,75 @@ class paymentController {
     } catch (error) {
       console.log(error);
       return responseReturn(res, 500, { message: "Internal Server Error" });
+    }
+  };
+
+  sumAmount = (data) => {
+    let sum = 0;
+    for (let i = 0; i < data.length; i++) {
+      sum = sum + data[i].amount;
+    }
+    return sum;
+  };
+
+ 
+  getSellerPaymentDetails = async (req, res) => {
+    const { sellerId } = req.params;
+
+    try {
+      const payments = await SellerWallet.find({ sellerId });
+
+      const pendingWithdraws = await WithdrawRequest.find({
+        $and: [
+          {
+            sellerId: {
+              $eq: sellerId,
+            },
+          },
+          {
+            status: {
+              $eq: "pending",
+            },
+          },
+        ],
+      });
+
+      const successWithdraws = await WithdrawRequest.find({
+        $and: [
+          {
+            sellerId: {
+              $eq: sellerId,
+            },
+          },
+          {
+            status: {
+              $eq: "success",
+            },
+          },
+        ],
+      });
+
+      const pendingAmount = this.sumAmount(pendingWithdraws);
+      const withdrawAmount = this.sumAmount(successWithdraws);
+      const totalAmount = this.sumAmount(payments);
+
+      let availableAmount = 0;
+
+      if (totalAmount > 0) {
+        availableAmount = totalAmount - (pendingAmount + withdrawAmount);
+      }
+
+      responseReturn(res, 200, {
+        totalAmount,
+        pendingAmount,
+        withdrawAmount,
+        availableAmount,
+        pendingWithdraws,
+        successWithdraws,
+      });
+    } catch (error) {
+      console.log(error.message);
+      console.log(error);
     }
   };
 }

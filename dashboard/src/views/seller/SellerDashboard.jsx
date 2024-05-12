@@ -1,8 +1,6 @@
 import React from "react";
 import { MdOutlineCurrencyExchange } from "react-icons/md";
 import { IoCart } from "react-icons/io5";
-import { HiMiniUsers } from "react-icons/hi2";
-import { FaTruck } from "react-icons/fa6";
 import Chart from "react-apexcharts";
 import { Link } from "react-router-dom";
 import { SiShopify } from "react-icons/si";

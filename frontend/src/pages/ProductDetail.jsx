@@ -21,6 +21,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { getProductDetail } from "../store/reducers/homeReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/reducers/cartReducer";
+import { BiSolidUpArrow, BiSolidDownArrow } from "react-icons/bi";
+import { IoBagAddSharp } from "react-icons/io5";
 
 const ProductDetail = () => {
   const [image, setImage] = useState("");
@@ -48,11 +50,11 @@ const ProductDetail = () => {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
-      items: 5,
+      items: 4,
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 5,
+      items: 4,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
@@ -138,7 +140,7 @@ const ProductDetail = () => {
 
   return (
     <>
-      <div className="bg-[url('http://localhost:3000/images/banner/shop.png')]  h-[220px] mt-6 bg-cover bg-no-repeat bg-left">
+      <div className="bg-[url('http://localhost:3001/images/banner/shop.png')]  h-[220px] mt-6 bg-cover bg-no-repeat bg-left">
         <div className="flex flex-col justify-center gap-1 items-center h-full w-full text-black">
           <h2 className="text-3xl font-bold">Product Details</h2>
           <div className="flex justify-center items-center gap-2 text-2xl w-full">
@@ -154,13 +156,13 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      <div className="w-[85%] py-4 md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto">
+      <div className="w-[85%] py-4 md:w-[80%] sm:w-[90%] lg:w-[90%] mt-3 h-full mx-auto">
         <div className="grid grid-cols-2 md-lg:grid-cols-1 gap-8">
-          <div>
+          <div className="w-[450px]">
             {/* product main image */}
-            <div className="p-5 border">
+            <div className=" border">
               <img
-                className="h-[400px] w-full object-contain"
+                className="h-[600px] w-[450px] object-fit"
                 src={image ? image : product?.images?.[0]}
                 alt=""
               />
@@ -241,7 +243,7 @@ const ProductDetail = () => {
 
             {/* description */}
 
-            <div className="text-black h-[180px] bg-slate-200 p-2">
+            <div className="text-black h-[180px] bg-[#ecf4f576] p-2 rounded-md shadow-md">
               <p>
                 {product?.description?.substring(0, 250)}
                 {"..."}
@@ -260,11 +262,11 @@ const ProductDetail = () => {
                     <div className="flex h-[50px] flex-row justify-center items-center text-xl gap-1">
                       <button
                         onClick={decrement}
-                        className="px-8 py-2 bg-slate-400 "
+                        className="px-4 py-3 inline-flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md "
                       >
-                        -
+                        <BiSolidDownArrow color="blue" size={18} />
                       </button>
-                      <span className="w-[55px] text-center bg-slate-300  py-2">
+                      <span className="w-[55px]  text-center inline-flex items-center px-4 py-[11px] bg-gray-200  text-gray-800 text-sm font-medium rounded-md">
                         {" "}
                         {qty}
                       </span>
@@ -273,18 +275,17 @@ const ProductDetail = () => {
                         onClick={increment}
                         className={` ${
                           alarm ? "cursor-not-allowed" : ""
-                        } px-8 py-2 bg-slate-400`}
+                        } px-4 py-3 inline-flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md`}
                       >
-                        -
+                        <BiSolidUpArrow color="blue" size={18} />
                       </button>
 
                       {userInfo ? (
                         <button
                           onClick={handleAddToCart}
-                          className=" w-[205px]  bg-slate-300 py-2 flex items-center justify-center gap-2"
+                          className="inline-flex items-center px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md"
                         >
-                          <span>Add To Cart</span>
-                          <FaCartPlus />
+                          <IoBagAddSharp size={18} />
                         </button>
                       ) : (
                         <Link
@@ -300,7 +301,7 @@ const ProductDetail = () => {
                 </div>
               ) : (
                 <div className="flex items-center justify-center gap-2 h-[41px]">
-                  <div className="flex bg-slate-300  h-full justify-center items-center text-xl gap-1">
+                  <div className="flex shadow-lg  h-full justify-center items-center text-xl gap-1">
                     <h2 className="px-3 text-red-600 font-bold">
                       Out of stock
                     </h2>
@@ -308,8 +309,8 @@ const ProductDetail = () => {
                 </div>
               )}
               <div className="flex h-[50px] justify-center items-center text-xl gap-1">
-                <button className=" bg-slate-300 px-3 py-2">
-                  <IoHeart size={25} color="red" title="add to cart" />
+                <button className=" inline-flex items-center px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md">
+                  <IoHeart size={18} color="red" title="add to cart" />
                 </button>
               </div>
             </div>
@@ -337,13 +338,16 @@ const ProductDetail = () => {
 
             <div className="flex gap-4 py-5 border-b">
               <div className="flex h-[50px] justify-center items-center text-xl gap-1">
-                <button onClick={buyNow} className="px-8 py-2 bg-green-400">
+                <button
+                  onClick={buyNow}
+                  className="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md"
+                >
                   Buy Now
                 </button>
 
                 <Link
                   to={`/dashboard/chat/${product.sellerId}`}
-                  className="px-8 py-2 bg-green-600"
+                  className="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md"
                 >
                   Chat Seller
                 </Link>
@@ -357,10 +361,10 @@ const ProductDetail = () => {
         <div className="flex flex-wrap">
           <div className="w-[72%] md-lg::w-full">
             <div className="pr-4 md-lg:pr-0">
-              <div className="grid grid-cols-2">
+              <div className="grid grid-cols-2 gap-1">
                 <button
                   onClick={() => setState("reviews")}
-                  className={`py-1 hover:text-white px-5 hover:bg-[#4a8477] transition-all duration-300 ${
+                  className={`inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md ${
                     state === "reviews"
                       ? "bg-[#059473] text-white"
                       : "bg-slate-200 text-black"
@@ -370,7 +374,7 @@ const ProductDetail = () => {
                 </button>
                 <button
                   onClick={() => setState("description")}
-                  className={`py-1 hover:text-white px-5 hover:bg-[#4a8477] transition-all duration-300 ${
+                  className={`inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md ${
                     state === "description"
                       ? "bg-[#059473] text-white"
                       : "bg-slate-200 text-black"

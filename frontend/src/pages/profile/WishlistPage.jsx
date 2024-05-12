@@ -5,16 +5,15 @@ import {
   getAllMyWishlists,
   removeWishlist,
 } from "../../store/reducers/cartReducer";
-import { AiFillHeart, AiOutlineEye } from "react-icons/ai";
+import {  AiOutlineEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import saleIcon from "../../assets/icon/icons8-sale.gif";
-import emptyWish from "../../assets/icon/empty-wishlist-64.png";
 import { RxCross2 } from "react-icons/rx";
 
 const WishlistPage = ({ product, index }) => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.customerAuth);
-  const { successMessage, errorMessage, wishlist } = useSelector(
+  const { wishlist } = useSelector(
     (state) => state.cart
   );
   console.log(wishlist);
@@ -27,12 +26,12 @@ const WishlistPage = ({ product, index }) => {
     <div className="bg-white shadow-lg p-2 gap-2 rounded-md w-full flex flex-row flex-wrap">
       {wishlist.length === 0 ? (
         <div className="min-h-[40vh] w-full flex flex-col items-center justify-center">
-          <img src={emptyWish} className="w-[200px]" alt="" />
+         
 
-          <h2 className="text-white bg-red-600 mt-4 px-4 py-2 font-mono font-bold rounded-[15px]">
+          <h2 className="mt-4 px-4 py-2 font-mono font-bold rounded-[15px]">
             You have not added any products to your wishlist yet.
           </h2>
-          <Link to='/shop' className="bg-slate-400 mt-6 px-4 py-2 rounded-2xl text-yellow-50 font-mono font-bold">
+          <Link to='/shop' className="bg-slate-400 mt-6 px-4 py-1 rounded-2xl text-yellow-50 font-mono font-bold">
             Go to Store
           </Link>
         </div>

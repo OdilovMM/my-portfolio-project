@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { IoArrowForwardCircleOutline } from "react-icons/io5";
 import { BreadCrumbs } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { placeOrder } from "../store/reducers/orderReducer";

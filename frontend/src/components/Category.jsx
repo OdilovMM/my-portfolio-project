@@ -20,7 +20,7 @@ const Category = () => {
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 6,
+      items: 10,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
@@ -45,19 +45,19 @@ const Category = () => {
   };
 
   return (
-    <div className="w-[87%] mx-auto relative">
+    <div className="w-[85%] mx-auto relative">
       <Carousel
         autoPlay={true}
         infinite={true}
         arrows={true}
         responsive={responsive}
-        transitionDuration={500}
+        transitionDuration={800}
         draggable={false}
       >
         {categories.map((category, i) => (
           <Link
             to={`/products?category=${category.name}`}
-            className="h-[230px] border block"
+            className="h-[120px] w-[120px] border block"
             key={i}
           >
             <div className="w-full h-full relative p-3 bg-white ">
@@ -66,8 +66,8 @@ const Category = () => {
                 alt=""
                 className="rounded-full object-cover bg-slate-200  w-full h-full hover:scale-105 transition-all duration-300"
               />
-              <div className="absolute bottom-1 shadow-md w-full mx-auto font-bold left-0 top-[170px] flex justify-center items-center">
-                <span className="py-[1px] rounded-md px-6 bg-green-400 text-black">
+              <div className="absolute bottom-1 shadow-md w-full mx-auto font-bold left-0 top-[80px] flex justify-center items-center">
+                <span className="py-[2px] text-[9px] text-center rounded-md px-2 bg-green-400 text-black">
                   {category.name}
                 </span>
               </div>

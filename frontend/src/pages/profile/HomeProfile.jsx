@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getDashboardIndexData } from "../../store/reducers/dashboardReducer";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaCreditCard } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa6";
 
 const HomeProfile = () => {
   const navigate = useNavigate();
@@ -101,7 +102,7 @@ const HomeProfile = () => {
                   return (
                     <tr
                       key={ind}
-                      className="bg-white border-b hover:bg-slate-300 cursor-pointer"
+                      className="bg-white border-b hover:bg-slate-200 cursor-pointer"
                     >
                       <td className="px-4 py- font-medium whitespace-normal">
                         ({ind + 1}) #{recent._id}
@@ -121,7 +122,7 @@ const HomeProfile = () => {
                       <td className="px-4 py-3 font-medium whitespace-normal flex flex-row gap-2">
                         <Link
                           to={`/dashboard/order/details/${recent._id}`}
-                          className="px-2 py-[2px] hover:bg-slate-400 rounded-md bg-slate-300 flex items-center justify-center"
+                          className="px-2 py-[2px]  rounded-md flex items-center justify-center"
                         >
                           <MdOutlineRemoveRedEye
                             size={18}
@@ -133,7 +134,7 @@ const HomeProfile = () => {
                         {recent.paymentStatus !== "paid" ? (
                           <button
                             onClick={() => redirectToPay(recent)}
-                            className="px-3 py-[2px] hover:bg-slate-400 rounded-md bg-slate-300  flex items-center justify-center"
+                            className="px-3 py-[2px]  rounded-md  flex items-center justify-center"
                           >
                             <FaCreditCard
                               size={18}
@@ -142,8 +143,8 @@ const HomeProfile = () => {
                             />
                           </button>
                         ) : (
-                          <div className="px-3 py-[2px] rounded-md bg-slate-300">
-                            Completed
+                          <div className="px-3 py-[2px] rounded-md ">
+                            <FaCheck size={18}/>
                           </div>
                         )}
                       </td>

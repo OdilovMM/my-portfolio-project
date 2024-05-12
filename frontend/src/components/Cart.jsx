@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AiFillHeart, AiOutlineEye, AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineEye } from "react-icons/ai";
 import Rating from "./Rating";
 import saleIcon from "./../assets/icon/icons8-sale.gif";
 import { useDispatch, useSelector } from "react-redux";
@@ -108,7 +108,7 @@ const Cart = ({ product, index }) => {
           </div>
         </div>
         {/* bottom info */}
-        <div className="flex flex-col h-[100px] overflow-hidden bg-[#d0dae3] ">
+        <div className="flex flex-col h-[100px] overflow-hidden bg-[#fefdfe] ">
           <div className="px-3 py-3">
             <h2>{product?.name.slice(0, 10)}...</h2>
             <div className="flex flex-row items-center justify-between">

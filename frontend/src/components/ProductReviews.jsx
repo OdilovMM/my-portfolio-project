@@ -247,7 +247,7 @@ const ProductReviews = ({ product }) => {
                 rows="5"
               ></textarea>
               <div className="mt-2">
-                <button className="py-1 h-[35px] w-[100px] px-5 bg-slate-500 text-white rounded-sm">
+                <button className="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md">
                   {isLoading ? (
                     <PulseLoader color="white" margin={2} className="mt-1" />
                   ) : (
@@ -261,7 +261,7 @@ const ProductReviews = ({ product }) => {
           <div>
             <Link
               to="/login"
-              className="py-1 px-5 bg-red-500 text-white rounded-sm"
+              className="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md"
             >
               Login First{" "}
             </Link>

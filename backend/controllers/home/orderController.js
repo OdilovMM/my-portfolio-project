@@ -335,55 +335,9 @@ class orderController {
     }
   };
 
-  // orderConfirm = async (req, res) => {
-  //   const { orderId } = req.params;
-  //   console.log(orderId);
-
-  //   try {
-  //     await customerOrder.findByIdAndUpdate(orderId, {
-  //       paymentStatus: "paid",
-  //     });
-  //     await authOrder.updateMany(
-  //       { orderId: new ObjectId(orderId) },
-  //       {
-  //         paymentStatus: "paid",
-  //         deliveryStatus: "pending",
-  //       }
-  //     );
-
-  //     const custOrder = await customerOrder.findById(orderId);
-  //     const authOrd = await authOrder.find({
-  //       orderId: new ObjectId(orderId),
-  //     });
-
-  //     const date = moment(Date.now()).format("l");
-  //     const splitDate = date.split("/");
-
-  //     await MyWallet.create({
-  //       amount: custOrder.price,
-  //       month: splitDate[0],
-  //       year: splitDate[2],
-  //     });
-
-  //     for (let i = 0; i < authOrd.length; i++) {
-  //       await SellerWallet.create({
-  //         sellerId: authOrd[i].sellerId.toString(),
-  //         amount: authOrd[i].price,
-  //         month: splitDate[0],
-  //         year: splitDate[2],
-  //       });
-  //     }
-
-  //     responseReturn(res, 201, { message: "Success" });
-  //   } catch (error) {
-  //     console.log("ERROR:", error.message);
-  //     responseReturn(res, 500, { error: error.message });
-  //   }
-  // };
-
   orderConfirm = async (req, res) => {
     const { orderId } = req.params;
-    console.log(orderId)
+    console.log(orderId);
     try {
       await customerOrder.findByIdAndUpdate(orderId, {
         paymentStatus: "paid",
@@ -420,7 +374,6 @@ class orderController {
       }
       responseReturn(res, 200, { message: "success" });
     } catch (error) {
-      
       console.log(error);
       console.log(error.message);
     }

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllOrders } from "../../store/reducers/orderReducer";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaCreditCard } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa6";
 
 const MyOrderPage = () => {
   const navigate = useNavigate();
@@ -59,16 +60,16 @@ const MyOrderPage = () => {
                   <th scope="col" className=" px-6 py-3">
                     Order Id
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-3 py-3">
                     Price
                   </th>
-                  <th scope="col" className=" px-6 py-3">
+                  <th scope="col" className=" px-2 py-3">
                     Payment Status
                   </th>
-                  <th scope="col" className=" px-6 py-3">
+                  <th scope="col" className=" px-1 py-3">
                     Date
                   </th>
-                  <th scope="col" className=" px-6 py-3">
+                  <th scope="col" className=" px-3 py-3">
                     Order Status
                   </th>
                   <th scope="col" className=" px-6 py-3">
@@ -81,25 +82,28 @@ const MyOrderPage = () => {
                   return (
                     <tr
                       key={index}
-                      className="bg-white border-b hover:bg-slate-300 cursor-pointer"
+                      className="bg-white border-b hover:bg-slate-200 cursor-pointer"
                     >
-                      <td className="px-4 py-4 font-medium whitespace-normal">
+                      <td className="px-2 py-4 font-medium whitespace-normal">
                         ({index + 1}) #{myOrd._id}
                       </td>
-                      <td className="px-5 py-4 font-medium whitespace-normal">
+                      <td className="px-3 py-4 font-medium whitespace-normal">
                         ${myOrd.price}
                       </td>
-                      <td className="px-6 py-4 font-medium whitespace-normal">
+                      <td className="px-4 py-4 font-medium whitespace-normal">
                         {myOrd.paymentStatus}
                       </td>
-                      <td className="px-5 py-4 font-medium whitespace-normal">
+                      <td className="px-1 py-4 font-medium whitespace-normal">
                         {myOrd.date}
                       </td>
-                      <td className="px-5 py-4 font-medium whitespace-normal">
+                      <td className="px-3 py-4 font-medium whitespace-normal">
                         {myOrd.deliveryStatus}
                       </td>
                       <td className="px-4 py-4 font-medium whitespace-normal flex flex-row gap-2">
-                        <Link to={`/dashboard/order/details/${myOrd._id}`} className="px-1 hover:bg-slate-400 py-[2px] flex items-center justify-center rounded-md bg-slate-300">
+                        <Link
+                          to={`/dashboard/order/details/${myOrd._id}`}
+                          className="px-1  py-[2px] flex items-center justify-center rounded-md "
+                        >
                           <MdOutlineRemoveRedEye
                             size={18}
                             title="View Details"
@@ -109,18 +113,17 @@ const MyOrderPage = () => {
                         {myOrd.paymentStatus !== "paid" ? (
                           <button
                             onClick={() => redirectToPay(myOrd)}
-                            className="px-3 py-[2px] rounded-md bg-slate-300  flex items-center justify-center hover:bg-slate-400"
+                            className="px-3 py-[2px] rounded-md  flex items-center justify-center"
                           >
                             <FaCreditCard
                               size={18}
                               title="Pay Now"
                               color="black"
-                             
                             />
                           </button>
                         ) : (
-                          <div className="px-3 py-[2px] rounded-md bg-slate-300">
-                            Completed
+                          <div className="px-3 py-[2px] rounded-md ">
+                            <FaCheck size={20} />
                           </div>
                         )}
                       </td>

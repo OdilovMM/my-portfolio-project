@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 
-const sellerWalletSchema = new Schema(
+const sellerWalletSchema = new mongoose.Schema(
   {
     sellerId: {
       type: String,
