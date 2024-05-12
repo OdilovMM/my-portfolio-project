@@ -37,6 +37,20 @@ export const sendWithdrawalRequest = createAsyncThunk(
   }
 );
 
+export const getPaymentRequestFromSeller = createAsyncThunk(
+  "payment/getPaymentRequestFromSeller",
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get("/payment/get-admin-payment-request", {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const paymentReducer = createSlice({
   name: "payment",
   initialState: {
@@ -84,6 +98,18 @@ export const paymentReducer = createSlice({
         toast.success(payload.message);
       })
       .addCase(sendWithdrawalRequest.rejected, (state, { payload }) => {
+        state.loader = false;
+        toast.error(payload.error);
+      })
+      // getPaymentRequestFromSeller
+      .addCase(getPaymentRequestFromSeller.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(getPaymentRequestFromSeller.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.pendingWithdraws = payload.withdrawalRequest;
+      })
+      .addCase(getPaymentRequestFromSeller.rejected, (state, { payload }) => {
         state.loader = false;
         toast.error(payload.error);
       });

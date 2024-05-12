@@ -9,7 +9,6 @@ import {
   getSellerPaymentDetails,
   sendWithdrawalRequest,
 } from "../../store/Reducers/paymentReducer";
-import { PulseLoader } from "react-spinners";
 import toast from "react-hot-toast";
 import moment from "moment";
 
@@ -72,7 +71,7 @@ const Payments = () => {
           </span>
         </div>
         <div className="w-[25%] p-2 whitespace-nowrap text-[#fff]">
-          {moment(pendingWithdraws[index]?.createdAt).format("LL")}
+          {moment(pendingWithdraws[index]?.createdAt).format("LLL")}
         </div>
       </div>
     );

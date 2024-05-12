@@ -22,5 +22,10 @@ router.post(
   authMiddleware,
   paymentController.PaymentRequest
 );
+router.get(
+  "/get-admin-payment-request",
+  authMiddleware,
+  paymentController.getAdminPaymentRequest
+);
 
 module.exports = router;
