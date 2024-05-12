@@ -16,6 +16,20 @@ export const getAdminDashboardInfo = createAsyncThunk(
   }
 );
 
+export const getSellerDashboardInfo = createAsyncThunk(
+  "dashboard/getSellerDashboardInfo",
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get("/dashboard/get-seller-dashboard-info", {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const dashboardReducer = createSlice({
   name: "dashboard",
   initialState: {
@@ -30,6 +44,8 @@ export const dashboardReducer = createSlice({
     totalProducts: 0,
     recentOrders: [],
     recentChats: [],
+    totalDeactiveSellers: 0,
+    totalPendingOrder: 0,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -39,14 +55,32 @@ export const dashboardReducer = createSlice({
       })
       .addCase(getAdminDashboardInfo.fulfilled, (state, { payload }) => {
         state.loader = false;
-        // state.totalAmount = payload.totalAmount;
-        // state.withdrawAmount = payload.withdrawAmount;
-        // state.availableAmount = payload.availableAmount;
-        // state.pendingAmount = payload.pendingAmount;
-        // state.pendingWithdraws = payload.pendingWithdraws;
-        // state.successWithdraws = payload.successWithdraws;
+        state.totalSales = payload.totalSales;
+        state.totalProducts = payload.totalProducts;
+        state.totalOrders = payload.totalOrders;
+        state.totalCustomers = payload.totalCustomers;
+        state.totalSellers = payload.totalSellers;
+        state.recentChats = payload.recentMessages;
+        state.recentOrders = payload.recentOrders;
+        state.totalDeactiveSellers = payload.totalDeactiveSellers;
       })
       .addCase(getAdminDashboardInfo.rejected, (state, { payload }) => {
+        state.loader = false;
+      })
+      //   getSellerDashboardInfo
+      .addCase(getSellerDashboardInfo.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(getSellerDashboardInfo.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.totalSales = payload.totalSales;
+        state.totalProducts = payload.totalProducts;
+        state.totalOrders = payload.totalOrders;
+        state.recentChats = payload.recentMessages;
+        state.recentOrders = payload.recentOrders;
+        state.totalPendingOrder = payload.totalPendingOrder;
+      })
+      .addCase(getSellerDashboardInfo.rejected, (state, { payload }) => {
         state.loader = false;
       });
   },

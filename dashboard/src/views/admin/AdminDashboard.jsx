@@ -2,11 +2,13 @@ import React, { useEffect } from "react";
 import { MdOutlineCurrencyExchange } from "react-icons/md";
 import { IoCart } from "react-icons/io5";
 import { HiMiniUsers } from "react-icons/hi2";
+import { FaListCheck } from "react-icons/fa6";
 import { FaTruck } from "react-icons/fa6";
 import Chart from "react-apexcharts";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAdminDashboardInfo } from "../../store/Reducers/dashboardReducer";
+import moment from "moment";
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
@@ -14,12 +16,12 @@ const AdminDashboard = () => {
   const {
     totalSales,
     totalOrders,
-    totalProduct,
     totalSellers,
     totalCustomers,
     totalProducts,
     recentOrders,
     recentChats,
+    totalDeactiveSellers,
   } = useSelector((state) => state.dashboard);
 
   useEffect(() => {
@@ -119,7 +121,7 @@ const AdminDashboard = () => {
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-7">
         <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#dfcbcb] rounded-md gap-3">
           <div className="flex flex-col justify-start  items-start text-[#333]">
-            <h2 className="text-3xl font-semibold">$1900</h2>
+            <h2 className="text-3xl font-semibold">${totalSales}</h2>
             <span className="text-md font-semibold">Total Sales</span>
           </div>
           <div className="w-[45px] h-[45px] rounded-full justify-center items-center">
@@ -128,7 +130,7 @@ const AdminDashboard = () => {
         </div>
         <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#dfcbcb] rounded-md gap-3">
           <div className="flex flex-col justify-start  items-start text-[#333]">
-            <h2 className="text-3xl font-semibold">1950</h2>
+            <h2 className="text-3xl font-semibold">{totalProducts}</h2>
             <span className="text-md font-semibold">Total Products</span>
           </div>
           <div className="w-[45px] h-[45px] rounded-full  justify-center items-center">
@@ -137,7 +139,7 @@ const AdminDashboard = () => {
         </div>
         <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#dfcbcb] rounded-md gap-3">
           <div className="flex flex-col justify-start  items-start text-[#333]">
-            <h2 className="text-3xl font-semibold">190</h2>
+            <h2 className="text-3xl font-semibold">{totalSellers}</h2>
             <span className="text-md font-semibold">Total Sellers</span>
           </div>
           <div className="w-[45px] h-[45px] rounded-full  justify-center items-center">
@@ -146,7 +148,34 @@ const AdminDashboard = () => {
         </div>
         <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#dfcbcb] rounded-md gap-3">
           <div className="flex flex-col justify-start  items-start text-[#333]">
-            <h2 className="text-3xl font-semibold">$1900</h2>
+            <h2 className="text-3xl font-semibold">{totalCustomers}</h2>
+            <span className="text-md font-semibold">Total Customers</span>
+          </div>
+          <div className="w-[45px] h-[45px] rounded-full  justify-center items-center">
+            <HiMiniUsers size={45} />
+          </div>
+        </div>
+        <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#dfcbcb] rounded-md gap-3">
+          <div className="flex flex-col justify-start  items-start text-[#333]">
+            <h2 className="text-3xl font-semibold">{totalDeactiveSellers}</h2>
+            <span className="text-md font-semibold">Deactive Customers</span>
+          </div>
+          <div className="w-[45px] h-[45px] rounded-full  justify-center items-center">
+            <HiMiniUsers size={45} />
+          </div>
+        </div>
+        <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#dfcbcb] rounded-md gap-3">
+          <div className="flex flex-col justify-start  items-start text-[#333]">
+            <h2 className="text-3xl font-semibold">18</h2>
+            <span className="text-md font-semibold">Total Categories</span>
+          </div>
+          <div className="w-[45px] h-[45px] rounded-full  justify-center items-center">
+            <FaListCheck size={45} />
+          </div>
+        </div>
+        <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#dfcbcb] rounded-md gap-3">
+          <div className="flex flex-col justify-start  items-start text-[#333]">
+            <h2 className="text-3xl font-semibold">{totalOrders}</h2>
             <span className="text-md font-semibold">Total Orders</span>
           </div>
           <div className="w-[45px] h-[45px] rounded-full  justify-center items-center">
@@ -173,52 +202,44 @@ const AdminDashboard = () => {
               <h2 className="font-semibold text-lg text-[#fff]">
                 Resent chats
               </h2>
-              <Link className="font-semibold text-sm text-[#fff]">
+              <Link
+                to={`/admin/dashboard/chat-seller`}
+                className="font-semibold text-sm text-[#fff]"
+              >
                 View All
               </Link>
             </div>
             <div className="flex flex-col gap-2 pt-6 text-[#fff]">
               <ol className="relative border-1 ml-3">
-                <li className="mb-2 ml-6">
-                  <div className="flex absolute -left-5 shadow-lg justify-center items-center w-10 h-10 p-[1px] z-10">
-                    <img
-                      src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                      alt=""
-                      className="h-full w-full rounded-full"
-                    />
-                  </div>
-                  <div className="p-3 rounded-md  bg-slate-600">
-                    <div className="flex justify-between  items-center mb-2">
-                      <Link className="text-md font-normal ">Admin</Link>
-                      <time className="mb-1 text-sm font-normal sm:order-last sm:mb-0">
-                        3 days ago
-                      </time>
-                    </div>
-                    <div className="p-2 text-xs font-normal bg-slate-500 rounded-sm border-slate-50">
-                      How are you
-                    </div>
-                  </div>
-                </li>
-                <li className="mb-2 ml-6">
-                  <div className="flex absolute -left-5 shadow-lg justify-center items-center w-10 h-10 p-[1px] z-10">
-                    <img
-                      src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                      alt=""
-                      className="h-full w-full rounded-full"
-                    />
-                  </div>
-                  <div className="p-3 rounded-md  bg-slate-600">
-                    <div className="flex justify-between  items-center mb-2">
-                      <Link className="text-md font-normal ">Admin</Link>
-                      <time className="mb-1 text-sm font-normal sm:order-last sm:mb-0">
-                        3 days ago
-                      </time>
-                    </div>
-                    <div className="p-2 text-xs font-normal bg-slate-500 rounded-sm border-slate-50">
-                      How are you
-                    </div>
-                  </div>
-                </li>
+                {recentChats.map((recent, index) => {
+                  return (
+                    <li key={index} className="mb-2 ml-6">
+                      <div className="flex absolute -left-5 shadow-lg justify-center items-center w-10 h-10 p-[1px] z-10">
+                        <img
+                          src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+                          alt=""
+                          className="h-full w-full rounded-full"
+                        />
+                      </div>
+                      <div className="p-3 rounded-md  bg-slate-600">
+                        <div className="flex justify-between  items-center mb-2">
+                          <Link
+                            to={`/admin/dashboard/chat-seller/${recent.senderId}`}
+                            className="text-md font-normal "
+                          >
+                            {recent.senderName}
+                          </Link>
+                          <time className="mb-1 text-sm font-normal sm:order-last sm:mb-0">
+                            {moment(recent?.createdAt).format("LLL")}
+                          </time>
+                        </div>
+                        <div className="p-2 text-xs font-normal bg-slate-500 rounded-sm border-slate-50">
+                          {recent.message}
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
               </ol>
             </div>
           </div>
@@ -259,22 +280,24 @@ const AdminDashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {[1, 2, 3, 4, 5].map((data, index) => (
+              {recentOrders?.map((data, index) => (
                 <tr key={index}>
                   <td className="py-4 px-4 font-medium whitespace-nowrap">
-                    #35652
+                    #{data?._id}
                   </td>
                   <td className="py-3 px-4 font-medium whitespace-nowrap">
-                    $54454
+                    ${data?.price}
                   </td>
                   <td className="py-3 px-4 font-medium whitespace-nowrap">
-                    Pending
+                    {data.paymentStatus}
                   </td>
                   <td className="py-3 px-4 font-medium whitespace-nowrap">
-                    Pending
+                    {data.deliveryStatus}
                   </td>
                   <td className="py-3 px-4 font-medium whitespace-nowrap">
-                    <Link>View</Link>
+                    <Link to={`/admin/dashboard/orders/details/${data._id}`}>
+                      View
+                    </Link>
                   </td>
                 </tr>
               ))}

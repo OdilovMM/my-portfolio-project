@@ -112,7 +112,7 @@ const SellerCustomerChat = () => {
                     <li className="flex flex-row w-full hover:bg-slate-500 active:bg-slate-500">
                       <Link
                         key={index}
-                        to={`/seller/dashboard/chat-customer/${customer.fdId}`}
+                        to={`/seller/dashboard/chat-customer/${customer?.fdId}`}
                         className={`flex w-full justify-start gap-0 items-center text-white px-2 py-1 rounded-sm cursor-pointer`}
                       >
                         <div className="relative">
@@ -126,7 +126,7 @@ const SellerCustomerChat = () => {
                         </div>
                         <div className="flex justify-center items-start flex-col w-full">
                           <div className="flex justify-between pl-2 items-center w-full">
-                            <h2>{customer.name}</h2>
+                            <h2>{customer?.name}</h2>
                           </div>
                         </div>
                       </Link>
@@ -150,7 +150,7 @@ const SellerCustomerChat = () => {
 
                     <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
                   </div>
-                  <h2 className="text-white">{currentCustomer.name}</h2>
+                  <h2 className="text-white">{currentCustomer?.name}</h2>
                 </div>
               )}
 
@@ -201,7 +201,7 @@ const SellerCustomerChat = () => {
                         >
                           <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
                             <div className="flex justify-center items-start flex-col bg-blue-300 text-[#333] py-1 px-2 rounded-tl-full rounded-bl-full rounded-tr-full ">
-                              <span>{message.message}</span>
+                              <span>{message?.message}</span>
                             </div>
 
                             {/* <div>

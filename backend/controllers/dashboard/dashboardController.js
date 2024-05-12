@@ -1,50 +1,138 @@
-const Category = require("../../models/categoryModel");
-const formidable = require("formidable");
+const MyWallet = require("../../models/myWalletModel");
+const SellerWallet = require("../../models/sellerWalletModel");
+const Products = require("../../models/productModel");
+const authorOrders = require("../../models/authOrderModel");
+const CustomerOrders = require("../../models/customerOrderModel");
+const Sellers = require("../../models/sellerModel");
+const Customers = require("../../models/customerModel");
+const AdminSellerMessage = require("../../models/chat/adminSellerMessageSchema");
+const SellerCustomerMessage = require("../../models/chat/sellerCustomerMessageModel");
 const { responseReturn } = require("../../utils/response");
-const cloudinary = require("cloudinary").v2;
+const {
+  mongo: { ObjectId },
+} = require("mongoose");
 
 class dashboardController {
   getAdminDashboardInfo = async (req, res) => {
-    const form = formidable();
-    form.parse(req, async (err, fields, files) => {
-      if (err) {
-        responseReturn(res, 404, { error: "Something went wrong" });
-      } else {
-        let { name } = fields;
-        let { image } = files;
+    const { id } = req;
 
-        name = name.trim();
-        const slug = name.split(" ").join("-");
+    try {
+      const totalSales = await MyWallet.aggregate([
+        {
+          $group: {
+            _id: null,
+            totalAmount: {
+              $sum: "$amount",
+            },
+          },
+        },
+      ]);
+      const totalProducts = await Products.find({}).countDocuments();
+      const totalOrders = await CustomerOrders.find({}).countDocuments();
+      const totalCustomers = await Customers.find({}).countDocuments();
+      const totalSellers = await Sellers.find({}).countDocuments();
 
-        cloudinary.config({
-          cloud_name: process.env.CLOUD_NAME,
-          api_key: process.env.CLOUD_API_KEY,
-          api_secret: process.env.CLOUD_API_SECRET,
-          secure: true,
-        });
-        try {
-          const result = await cloudinary.uploader.upload(image.filepath, {
-            folder: "categories",
-          });
-          if (result) {
-            const category = await Category.create({
-              name,
-              slug,
-              image: result.url,
-            });
-            responseReturn(res, 201, {
-              message: "Category added successfully",
-            });
-          } else {
-            responseReturn(res, 404, {
-              error: "Something went wrong with image upload",
-            });
-          }
-        } catch (error) {
-          responseReturn(res, 500, { error: "Internal Server Error" });
-        }
-      }
-    });
+      const totalDeactiveSellers = await Sellers.find({
+        status: "deactive",
+      }).countDocuments();
+      const recentMessages = await AdminSellerMessage.find({}).limit(3);
+      const recentOrders = await CustomerOrders.find({}).limit(8);
+      console.log(totalDeactiveSellers);
+
+      responseReturn(res, 200, {
+        totalSales: totalSales.length > 0 ? totalSales[0].totalAmount : 0,
+        totalProducts,
+        totalOrders,
+        totalCustomers,
+        totalSellers,
+        recentMessages,
+        recentOrders,
+        totalDeactiveSellers,
+      });
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+  getSellerDashboardInfo = async (req, res) => {
+    const { id } = req;
+
+    try {
+      const totalSales = await SellerWallet.aggregate([
+        {
+          $match: {
+            sellerId: {
+              $eq: id,
+            },
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            totalAmount: {
+              $sum: "$amount",
+            },
+          },
+        },
+      ]);
+      const totalProducts = await Products.find({
+        sellerId: new Object(id),
+      }).countDocuments();
+
+      const totalOrders = await authorOrders
+        .find({
+          sellerId: new Object(id),
+        })
+        .countDocuments();
+
+      const totalPendingOrder = await authorOrders
+        .find({
+          $and: [
+            {
+              sellerId: {
+                $eq: new ObjectId(id),
+              },
+            },
+            {
+              deliveryStatus: {
+                $eq: "pending",
+              },
+            },
+          ],
+        })
+        .countDocuments();
+
+      const recentMessages = await SellerCustomerMessage.find({
+        $or: [
+          {
+            senderId: {
+              $eq: id,
+            },
+          },
+          {
+            receiverId: {
+              $eq: id,
+            },
+          },
+        ],
+      }).limit(3);
+
+      const recentOrders = await authorOrders
+        .find({
+          sellerId: new ObjectId(id),
+        })
+        .limit(3);
+
+      responseReturn(res, 200, {
+        totalSales: totalSales.length > 0 ? totalSales[0].totalAmount : 0,
+        totalProducts,
+        totalOrders,
+        recentMessages,
+        recentOrders,
+        totalPendingOrder,
+      });
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
   };
 }
 
