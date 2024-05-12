@@ -67,6 +67,25 @@ export const paymentReducer = createSlice({
       })
       .addCase(getSellerPaymentDetails.rejected, (state, { payload }) => {
         state.loader = false;
+      })
+      // sendWithdrawalRequest
+      .addCase(sendWithdrawalRequest.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(sendWithdrawalRequest.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.pendingWithdraws = [
+          ...state.pendingWithdraws,
+          payload.withdrawal,
+        ];
+        state.availableAmount =
+          state.availableAmount - payload.withdrawal.amount;
+        state.pendingAmount = payload.withdrawal.amount;
+        toast.success(payload.message);
+      })
+      .addCase(sendWithdrawalRequest.rejected, (state, { payload }) => {
+        state.loader = false;
+        toast.error(payload.error);
       });
   },
 });

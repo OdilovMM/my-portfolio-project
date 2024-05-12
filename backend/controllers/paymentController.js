@@ -47,7 +47,6 @@ class paymentController {
       responseReturn(res, 500, { error: error.message });
     }
   };
-
   activateAccount = async (req, res) => {
     const { activeCode } = req.params;
     const { id } = req;
@@ -66,7 +65,6 @@ class paymentController {
       return responseReturn(res, 500, { message: "Internal Server Error" });
     }
   };
-
   sumAmount = (data) => {
     let sum = 0;
     for (let i = 0; i < data.length; i++) {
@@ -74,8 +72,6 @@ class paymentController {
     }
     return sum;
   };
-
- 
   getSellerPaymentDetails = async (req, res) => {
     const { sellerId } = req.params;
 
@@ -133,6 +129,23 @@ class paymentController {
     } catch (error) {
       console.log(error.message);
       console.log(error);
+    }
+  };
+  PaymentRequest = async (req, res) => {
+    const { amount, sellerId } = req.body;
+
+    try {
+      const withdrawal = await WithdrawRequest.create({
+        sellerId,
+        amount: parseInt(amount),
+      });
+      responseReturn(res, 201, {
+        withdrawal,
+        message: "Successfully withdrawal",
+      });
+    } catch (error) {
+      console.log(error.message);
+      responseReturn(res, 500, { message: "Internal Server Error" });
     }
   };
 }

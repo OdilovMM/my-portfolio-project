@@ -11,6 +11,7 @@ import {
 } from "../../store/Reducers/paymentReducer";
 import { PulseLoader } from "react-spinners";
 import toast from "react-hot-toast";
+import moment from "moment";
 
 function handleOnWheel({ deltaY }) {}
 
@@ -52,6 +53,10 @@ const Payments = () => {
     }
   };
 
+  useEffect(() => {
+    //
+  }, []);
+
   const Row = ({ index, style }) => {
     return (
       <div style={style} className="flex text-sm">
@@ -59,16 +64,15 @@ const Payments = () => {
           {index + 1}
         </div>
         <div className="w-[25%] p-2 whitespace-nowrap text-[#fff]">
-          $5{index + 1}5{index + 1}
+          ${pendingWithdraws[index]?.amount}
         </div>
         <div className="w-[25%] p-2 whitespace-nowrap">
           <span className="px-3 py-1 bg-[#6e7376] text-[#fff] rounded-[3px]">
-            Pending
+            {pendingWithdraws[index]?.status}
           </span>
         </div>
         <div className="w-[25%] p-2 whitespace-nowrap text-[#fff]">
-          {" "}
-          12 Apr 2024{" "}
+          {moment(pendingWithdraws[index]?.createdAt).format("LL")}
         </div>
       </div>
     );
@@ -153,7 +157,7 @@ const Payments = () => {
                   style={{ minWidth: "340px" }}
                   className="List"
                   height={350}
-                  itemCount={20}
+                  itemCount={pendingWithdraws?.length}
                   itemSize={35}
                   outerElementType={outerElType}
                 >
@@ -163,6 +167,7 @@ const Payments = () => {
             </div>
           </div>
         </div>
+
         <div className="bg-[#3D464D] text-white rounded-[5px] p-5">
           <h1 className="text-lg mb-5">Successful Withdraw</h1>
 
@@ -179,7 +184,7 @@ const Payments = () => {
                   style={{ minWidth: "340px" }}
                   className="List"
                   height={440}
-                  itemCount={20}
+                  itemCount={successWithdraws?.length}
                   itemSize={35}
                   outerElementType={outerElType}
                 >
