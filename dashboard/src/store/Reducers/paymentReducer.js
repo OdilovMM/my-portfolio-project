@@ -50,6 +50,25 @@ export const getPaymentRequestFromSeller = createAsyncThunk(
     }
   }
 );
+export const confirmPaymentRequest = createAsyncThunk(
+  "payment/confirmPaymentRequest",
+  async (paymentId, { rejectWithValue, fulfillWithValue }) => {
+    console.log(paymentId);
+    try {
+      const { data } = await api.put(
+        "/payment/admin-confirm-payment-request",
+        { paymentId },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const paymentReducer = createSlice({
   name: "payment",
@@ -75,7 +94,7 @@ export const paymentReducer = createSlice({
         state.totalAmount = payload.totalAmount;
         state.withdrawAmount = payload.withdrawAmount;
         state.availableAmount = payload.availableAmount;
-        state.pendingAmount = payload.availableAmount;
+        state.pendingAmount = payload.pendingAmount;
         state.pendingWithdraws = payload.pendingWithdraws;
         state.successWithdraws = payload.successWithdraws;
       })
@@ -110,6 +129,22 @@ export const paymentReducer = createSlice({
         state.pendingWithdraws = payload.withdrawalRequest;
       })
       .addCase(getPaymentRequestFromSeller.rejected, (state, { payload }) => {
+        state.loader = false;
+        toast.error(payload.error);
+      })
+      // confirmPaymentRequest
+      .addCase(confirmPaymentRequest.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(confirmPaymentRequest.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        const temp = state.pendingWithdraws.filter(
+          (request) => request._id !== payload.payment._id
+        );
+        state.pendingWithdraws = temp;
+        toast.success(payload.message);
+      })
+      .addCase(confirmPaymentRequest.rejected, (state, { payload }) => {
         state.loader = false;
         toast.error(payload.error);
       });

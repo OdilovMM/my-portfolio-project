@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { MdOutlineCurrencyExchange } from "react-icons/md";
 import { IoCart } from "react-icons/io5";
 import { HiMiniUsers } from "react-icons/hi2";
 import { FaTruck } from "react-icons/fa6";
 import Chart from "react-apexcharts";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getAdminDashboardInfo } from "../../store/Reducers/dashboardReducer";
 
 const AdminDashboard = () => {
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
+  const {
+    totalSales,
+    totalOrders,
+    totalProduct,
+    totalSellers,
+    totalCustomers,
+    totalProducts,
+    recentOrders,
+    recentChats,
+  } = useSelector((state) => state.dashboard);
+
+  useEffect(() => {
+    dispatch(getAdminDashboardInfo());
+  }, [dispatch]);
+
   const state = {
     series: [
       {
@@ -257,7 +276,7 @@ const AdminDashboard = () => {
                   <td className="py-3 px-4 font-medium whitespace-nowrap">
                     <Link>View</Link>
                   </td>
-                </tr> 
+                </tr>
               ))}
             </tbody>
           </table>

@@ -19,6 +19,7 @@ const customerRouter = require("./routes/frontend/customerAuthRoutes");
 const orderRouter = require("./routes/home/orderRoutes");
 const chatRouter = require("./routes/chatRoutes");
 const paymentRouter = require("./routes/paymentRoutes");
+const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 
 app.use(
   cors({
@@ -152,6 +153,7 @@ app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/chat", chatRouter);
 app.use("/api/v1/payment", paymentRouter);
+app.use("/api/v1/dashboard", dashboardRouter);
 
 const port = process.env.PORT || 8000;
 dbConnect();

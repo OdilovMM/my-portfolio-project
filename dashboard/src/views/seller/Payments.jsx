@@ -76,43 +76,64 @@ const Payments = () => {
       </div>
     );
   };
+
+  const Rows = ({ index, style }) => {
+    return (
+      <div style={style} className="flex text-sm">
+        <div className="w-[10%] p-2 whitespace-nowrap text-[#fff]">
+          {index + 1}
+        </div>
+        <div className="w-[25%] p-2 whitespace-nowrap text-[#fff]">
+          ${successWithdraws[index]?.amount}
+        </div>
+        <div className="w-[30%] p-2 whitespace-nowrap">
+          <span className="px-3 py-1 bg-[#6e7376] text-[#fff] rounded-[3px]">
+            {successWithdraws[index]?.status}
+          </span>
+        </div>
+        <div className="w-[30%] p-2 whitespace-nowrap text-[#fff]">
+          {moment(successWithdraws[index]?.createdAt).format("LLL")}
+        </div>
+      </div>
+    );
+  };
   return (
     <div className="px-2 md:px-7 py-5 ">
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-7 mb-4">
-        <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#dfcbcb] rounded-md gap-3">
+        <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#b1d6f2] rounded-md gap-3">
           <div className="flex flex-col justify-start  items-start text-[#333]">
             <h2 className="text-3xl font-semibold">${totalAmount}</h2>
             <span className="text-md font-semibold">Total Sales</span>
           </div>
           <div className="w-[45px] h-[45px] rounded-full justify-center items-center">
-            <MdOutlineCurrencyExchange size={45} />
+            <MdOutlineCurrencyExchange color="blue" size={45} />
           </div>
         </div>
-        <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#dfcbcb] rounded-md gap-3">
+        <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#b1d6f2] rounded-md gap-3">
           <div className="flex flex-col justify-start  items-start text-[#333]">
             <h2 className="text-3xl font-semibold">${availableAmount}</h2>
             <span className="text-md font-semibold">Available Amount</span>
           </div>
           <div className="w-[45px] h-[45px] rounded-full  justify-center items-center">
-            <GiCash size={45} />
+            <GiCash color="blue" size={45} />
           </div>
         </div>
-        <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#dfcbcb] rounded-md gap-3">
+        <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#b1d6f2] rounded-md gap-3">
           <div className="flex flex-col justify-start  items-start text-[#333]">
             <h2 className="text-3xl font-semibold">${withdrawAmount}</h2>
             <span className="text-md font-semibold">Withdrawal Amount</span>
           </div>
           <div className="w-[45px] h-[45px] rounded-full  justify-center items-center">
-            <BiMoneyWithdraw size={45} />
+            <BiMoneyWithdraw color="blue" size={45} />
           </div>
         </div>
-        <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#dfcbcb] rounded-md gap-3">
+        <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#b1d6f2] rounded-md gap-3">
           <div className="flex flex-col justify-start  items-start text-[#333]">
             <h2 className="text-3xl font-semibold">${pendingAmount}</h2>
             <span className="text-md font-semibold">Pending Amount</span>
           </div>
           <div className="w-[45px] h-[45px] rounded-full  justify-center items-center">
-            <LuTimer size={45} />
+            <LuTimer color="blue" size={45} />
           </div>
         </div>
       </div>
@@ -173,10 +194,10 @@ const Payments = () => {
           <div>
             <div className="w-full overflow-x-auto">
               <div className="flex bg-[#65727a] uppercase text-[#fff] text-xs font-bold min-w-[340px] rounded-md">
-                <div className="w-[25%] p-2"> No </div>
+                <div className="w-[10%] p-2"> No </div>
                 <div className="w-[25%] p-2"> Amount </div>
-                <div className="w-[25%] p-2"> Status </div>
-                <div className="w-[25%] p-2"> Date </div>
+                <div className="w-[30%] p-2"> Status </div>
+                <div className="w-[30%] p-2"> Date </div>
               </div>
               {
                 <List
@@ -187,7 +208,7 @@ const Payments = () => {
                   itemSize={35}
                   outerElementType={outerElType}
                 >
-                  {Row}
+                  {Rows}
                 </List>
               }
             </div>

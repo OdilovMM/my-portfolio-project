@@ -28,4 +28,11 @@ router.get(
   paymentController.getAdminPaymentRequest
 );
 
+
+router.put(
+  "/admin-confirm-payment-request",
+  authMiddleware,
+  paymentController.adminConfirmPaymentRequest
+);
+
 module.exports = router;

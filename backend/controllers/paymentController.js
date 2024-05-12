@@ -3,6 +3,9 @@ const SellerWallet = require("../models/sellerWalletModel");
 const WithdrawRequest = require("../models/withdrawReqModel");
 const { responseReturn } = require("../utils/response");
 const paymentModel = require("../models/paymentModel");
+const {
+  mongo: { ObjectId },
+} = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 const stripe = require("stripe")(process.env.SECRET_KEY_STRIPE);
 
@@ -156,6 +159,34 @@ class paymentController {
       });
       responseReturn(res, 201, { withdrawalRequest });
     } catch (error) {
+      console.log(error.message);
+      responseReturn(res, 500, { message: "Internal Server Error" });
+    }
+  };
+
+  adminConfirmPaymentRequest = async (req, res) => {
+    const { paymentId } = req.body;
+    console.log(paymentId);
+
+    try {
+      const payment = await WithdrawRequest.findById(paymentId);
+      const { stripeId } = await paymentModel.findOne({
+        sellerId: new ObjectId(payment.sellerId),
+      });
+
+      await stripe.transfers.create({
+        amount: payment.amount * 100,
+        currency: "usd",
+        destination: stripeId,
+      });
+
+      await WithdrawRequest.findByIdAndUpdate(paymentId, {
+        status: "success",
+      });
+
+      responseReturn(res, 201, { payment, message: "Payment Confirmed" });
+    } catch (error) {
+      console.log(error);
       console.log(error.message);
       responseReturn(res, 500, { message: "Internal Server Error" });
     }

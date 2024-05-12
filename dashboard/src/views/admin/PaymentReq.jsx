@@ -1,23 +1,31 @@
-import React, { forwardRef, useEffect } from "react";
+import React, { forwardRef, useState, useEffect } from "react";
 import { FixedSizeList as List } from "react-window";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { getPaymentRequestFromSeller } from "../../store/Reducers/paymentReducer";
-
+import { confirmPaymentRequest, getPaymentRequestFromSeller } from "../../store/Reducers/paymentReducer";
+import { FaCheck } from "react-icons/fa6";
 function handleOnWheel({ deltaY }) {}
-
 const outerElType = forwardRef((props, ref) => (
   <div ref={ref} onWheel={handleOnWheel} {...props} />
 ));
 
+
+
 const PaymentReq = () => {
+
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.auth);
   const { pendingWithdraws, loader } = useSelector((state) => state.payment);
+  const [paymentId, setPaymentId] = useState("");
 
   useEffect(() => {
     dispatch(getPaymentRequestFromSeller());
   }, [dispatch]);
+
+  const handleConfirmRequest = (id) => {
+    setPaymentId(id);
+    dispatch(confirmPaymentRequest(id))
+    console.log(id)
+  };
 
   const Row = ({ index, style }) => {
     return (
@@ -30,15 +38,22 @@ const PaymentReq = () => {
         </div>
         <div className="w-[25%] p-2 whitespace-nowrap">
           <span className="px-3 py-1 bg-[#6e7376] capitalize text-[#fff] rounded-[3px]">
-          {pendingWithdraws[index]?.status}
+            {pendingWithdraws[index]?.status}
           </span>
         </div>
         <div className="w-[25%] p-2 whitespace-nowrap text-[#fff]">
-        {moment(pendingWithdraws[index]?.createdAt).format("LLL")}
+          {moment(pendingWithdraws[index]?.createdAt).format("LLL")}
         </div>
         <div className="w-[25%] p-2 whitespace-nowrap">
-          <button className="bg-[#687177] capitalize rounded-[5px] text-[#fff] px-3 py-1 cursor-pointer">
-            confirm
+          <button
+            disabled={loader}
+            onClick={() => handleConfirmRequest(pendingWithdraws[index]?._id)}
+            className="bg-[#687177] hover:bg-[#987179] capitalize rounded-[5px] text-[#fff] px-3 py-1 cursor-pointer"
+          >
+            {loader && paymentId === pendingWithdraws[index]?._id
+              ? "Confirming..."
+              : "Confirm"}
+            {/* <FaCheck/> */}
           </button>
         </div>
       </div>

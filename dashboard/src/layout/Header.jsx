@@ -3,6 +3,12 @@ import { FaBars } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import { useSelector } from "react-redux";
 
+import { FaCartShopping } from "react-icons/fa6";
+import { MdOutlinePayments } from "react-icons/md";
+import { FaUserClock } from "react-icons/fa6";
+import { CiMail } from "react-icons/ci";
+import { Link } from "react-router-dom";
+
 const Header = ({ showBar, setShowBar }) => {
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -39,7 +45,45 @@ const Header = ({ showBar, setShowBar }) => {
           />
         </div>
 
+        {/* notifications */}
+
         <div className="flex justify-center items-center gap-8 relative">
+          <div className="hidden md:block relative ">
+            <ul className="flex flex-row gap-0 items-center">
+              <li className="relative p-3">
+                <Link className="cursor-pointer">
+                  <span className="absolute text-[12px] top-0 text-black font-bold right-1 rounded-full flex justify-center items-center">
+                    0
+                  </span>
+                  <FaCartShopping size={22} />
+                </Link>
+              </li>
+              <li className="relative p-3">
+                <Link className="cursor-pointer">
+                  <span className="absolute text-[12px] top-0 text-black font-bold right-1 rounded-full flex justify-center items-center">
+                    3
+                  </span>
+                  <MdOutlinePayments size={22} />
+                </Link>
+              </li>
+              <li className="relative p-3">
+                <Link className="cursor-pointer">
+                  <span className="absolute text-[12px] top-0 text-black font-bold right-1 rounded-full flex justify-center items-center">
+                    4
+                  </span>
+                  <FaUserClock size={22} />
+                </Link>
+              </li>
+              <li className="relative p-3">
+                <Link className="cursor-pointer">
+                  <span className="absolute text-[12px] top-0 text-black font-bold right-1 rounded-full flex justify-center items-center">
+                    9
+                  </span>
+                  <CiMail size={22} />
+                </Link>
+              </li>
+            </ul>
+          </div>
           <div className="flex justify-center items-center">
             <div className="flex justify-center items-center gap-4">
               <div className="flex justify-center items-center flex-col text-end">

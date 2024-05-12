@@ -5,8 +5,23 @@ import Chart from "react-apexcharts";
 import { Link } from "react-router-dom";
 import { SiShopify } from "react-icons/si";
 import { LuTimer } from "react-icons/lu";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const SellerDashboard = () => {
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
+  const {
+    pendingWithdraws,
+    successWithdraws,
+    totalAmount,
+    withdrawAmount,
+    availableAmount,
+    pendingAmount,
+    loader,
+  } = useSelector((state) => state.payment);
+
+  
   const state = {
     series: [
       {
