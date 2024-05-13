@@ -2,8 +2,18 @@ import React from "react";
 import Carousel from "react-multi-carousel";
 import { Link } from "react-router-dom";
 import "react-multi-carousel/lib/styles.css";
-
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getAllBanners } from "../store/reducers/homeReducer";
 const Banner = () => {
+  const dispatch = useDispatch();
+  const { banners } = useSelector((state) => state.home);
+  console.log(banners);
+
+  useEffect(() => {
+    dispatch(getAllBanners());
+  }, [dispatch]);
+
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -24,7 +34,7 @@ const Banner = () => {
   };
 
   return (
-    <div className="w-full md-lg:mt-6 ">
+    <div className="w-full md-lg:mt-6">
       <div className="w-[85%] lg:w-[90%] mx-auto ">
         <div className="w-full flex flex-wrap md-lg:gap-8 ">
           <div className="w-full ">
@@ -32,19 +42,17 @@ const Banner = () => {
               <Carousel
                 autoPlay={true}
                 infinite={true}
-                arrows={true}
+                arrows={false}
                 showDots={true}
                 responsive={responsive}
                 draggable={false}
               >
-                {[1, 2, 3, 4, 5, 6].map((img, i) => (
-                  <Link key={i} to="#">
-                    <img
-                      src={`http://localhost:3000/images/banner/${img}.jpg`}
-                      alt=""
-                    />
-                  </Link>
-                ))}
+                {banners.length > 0 &&
+                  banners.map((banner, i) => (
+                    <Link key={i} to={`/product/details/${banner.link}`}>
+                      <img src={banner.banner} alt="" />
+                    </Link>
+                  ))}
               </Carousel>
             </div>
           </div>

@@ -32,15 +32,15 @@ const Category = () => {
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
-      items: 3,
+      items: 4,
     },
     smmobile: {
       breakpoint: { max: 640, min: 0 },
-      items: 2,
+      items: 4,
     },
     xsmobile: {
       breakpoint: { max: 440, min: 0 },
-      items: 1,
+      items: 3,
     },
   };
 
@@ -49,7 +49,7 @@ const Category = () => {
       <Carousel
         autoPlay={true}
         infinite={true}
-        arrows={true}
+        arrows={false}
         responsive={responsive}
         transitionDuration={800}
         draggable={false}

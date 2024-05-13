@@ -42,7 +42,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-w-screen h-full py-9 my-5 bg-[#e5e1e1] flex items-center justify-center">
-      <div className="w-[350px] text-[#fffFFF] bg-[#a1cbd9] p-7 rounded-md">
+      <div className="w-[350px] text-[#fffFFF] bg-[#c1dcd6] shadow-lg p-7 rounded-md">
         <h2 className="text-xl mb-3 font-bold">Login</h2>
 
         <form className="space-y-6" onSubmit={handleSubmitData}>
@@ -114,30 +114,11 @@ const LoginPage = () => {
               )}
             </button>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 text-black">
             <h4>Do not have an account?</h4>
             <Link to="/register" className="text-blue-600 pl-2">
               Register here
             </Link>
-          </div>
-
-          <div className="w-full flex justify-center items-center mb-3">
-            <div className="w-[45%] bg-slate-700 h-[2px]"></div>
-            <div className="w-[10%] flex justify-center items-center ">
-              <span className="pb-1"> Or</span>
-            </div>
-            <div className="w-[45%] bg-slate-700 h-[2px]"></div>
-          </div>
-
-          <div className="flex justify-center items-start flex-col gap-3">
-            <div className="gap-3 p-4 w-[250px] h-[35px] flex rounded-md bg-orange-500 shadow-lg hover:shadow-orange-600/50 justify-center cursor-pointer items-center overflow-hidden">
-              <FaGoogle />
-              <span>Login with Google account</span>
-            </div>
-            <div className="gap-3 p-4 w-[250px] h-[35px] flex rounded-md bg-blue-500 shadow-lg hover:shadow-orange-600/50 justify-center cursor-pointer items-center overflow-hidden">
-              <FaFacebook />
-              <span>Login with Facebook</span>
-            </div>
           </div>
         </form>
       </div>

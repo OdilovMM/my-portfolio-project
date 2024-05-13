@@ -8,6 +8,7 @@ import { LuEye } from "react-icons/lu";
 import { useSelector, useDispatch } from "react-redux";
 import { ScaleLoader } from "react-spinners";
 import { getProducts } from "../../store/Reducers/productReducer";
+import { MdAddPhotoAlternate } from "react-icons/md";
 
 const AllProducts = () => {
   const dispatch = useDispatch();
@@ -81,58 +82,40 @@ const AllProducts = () => {
             <tbody>
               {products.map((d, i) => (
                 <tr key={i}>
-                  <td
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
                     {i + 1}
                   </td>
-                  <td
-                    className="py-1 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-1 px-4 font-medium whitespace-nowrap">
                     <img
                       className="w-[45px] h-[45px]"
                       src={d.images[0]}
                       alt=""
                     />
                   </td>
-                  <td
-                    className="py-3 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-3 px-4 font-medium whitespace-nowrap">
                     {d?.name?.length > 7 ? d?.name?.slice(0, 6) : d.name}
                   </td>
-                  <td
-                    className="py-3 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-3 px-4 font-medium whitespace-nowrap">
                     {d.category}
                   </td>
-                  <td
-                    className="py-3 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-3 px-4 font-medium whitespace-nowrap">
                     {d.brand}
                   </td>
-                  <td
-                    className="py-3 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-3 px-4 font-medium whitespace-nowrap">
                     $ {d.price}
                   </td>
-                  <td
-                    className="py-3 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-3 px-4 font-medium whitespace-nowrap">
                     {d.discount === 0 ? (
                       <span>No Discount</span>
                     ) : (
                       <span>% {d.discount}</span>
                     )}
                   </td>
-                  <td
-                    className="py-3 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-3 px-4 font-medium whitespace-nowrap">
                     {d.stock}
                   </td>
 
-                  <td
-                    className="py-3 px-4 font-medium whitespace-nowrap"
-                  >
+                  <td className="py-3 px-4 font-medium whitespace-nowrap">
                     <div className="flex flex-start items-center gap-4">
                       {/* edit product */}
                       <Link
@@ -149,6 +132,9 @@ const AllProducts = () => {
                       <button>
                         <MdAutoDelete size={18} />
                       </button>
+                      <Link to={`/seller/dashboard/add-banner/${d._id}`}>
+                        <MdAddPhotoAlternate size={18} />
+                      </Link>
                     </div>
                   </td>
                 </tr>

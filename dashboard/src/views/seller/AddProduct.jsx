@@ -219,7 +219,7 @@ const AddProduct = () => {
                   <div className="pt-14"></div>
                   <div className="flex justify-start items-start flex-col h-[200px] overflow-y-scroll ">
                     {allCategory.map((categ, index) => (
-                      <span
+                      <span key={index}
                         className={`px-4 py-1 font-semibold mb-1 hover:bg-gray-600 w-full cursor-pointer ${
                           category === categ.name && "bg-gray-600"
                         } `}

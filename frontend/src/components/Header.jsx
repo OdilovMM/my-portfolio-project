@@ -56,13 +56,6 @@ const Header = () => {
       navigate("/login");
     }
   };
-  const redirectWishlist = () => {
-    if (userInfo) {
-      navigate("/my-wishlist");
-    } else {
-      navigate("/login");
-    }
-  };
 
   useEffect(() => {
     dispatch(getAllMyWishlists(userInfo.Id));
@@ -233,9 +226,10 @@ const Header = () => {
 
                 <div className="flex md-lg:hidden justify-center items-center gap-5">
                   <div className="flex justify-center gap-5">
-                    <Link
-                      onClick={redirectWishlist}
-                      to="/dashboard/my-wishlist"
+                    <div
+                      onClick={() =>
+                        navigate(userInfo ? "/dashboard/my-wishlist" : "/login")
+                      }
                       className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
                     >
                       <span className="text-xl text-green-500">
@@ -246,7 +240,7 @@ const Header = () => {
                           {wishlist_count}
                         </div>
                       )}
-                    </Link>
+                    </div>
 
                     <div
                       onClick={redirectCart}
@@ -273,7 +267,7 @@ const Header = () => {
 
       {/* main menu  */}
 
-      <div className="hidden md-lg:block">
+      <div className="hidden md-lg:block z-[9999999]">
         <div
           onClick={() => setShowBar(true)}
           className={`fixed duration-300 transition-all ${
@@ -321,7 +315,7 @@ const Header = () => {
                   <>
                     <Link
                       className="flex cursor-pointer justify-center items-center gap-2 text-sm text-black"
-                      to="/dashboard"
+                      to="/login"
                     >
                       <span>
                         {" "}
@@ -420,7 +414,12 @@ const Header = () => {
             </ul>
 
             <div className="flex justify-center gap-5">
-              <div className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]">
+              <div
+                onClick={() =>
+                  navigate(userInfo ? "/dashboard/my-wishlist" : "/login")
+                }
+                className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
+              >
                 <span className="text-xl text-green-500">
                   <IoHeart color="black" />
                 </span>
@@ -431,12 +430,15 @@ const Header = () => {
                 )}
               </div>
 
-              <div className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]">
+              <div
+                onClick={redirectCart}
+                className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
+              >
                 <span className="text-xl text-green-500">
                   <SiShopify color="black" />
                 </span>
                 <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                  {wishlist_count}
+                  {card_product_count}
                 </div>
               </div>
             </div>

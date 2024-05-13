@@ -96,16 +96,16 @@ const Chat = () => {
   }, [friendMessages]);
 
   return (
-    <div className="bg-white p-3 rounded-md">
-      <div className="w-full flex">
+    <div className="bg-white p-3 sm:bg-slate-600 rounded-md">
+      <div className="w-full flex sm:items-center ">
         <div className="w-[230px]">
-          <div className="flex justify-start gap-3 rounded-md items-center px-2 text-slate-600 text-xl h-[30px] my-2">
+          <div className="flex justify-start  gap-3 rounded-md items-center px-2 text-slate-600 text-xl h-[30px] my-2">
             <span>
               <GrChatOption size={24} />
             </span>
             <span>Message</span>
           </div>
-          <ul className="w-full flex flex-col items-start  justify-start text-slate-600 gap-1 h-[400px] pr-2 border-r right-2">
+          <ul className="w-full sm:w-[150px] flex flex-col items-start  justify-start text-slate-600 gap-1 h-[400px] pr-2 border-r right-2">
             {myFriends.map((friend, ind) => (
               <li
                 key={ind}
@@ -166,7 +166,7 @@ const Chat = () => {
                   <div className="w-[38px] h-[38px]  border-black relative">
                     <img
                       src={currentFriend.image}
-                      className=" object-cover rounded-full shadow-lg w-[38px] h-[38px]"
+                      className=" object-cover sm:hidden rounded-full shadow-lg w-[38px] h-[38px]"
                       alt=""
                     />
                   </div>
@@ -183,7 +183,7 @@ const Chat = () => {
                           className="w-full flex gap-2 justify-start items-center text-[14px]"
                         >
                           <img
-                            className="w-[30px] h-[30px] rounded-full "
+                            className="w-[30px] h-[30px] sm:hidden rounded-full "
                             src={currentFriend.image}
                             alt=""
                           />
