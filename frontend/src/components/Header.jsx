@@ -85,16 +85,16 @@ const Header = () => {
             <div>
               <div className="flex justify-center items-center gap-8">
                 <div className="flex justify-center items-center gap-4 text-black">
-                  <Link>
+                  <Link to="https://github.com/OdilovMM">
                     <MdFacebook size={18} />
                   </Link>
-                  <Link>
+                  <Link to="https://t.me/Makhmudovichk">
                     <FaTelegram size={18} />
                   </Link>
-                  <Link>
+                  <Link to="https://github.com/OdilovMM">
                     <FaLinkedin size={18} />
                   </Link>
-                  <Link>
+                  <Link to="https://github.com/OdilovMM">
                     <FaGithub size={18} />
                   </Link>
                 </div>
@@ -188,7 +188,7 @@ const Header = () => {
                       shop
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link
                       to="/blog"
                       className={`p-2 block ${
@@ -221,7 +221,7 @@ const Header = () => {
                     >
                       contact us
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
 
                 <div className="flex md-lg:hidden justify-center items-center gap-5">
@@ -350,7 +350,7 @@ const Header = () => {
                   shop
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   to="/blog"
                   className={`py-2 block ${
@@ -379,21 +379,21 @@ const Header = () => {
                 >
                   contact us
                 </Link>
-              </li>
+              </li> */}
             </ul>
             {/* icons */}
 
             <div className="flex justify-start items-center gap-4 text-black">
-              <Link>
+              <Link to="https://github.com/OdilovMM">
                 <MdFacebook size={18} />
               </Link>
-              <Link>
+              <Link to="https://github.com/OdilovMM">
                 <FaTelegram size={18} />
               </Link>
-              <Link>
+              <Link to="https://github.com/OdilovMM">
                 <FaLinkedin size={18} />
               </Link>
-              <Link>
+              <Link to="https://github.com/OdilovMM">
                 <FaGithub size={18} />
               </Link>
             </div>
@@ -403,7 +403,7 @@ const Header = () => {
                 <span>
                   <IoIosMail color="blue" size={18} />
                 </span>
-                <span>xolmurododilov@gmail.com</span>
+                <span>dssrinman@gmail.com</span>
               </li>
               <li className="flex relative justify-center items-center gap-2 text-sm ">
                 <span>
@@ -552,9 +552,6 @@ const Header = () => {
                     </span>
                   </div>
                   <div className="flex justify-end flex-col gap-1">
-                    <h2 className="text-md font-medium text-slate-700">
-                      061185
-                    </h2>
                     <span className="text-sm">Online 24/7</span>
                   </div>
                 </div>

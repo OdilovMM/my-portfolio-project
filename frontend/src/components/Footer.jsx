@@ -14,7 +14,7 @@ const Footer = () => {
             <ul className="flex flex-col gap-2 text-slate-600">
               <li>Address : 150100, Fergana, Uzbekistan</li>
               <li>Phone : +998905329914</li>
-              <li>Email : xolmurododilov@gmail.com</li>
+              <li>Email : dssrinman@gmail.com</li>
             </ul>
           </div>
         </div>

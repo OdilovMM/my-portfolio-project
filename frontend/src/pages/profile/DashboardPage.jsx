@@ -1,6 +1,5 @@
 import React from "react";
 import { ProfileNav } from "../../components";
-import { Outlet } from "react-router-dom";
 import ProfileContentLayout from "./ProfileContentLayout";
 
 const DashboardPage = () => {

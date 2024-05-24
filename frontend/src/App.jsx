@@ -18,7 +18,6 @@ import {
   HomeProfile,
   MyOrderPage,
   WishlistPage,
-  ChangePasswordPage,
   ConfirmOrder,
 } from "./pages";
 import { MainLayout } from "./layout";
@@ -27,20 +26,16 @@ import { OrderDetails } from "./components";
 import Chat from "./components/profile/Chat";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllMyWishlists,
-  getCustomerCartProducts,
-} from "./store/reducers/cartReducer";
-import toast from "react-hot-toast";
-import { jwtDecode } from "jwt-decode";
+import { getAllMyWishlists } from "./store/reducers/cartReducer";
 
 const App = () => {
   const dispatch = useDispatch();
+
   const { userInfo } = useSelector((state) => state.customerAuth);
 
   useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
+    dispatch(getAllMyWishlists(userInfo.id));
+  }, [userInfo, dispatch]);
 
   return (
     <BrowserRouter>
@@ -73,7 +68,6 @@ const App = () => {
             <Route path="my-orders" element={<MyOrderPage />} />
             <Route path="chat" element={<Chat />} />
             <Route path="my-wishlist" element={<WishlistPage />} />
-            <Route path="change-password" element={<ChangePasswordPage />} />
             <Route path="order/details/:orderId" element={<OrderDetails />} />
             <Route path="chat/:sellerId" element={<Chat />} />
           </Route>

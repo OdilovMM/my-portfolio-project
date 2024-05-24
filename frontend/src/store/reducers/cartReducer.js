@@ -101,7 +101,6 @@ export const addToWishlist = createAsyncThunk(
 export const getAllMyWishlists = createAsyncThunk(
   "wishlist/getAllMyWishlists",
   async (userId, { rejectWithValue, fulfillWithValue }) => {
-    console.log(userId);
     try {
       const { data } = await api.get(`/cart/get-all-wishlist/${userId}`, {
         withCredentials: true,

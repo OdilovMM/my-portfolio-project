@@ -25,6 +25,7 @@ export const seller_login = createAsyncThunk(
       const { data } = await api.post("/auth/seller-login", info, {
         withCredentials: true,
       });
+      console.log(data)
       localStorage.setItem("accessToken", data.token);
       return fulfillWithValue(data);
     } catch (error) {
@@ -56,6 +57,8 @@ export const seller_register = createAsyncThunk(
       const { data } = await api.post("/auth/seller-register", info, {
         withCredentials: true,
       });
+      console.log(data)
+
       localStorage.setItem("accessToken", data.token);
       return fulfillWithValue(data);
     } catch (error) {

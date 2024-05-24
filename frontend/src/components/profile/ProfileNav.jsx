@@ -4,7 +4,6 @@ import { IoHeartOutline } from "react-icons/io5";
 import { SiShopee } from "react-icons/si";
 import { RxDashboard } from "react-icons/rx";
 import { IoChatbubblesOutline } from "react-icons/io5";
-import { FaLock } from "react-icons/fa";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import api from "../../api/api";
@@ -73,17 +72,7 @@ const ProfileNav = () => {
               <span className="md:hidden">Chat</span>
             </NavLink>
           </li>
-          <li className="hover:bg-slate-300 w-full px-4 sm:px-2  transition-all duration-200">
-            <NavLink
-              to="/dashboard/change-password"
-              className="flex items-center justify-start gap-3 py-1"
-            >
-              <span>
-                <FaLock size={20} />
-              </span>
-              <span className="md:hidden">Change Password</span>
-            </NavLink>
-          </li>
+
           <li className="hover:bg-slate-300 w-full px-4 sm:px-2  transition-all duration-200">
             <button
               onClick={handleLogout}

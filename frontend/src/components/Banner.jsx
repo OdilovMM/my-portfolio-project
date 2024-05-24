@@ -8,7 +8,6 @@ import { getAllBanners } from "../store/reducers/homeReducer";
 const Banner = () => {
   const dispatch = useDispatch();
   const { banners } = useSelector((state) => state.home);
-  console.log(banners);
 
   useEffect(() => {
     dispatch(getAllBanners());

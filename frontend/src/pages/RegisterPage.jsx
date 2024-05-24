@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { registerUserCustomer } from "../store/reducers/authReducer";
 import { ScaleLoader } from "react-spinners";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
-  const { loader } = useSelector((state) => state.customerAuth);
+  const navigate = useNavigate();
+  const { loader, userInfo } = useSelector((state) => state.customerAuth);
 
   const [visible, setVisible] = useState(false);
   const [state, setState] = useState({
@@ -28,6 +28,14 @@ const RegisterPage = () => {
     e.preventDefault();
     dispatch(registerUserCustomer(state));
   };
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
+    } else {
+      return;
+    }
+  }, [userInfo, navigate, dispatch]);
 
   return (
     <div className="min-w-screen h-full  py-9 my-5 bg-[#e5e1e1] flex items-center justify-center">
@@ -117,7 +125,9 @@ const RegisterPage = () => {
               id="checkbox"
               className="w-4 h-4 text-blue-600 overflow-hidden "
             />
-            <label htmlFor="checkbox" className="text-black">I agree privacy policy and terms</label>
+            <label htmlFor="checkbox" className="text-black">
+              I agree privacy policy and terms
+            </label>
           </div>
 
           <div>
