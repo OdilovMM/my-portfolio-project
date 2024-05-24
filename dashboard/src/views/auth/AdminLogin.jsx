@@ -9,7 +9,7 @@ const AdminLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loader, errorMessage } = useSelector((state) => state.auth);
+  const { loader, errorMessage, userInfo } = useSelector((state) => state.auth);
 
   const [visible, setVisible] = useState(false);
   const [credentials, setCredentials] = useState({
@@ -30,7 +30,6 @@ const AdminLogin = () => {
     console.log(credentials);
     dispatch(admin_Login(credentials));
 
-    
     setTimeout(() => {
       navigate("/");
     }, 1500);
@@ -46,6 +45,14 @@ const AdminLogin = () => {
     //   dispatch(clearMessage());
     // }
   }, [errorMessage, dispatch, navigate]);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/admin/dashboard");
+    } else {
+      return;
+    }
+  }, [userInfo, navigate, dispatch]);
 
   return (
     <div className="min-w-screen min-h-screen bg-[#e5e1e1] flex items-center justify-center">

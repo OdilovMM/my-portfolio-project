@@ -4,6 +4,7 @@ require("dotenv").config();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 const socket = require("socket.io");
 const http = require("http");
@@ -154,6 +155,19 @@ app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/chat", chatRouter);
 app.use("/api/v1/payment", paymentRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
+
+// const __dirname = path.resolve();
+
+app.use("/dashboard", express.static(path.join(__dirname, "dashboard/build")));
+app.get("/dashboard/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dashboard/build", "index.html"));
+});
+
+app.use(express.static(path.join(__dirname, "frontend/build")));
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
+});
+
 
 const port = process.env.PORT || 8000;
 dbConnect();
