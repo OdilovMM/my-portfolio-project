@@ -18,28 +18,29 @@ import { SiShopify } from "react-icons/si";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories } from "../store/reducers/homeReducer";
-import { getCustomerCartProducts } from "../store/reducers/cartReducer";
+import {
+  getCustomerCartProducts,
+  getAllMyWishlists,
+  messageClear,
+} from "../store/reducers/cartReducer";
+import toast from "react-hot-toast";
 
 const Header = () => {
+  const { userInfo } = useSelector((state) => state.customerAuth);
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.home);
-  const { card_product_count } = useSelector((state) => state.cart);
-  console.log(card_product_count)
-  const { userInfo } = useSelector((state) => state.customerAuth);
-
-  console.log(card_product_count);
+  const { card_product_count, wishlist_count, successMessage, errorMessage } =
+    useSelector((state) => state.cart);
 
   useEffect(() => {
+    dispatch(getCustomerCartProducts(userInfo.id));
     dispatch(getAllCategories());
-  }, [dispatch]);
+  }, [dispatch, userInfo.id]);
 
   const [showBar, setShowBar] = useState(true);
   const [showCategory, setShowCategory] = useState(true);
-
   const { pathname } = useLocation();
-  const wishlist_count = 3;
 
   const [searchValue, setSearchValue] = useState("");
   const [category, setCategory] = useState();
@@ -55,6 +56,11 @@ const Header = () => {
       navigate("/login");
     }
   };
+
+  useEffect(() => {
+    dispatch(getAllMyWishlists(userInfo.Id));
+    dispatch(getCustomerCartProducts(userInfo.id));
+  }, [dispatch, userInfo]);
 
   return (
     <div className="w-full bg-white">
@@ -79,16 +85,16 @@ const Header = () => {
             <div>
               <div className="flex justify-center items-center gap-8">
                 <div className="flex justify-center items-center gap-4 text-black">
-                  <Link>
+                  <Link to="https://github.com/OdilovMM">
                     <MdFacebook size={18} />
                   </Link>
-                  <Link>
+                  <Link to="https://t.me/Makhmudovichk">
                     <FaTelegram size={18} />
                   </Link>
-                  <Link>
+                  <Link to="https://github.com/OdilovMM">
                     <FaLinkedin size={18} />
                   </Link>
-                  <Link>
+                  <Link to="https://github.com/OdilovMM">
                     <FaGithub size={18} />
                   </Link>
                 </div>
@@ -182,7 +188,7 @@ const Header = () => {
                       shop
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link
                       to="/blog"
                       className={`p-2 block ${
@@ -215,18 +221,25 @@ const Header = () => {
                     >
                       contact us
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
 
                 <div className="flex md-lg:hidden justify-center items-center gap-5">
                   <div className="flex justify-center gap-5">
-                    <div className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]">
+                    <div
+                      onClick={() =>
+                        navigate(userInfo ? "/dashboard/my-wishlist" : "/login")
+                      }
+                      className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
+                    >
                       <span className="text-xl text-green-500">
                         <IoHeart color="black" />
                       </span>
-                      <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                        {/* {wishlistCount} */}5
-                      </div>
+                      {wishlist_count > 0 && (
+                        <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
+                          {wishlist_count}
+                        </div>
+                      )}
                     </div>
 
                     <div
@@ -238,9 +251,11 @@ const Header = () => {
                           <SiShopify color="black" />
                         </Link>
                       </span>
-                      <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                        {card_product_count}
-                      </div>
+                      {card_product_count > 0 && (
+                        <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
+                          {card_product_count}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -252,7 +267,7 @@ const Header = () => {
 
       {/* main menu  */}
 
-      <div className="hidden md-lg:block">
+      <div className="hidden md-lg:block z-[9999999]">
         <div
           onClick={() => setShowBar(true)}
           className={`fixed duration-300 transition-all ${
@@ -300,7 +315,7 @@ const Header = () => {
                   <>
                     <Link
                       className="flex cursor-pointer justify-center items-center gap-2 text-sm text-black"
-                      to="/dashboard"
+                      to="/login"
                     >
                       <span>
                         {" "}
@@ -335,7 +350,7 @@ const Header = () => {
                   shop
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   to="/blog"
                   className={`py-2 block ${
@@ -364,21 +379,21 @@ const Header = () => {
                 >
                   contact us
                 </Link>
-              </li>
+              </li> */}
             </ul>
             {/* icons */}
 
             <div className="flex justify-start items-center gap-4 text-black">
-              <Link>
+              <Link to="https://github.com/OdilovMM">
                 <MdFacebook size={18} />
               </Link>
-              <Link>
+              <Link to="https://github.com/OdilovMM">
                 <FaTelegram size={18} />
               </Link>
-              <Link>
+              <Link to="https://github.com/OdilovMM">
                 <FaLinkedin size={18} />
               </Link>
-              <Link>
+              <Link to="https://github.com/OdilovMM">
                 <FaGithub size={18} />
               </Link>
             </div>
@@ -388,7 +403,7 @@ const Header = () => {
                 <span>
                   <IoIosMail color="blue" size={18} />
                 </span>
-                <span>xolmurododilov@gmail.com</span>
+                <span>dssrinman@gmail.com</span>
               </li>
               <li className="flex relative justify-center items-center gap-2 text-sm ">
                 <span>
@@ -399,7 +414,12 @@ const Header = () => {
             </ul>
 
             <div className="flex justify-center gap-5">
-              <div className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]">
+              <div
+                onClick={() =>
+                  navigate(userInfo ? "/dashboard/my-wishlist" : "/login")
+                }
+                className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
+              >
                 <span className="text-xl text-green-500">
                   <IoHeart color="black" />
                 </span>
@@ -410,12 +430,15 @@ const Header = () => {
                 )}
               </div>
 
-              <div className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]">
+              <div
+                onClick={redirectCart}
+                className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
+              >
                 <span className="text-xl text-green-500">
                   <SiShopify color="black" />
                 </span>
                 <div className="w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                  {wishlist_count}
+                  {card_product_count}
                 </div>
               </div>
             </div>
@@ -452,10 +475,10 @@ const Header = () => {
               <div
                 className={`${
                   showCategory ? "h-0" : "h-[480px]"
-                } overflow-hidden transition-all md-lg:relative duration-100 absolute z-[99999] bg-[#bacfd9] w-full border-x`}
+                } overflow-hidden transition-all md-lg:relative duration-100 absolute z-[99999] bg-[#f1fafa] w-full border-x`}
               >
                 <ul className="py-2 text-slate-600 font-semibold uppercase">
-                  {categories.map((cat, index) => {
+                  {categories?.map((cat, index) => {
                     return (
                       <li
                         key={index}
@@ -529,9 +552,6 @@ const Header = () => {
                     </span>
                   </div>
                   <div className="flex justify-end flex-col gap-1">
-                    <h2 className="text-md font-medium text-slate-700">
-                      +070 0880
-                    </h2>
                     <span className="text-sm">Online 24/7</span>
                   </div>
                 </div>

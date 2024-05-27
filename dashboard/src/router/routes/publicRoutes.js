@@ -1,4 +1,6 @@
 import { lazy } from "react";
+
+const SuccessPage = lazy(() => import("../../views/seller/SuccessPage"));
 const AnAuthorized = lazy(() => import("../../views/AnAuthorized"));
 const Home = lazy(() => import("../../views/Home"));
 const Login = lazy(() => import("../../views/auth/Login"));
@@ -25,6 +27,10 @@ const publicRoutes = [
   {
     path: "/unauthorized",
     element: <AnAuthorized />,
+  },
+  {
+    path: "/success?",
+    element: <SuccessPage />,
   },
 ];
 

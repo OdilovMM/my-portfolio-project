@@ -1,10 +1,96 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaList } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  adminMessageToSeller,
+  getAdminMessages,
+  getSellers,
+  messageClear,
+  updateSellerMessage,
+} from "../../store/Reducers/chatReducer";
+import { Link, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import { socket } from "../../utils/utils";
 
 const ChatSeller = () => {
+  const dispatch = useDispatch();
+  const scrollRef = useRef();
+
+  const {
+    sellers,
+    activeSeller,
+    sellerAdminMessage,
+    currentSeller,
+    successMessage,
+  } = useSelector((state) => state.chat);
+  const { sellerId } = useParams();
   const [show, setShow] = useState(false);
-  const sellerId = 65;
+  const [messageText, setMessageText] = useState("");
+  const [incomingMessage, setIncomingMessage] = useState("");
+
+  useEffect(() => {
+    dispatch(getSellers());
+  }, [dispatch]);
+
+  const handleSendMessageToSeller = (e) => {
+    e.preventDefault();
+    if (messageText) {
+      dispatch(
+        adminMessageToSeller({
+          senderId: "",
+          receiverId: sellerId,
+          senderName: "Admin",
+          message: messageText,
+        })
+      );
+      setMessageText("");
+    } else {
+      toast.error("Enter your message");
+      return;
+    }
+  };
+
+  useEffect(() => {
+    if (sellerId) {
+      dispatch(getAdminMessages(sellerId));
+    }
+  }, [sellerId, dispatch]);
+
+  useEffect(() => {
+    socket.on("sellerMessage", (msg) => {
+      dispatch(updateSellerMessage(msg));
+      setIncomingMessage(msg);
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (successMessage) {
+      socket.emit(
+        "adminSendMessageSeller",
+        sellerAdminMessage[sellerAdminMessage.length - 1]
+      );
+      dispatch(messageClear());
+    }
+  }, [successMessage, dispatch, sellerAdminMessage]);
+
+  useEffect(() => {
+    if (incomingMessage) {
+      if (
+        incomingMessage.sellerId === sellerId &&
+        incomingMessage.receiverId === ""
+      ) {
+        dispatch(updateSellerMessage(incomingMessage));
+      } else {
+        toast.success(incomingMessage.senderName + " " + "Send a message");
+        dispatch(messageClear());
+      }
+    }
+  }, [incomingMessage, dispatch, sellerId]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [sellerAdminMessage]);
 
   return (
     <div className="px-2 lg:px-7 py-5">
@@ -25,63 +111,49 @@ const ChatSeller = () => {
                   <IoMdClose />{" "}
                 </span>
               </div>
-
-              <div
-                className={`h-[60px] flex justify-start gap-0 items-center text-white px-2 py-2 rounded-sm cursor-pointer bg-[#979696]`}
-              >
-                <div className="relative">
-                  <img
-                    src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                    className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
-                    alt=""
-                  />
-
-                  <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
-                </div>
-                <div className="flex justify-center items-start flex-col w-full">
-                  <div className="flex justify-between pl-2 items-center w-full">
-                    <h2 className="font-bold">John One</h2>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className={`h-[60px] flex justify-start gap-0 items-center text-white px-2 py-2 rounded-sm cursor-pointer `}
-              >
-                <div className="relative">
-                  <img
-                    src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                    className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
-                    alt=""
-                  />
-
-                  <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
-                </div>
-                <div className="flex justify-center items-start flex-col w-full">
-                  <div className="flex justify-between pl-2 items-center w-full">
-                    <h2 className="font-bold">John Doe</h2>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className={`h-[60px] flex justify-start gap-0 items-center text-white px-2 py-2 rounded-sm cursor-pointer `}
-              >
-                <div className="relative">
-                  <img
-                    src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                    className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
-                    alt=""
-                  />
-
-                  <div className="w-[10px] h-[10px] bg-black  rounded-full absolute right-0 bottom-0"></div>
-                </div>
-                <div className="flex justify-center items-start flex-col w-full">
-                  <div className="flex justify-between pl-2 items-center w-full">
-                    <h2 className="font-bold">John Doe</h2>
-                  </div>
-                </div>
-              </div>
+              <ul className="">
+                {sellers.map((seller, index) => {
+                  return (
+                    <li key={index} className="hover:bg-slate-600">
+                      <Link
+                        key={index}
+                        to={`/admin/dashboard/chat-seller/${seller._id}`}
+                        className={`${
+                          sellerId === seller._id ? "bg-slate-600" : ""
+                        } h-[60px] flex justify-start gap-0 items-center text-white px-2 py-1 rounded-sm cursor-pointer `}
+                      >
+                        <div className="relative">
+                          <img
+                            src={seller.image}
+                            className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
+                            alt=""
+                          />
+                        </div>
+                        <div className="flex justify-center items-start flex-col w-full">
+                          <div className="flex flex-col justify-center items-end w-full">
+                            <h2 className="font-bold">
+                              {seller?.shopInfo?.shopName}
+                            </h2>
+                            <div>
+                              {activeSeller.some(
+                                (active) => active.sellerId === seller._id
+                              ) ? (
+                                <span className="text-[13px] text-blue-600 ">
+                                  Online
+                                </span>
+                              ) : (
+                                <span className="text-[13px] text-white ">
+                                  Offline
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           </div>
 
@@ -91,12 +163,24 @@ const ChatSeller = () => {
                 <div className="flex justify-start items-center gap-3">
                   <div className="relative">
                     <img
-                      src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+                      src={currentSeller.image}
                       className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
                       alt=""
                     />
-
-                    <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
+                  </div>
+                  <div>
+                    <h1 className="text-white">{currentSeller.name}</h1>
+                    <div>
+                      {activeSeller.some(
+                        (active) => active.sellerId === currentSeller._id
+                      ) ? (
+                        <span className="text-[13px] text-blue-600 ">
+                          Online
+                        </span>
+                      ) : (
+                        <span className="text-[13px] text-white ">Offline</span>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
@@ -112,70 +196,70 @@ const ChatSeller = () => {
             </div>
 
             <div className="py-4">
-              <div className="bg-[#98a3a4eb] h-[calc(100vh-290px)] rounded-[5px] p-3 overflow-y-auto">
-                {/* Left */}
-                <div className="w-full flex justify-start items-center ">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div>
-                      <img
-                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                        className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
-                        alt=""
-                      />
-                    </div>
-                    <div className="flex justify-center items-start  flex-col w-full bg-blue-300 text-white py-1 px-2 rounded-sm">
-                      <span>Hello there Admin, Are you her???</span>
-                    </div>
+              <div className="bg-[#98a3a4eb] h-[calc(100vh-290px)] rounded-[5px] overflow-y-scroll">
+                {sellerId ? (
+                  sellerAdminMessage.map((message, index) => {
+                    if (message.senderId === sellerId) {
+                      return (
+                        <div
+                          ref={scrollRef}
+                          key={index}
+                          className="w-full flex justify-start items-center "
+                        >
+                          <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
+                            <div>
+                              <img
+                                src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+                                className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
+                                alt=""
+                              />
+                            </div>
+                            <div className="flex justify-center items-start flex-col bg-blue-300 text-[#333]  px-2 rounded-tl-full rounded-tr-full rounded-br-full">
+                              <span>{message.message}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div
+                          ref={scrollRef}
+                          key={index}
+                          className="w-full flex justify-end items-center "
+                        >
+                          <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
+                            <div className="flex justify-center items-start flex-col bg-blue-300 text-[#333] px-2 rounded-tl-full rounded-bl-full rounded-tr-full ">
+                              <span>{message.message}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+                  })
+                ) : (
+                  <div className="w-full h-full flex justify-center bg-slate-600 rounded-md items-center">
+                    <span className="text-[18px] text-white  font-bold">
+                      Select a Seller
+                    </span>
                   </div>
-                </div>
-
-                {/* right */}
-                <div className="w-full flex justify-end items-center ">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div className="flex justify-center items-start  flex-col w-full bg-blue-600 text-white py-1 px-2 rounded-sm">
-                      <span>Hi??? How Can i help uu??</span>
-                    </div>
-
-                    <div>
-                      <img
-                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                        className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                </div>
-                {/* left */}
-
-                <div className="w-full flex justify-start items-center ">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div>
-                      <img
-                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                        className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
-                        alt=""
-                      />
-                    </div>
-                    <div className="flex justify-center items-start  flex-col w-full bg-blue-300 text-white py-1 px-2 rounded-sm">
-                      <span>
-                        I need some instructions about the Admin panel
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
 
-            <form className="flex gap-3">
-              <input
-                type="text"
-                className="w-full flex justify-between px-2 border rounded-[5px] border-slate-700 items-center py-[5px] outline-none bg-[#85a8ac83]"
-                placeholder="Type your text"
-              />
-              <button className="shadow-lg bg-green-600 px-4 py-2 h-[36px] rounded-sm">
-                Send
-              </button>
-            </form>
+            {sellerId && (
+              <form className="flex gap-3" onSubmit={handleSendMessageToSeller}>
+                <input
+                  value={messageText}
+                  onChange={(e) => setMessageText(e.target.value)}
+                  type="text"
+                  className="w-full flex justify-between px-2 border rounded-[5px] border-slate-700 items-center py-[5px] outline-none bg-[#85a8ac83]"
+                  placeholder="Type your text"
+                />
+                <button className="shadow-lg bg-green-600 rounded-md px-4 py-2 h-[36px] ">
+                  Send
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </div>

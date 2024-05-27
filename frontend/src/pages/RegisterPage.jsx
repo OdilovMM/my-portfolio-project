@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { registerUserCustomer } from "../store/reducers/authReducer";
 import { ScaleLoader } from "react-spinners";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
-  const { loader } = useSelector((state) => state.customerAuth);
+  const navigate = useNavigate();
+  const { loader, userInfo } = useSelector((state) => state.customerAuth);
 
   const [visible, setVisible] = useState(false);
   const [state, setState] = useState({
@@ -27,14 +27,19 @@ const RegisterPage = () => {
   const handleRegister = (e) => {
     e.preventDefault();
     dispatch(registerUserCustomer(state));
-    
-    
-    
   };
 
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
+    } else {
+      return;
+    }
+  }, [userInfo, navigate, dispatch]);
+
   return (
-    <div className="min-w-screen h-full py-9 my-5 bg-[#e5e1e1] flex items-center justify-center">
-      <div className="w-[350px] text-[#fffFFF] bg-[#a1cbd9] p-7 rounded-md">
+    <div className="min-w-screen h-full  py-9 my-5 bg-[#e5e1e1] flex items-center justify-center">
+      <div className="w-[350px] shadow-lg text-[#fffFFF] bg-[#c1dcd6] p-7 rounded-md">
         <h2 className="text-xl mb-3 font-bold">Register</h2>
 
         <form className="space-y-6" onSubmit={handleRegister}>
@@ -120,7 +125,9 @@ const RegisterPage = () => {
               id="checkbox"
               className="w-4 h-4 text-blue-600 overflow-hidden "
             />
-            <label htmlFor="checkbox">I agree privacy policy and terms</label>
+            <label htmlFor="checkbox" className="text-black">
+              I agree privacy policy and terms
+            </label>
           </div>
 
           <div>
@@ -136,30 +143,11 @@ const RegisterPage = () => {
               )}
             </button>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 text-black">
             <h4>Already have an account?</h4>
             <Link to="/login" className="text-blue-600 pl-2">
               Login here
             </Link>
-          </div>
-
-          <div className="w-full flex justify-center items-center mb-3">
-            <div className="w-[45%] bg-slate-700 h-[2px]"></div>
-            <div className="w-[10%] flex justify-center items-center ">
-              <span className="pb-1"> Or</span>
-            </div>
-            <div className="w-[45%] bg-slate-700 h-[2px]"></div>
-          </div>
-
-          <div className="flex justify-center items-start flex-col gap-3">
-            <div className="gap-3 p-4 w-[270px] h-[35px] flex rounded-md bg-orange-500 shadow-lg hover:shadow-orange-600/50 justify-center cursor-pointer items-center overflow-hidden">
-              <FaGoogle />
-              <span>Sign in with Google account</span>
-            </div>
-            <div className="gap-3 p-4 w-[270px] h-[35px] flex rounded-md bg-blue-500 shadow-lg hover:shadow-orange-600/50 justify-center cursor-pointer items-center overflow-hidden">
-              <FaFacebook />
-              <span>Sign in with Facebook</span>
-            </div>
           </div>
         </form>
       </div>

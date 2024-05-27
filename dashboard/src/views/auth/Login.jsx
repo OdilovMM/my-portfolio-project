@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaGoogle } from "react-icons/fa6";
@@ -8,9 +8,8 @@ import { ScaleLoader } from "react-spinners";
 import { seller_login } from "../../store/Reducers/authReducer";
 
 const Login = () => {
-  
   const navigate = useNavigate();
-  const { loader } = useSelector((state) => state.auth);
+  const { loader, userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const [visible, setVisible] = useState(false);
@@ -31,11 +30,19 @@ const Login = () => {
     e.preventDefault();
     console.log(credentials);
     dispatch(seller_login(credentials));
-    
+
     setTimeout(() => {
       navigate("/");
     }, 1500);
   };
+  
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/seller/dashboard");
+    } else {
+      return;
+    }
+  }, [userInfo, navigate, dispatch]);
 
   return (
     <div className="min-w-screen min-h-screen bg-[#e5e1e1] flex items-center justify-center">

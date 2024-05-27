@@ -1,7 +1,11 @@
 const Product = require("../../models/productModel");
+const Banner = require("../../models/bannerModel");
 const formidable = require("formidable");
 const { responseReturn } = require("../../utils/response");
 const cloudinary = require("cloudinary").v2;
+const {
+  mongo: { ObjectId },
+} = require("mongoose");
 
 class productController {
   addProduct = async (req, res) => {
@@ -189,6 +193,99 @@ class productController {
         } catch (error) {
           responseReturn(res, 500, { error: error.message });
         }
+      }
+    });
+  };
+  addBanner = async (req, res) => {
+    const form = formidable({ multiples: true });
+    form.parse(req, async (err, field, files) => {
+      const { productId } = field;
+      const { mainban } = files;
+
+      cloudinary.config({
+        cloud_name: process.env.CLOUD_NAME,
+        api_key: process.env.CLOUD_API_KEY,
+        api_secret: process.env.CLOUD_API_SECRET,
+        secure: true,
+      });
+
+      try {
+        const { slug } = await Product.findById(productId);
+        const result = await cloudinary.uploader.upload(mainban.filepath, {
+          folder: "banner",
+        });
+        const banner = await Banner.create({
+          productId,
+          banner: result.url,
+          link: slug,
+        });
+        responseReturn(res, 200, { banner, message: "Banner Add Success" });
+      } catch (error) {
+        console.log(error);
+        responseReturn(res, 500, { error: error.message });
+      }
+    });
+  };
+  getBanner = async (req, res) => {
+    const { productId } = req.params;
+    try {
+      const getBanner = await Banner.findOne({
+        productId: new ObjectId(productId),
+      });
+      responseReturn(res, 200, { getBanner });
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+
+  getAllBanners = async (req, res) => {
+    console.log("get banners");
+    try {
+      const getBanners = await Banner.find();
+      responseReturn(res, 200, { getBanners });
+      console.log(getBanners);
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+
+  updateBanner = async (req, res) => {
+    const { bannerId } = req.params;
+    const form = formidable({});
+
+    form.parse(req, async (err, _, files) => {
+      const { mainban } = files;
+
+      try {
+        cloudinary.config({
+          cloud_name: process.env.CLOUD_NAME,
+          api_key: process.env.CLOUD_API_KEY,
+          api_secret: process.env.CLOUD_API_SECRET,
+          secure: true,
+        });
+
+        const banner = await Banner.findById(bannerId);
+        let temp = banner.banner.split("/");
+        temp = temp[temp.length - 1];
+        const imageName = temp.split(".")[0];
+        await cloudinary.uploader.destroy(imageName);
+
+        const { url } = await cloudinary.uploader.upload(mainban.filepath, {
+          folder: "banner",
+        });
+
+        await Banner.findByIdAndUpdate(bannerId, {
+          banner: url,
+        });
+
+        const updatedBanner = await Banner.findById(bannerId);
+        responseReturn(res, 200, {
+          banner: updatedBanner,
+          message: "Banner Updated",
+        });
+      } catch (error) {
+        console.log(error);
+        responseReturn(res, 500, { error: error.message });
       }
     });
   };

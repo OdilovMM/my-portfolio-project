@@ -1,13 +1,23 @@
-import authReducer from "./Reducers/authReducer";
-import categoryReducer from "./Reducers/categoryReducer";
-import productReducer from "./Reducers/productReducer";
-import sellerReducer from "./Reducers/sellerReducer";
+import authSlice from "./Reducers/authReducer";
+import bannerSlice from "./Reducers/bannerReducer";
+import categorySlice from "./Reducers/categoryReducer";
+import chatSlice from "./Reducers/chatReducer";
+import dashboardSlice from "./Reducers/dashboardReducer";
+import orderSlice from "./Reducers/orderReducer";
+import paymentSlice from "./Reducers/paymentReducer";
+import productSlice from "./Reducers/productReducer";
+import sellerSlice from "./Reducers/sellerReducer";
 
 const rootReducer = {
-  auth: authReducer,
-  category: categoryReducer,
-  product: productReducer,
-  seller: sellerReducer,
+  auth: authSlice,
+  category: categorySlice,
+  product: productSlice,
+  seller: sellerSlice,
+  chat: chatSlice,
+  order: orderSlice,
+  payment: paymentSlice,
+  dashboard: dashboardSlice,
+  banner: bannerSlice,
 };
 
 export default rootReducer;

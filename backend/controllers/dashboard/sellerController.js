@@ -7,7 +7,6 @@ const Seller = require("../../models/sellerModel");
 
 class sellerController {
   getSellerRequest = async (req, res) => {
-    console.log(req.query);
     const { page, search, parPage } = req.query;
     const skipPage = parseInt(parPage) * (parseInt(page) - 1);
 
@@ -31,11 +30,9 @@ class sellerController {
 
   getSellerDetail = async (req, res) => {
     const { sellerId } = req.params;
-    console.log(sellerId);
 
     try {
       const seller = await Seller.findById(sellerId);
-      console.log("seller:::", seller);
       responseReturn(res, 200, { seller });
     } catch (error) {
       responseReturn(res, 404, { error: error.message });
@@ -44,7 +41,6 @@ class sellerController {
 
   updateSellerStatus = async (req, res) => {
     const { sellerId, status } = req.body;
-    console.log("seller:::", sellerId, status);
 
     try {
       await Seller.findByIdAndUpdate(sellerId, { status });
@@ -52,6 +48,86 @@ class sellerController {
       responseReturn(res, 200, { seller, message: "Seller Status Updated" });
     } catch (error) {
       responseReturn(res, 404, { error: error.message });
+    }
+  };
+
+  getActiveSellers = async (req, res) => {
+    let { page, search, parPage } = req.query;
+    page = parseInt(page);
+    parPage = parseInt(parPage);
+    const skipPage = parPage * (page - 1);
+    try {
+      if (search) {
+        const sellers = await Seller.find({
+          $text: { $search: search },
+          status: "active",
+        })
+          .skip(skipPage)
+          .limit(parPage)
+          .sort({ createdAt: -1 });
+
+        const totalSellers = await Seller.find({
+          $text: { $search: search },
+          status: "active",
+        }).countDocuments();
+        responseReturn(res, 200, { totalSellers, sellers });
+      } else {
+        const sellers = await Seller.find({
+          status: "active",
+        })
+          .skip(skipPage)
+          .limit(parPage)
+          .sort({ createdAt: -1 });
+
+        const totalSellers = await Seller.find({
+          status: "active",
+        }).countDocuments();
+        console.log(sellers, totalSellers);
+        responseReturn(res, 200, { totalSellers, sellers });
+      }
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+
+  getDeactiveSellers = async (req, res) => {
+    let { page, search, parPage } = req.query;
+    page = parseInt(page);
+    parPage = parseInt(parPage);
+    const skipPage = parPage * (page - 1);
+    try {
+      if (search) {
+        const deactiveSellers = await Seller.find({
+          $text: { $search: search },
+          status: "deactive",
+        })
+          .skip(skipPage)
+          .limit(parPage)
+          .sort({ createdAt: -1 });
+
+        const totalDeactives = await Seller.find({
+          $text: { $search: search },
+          status: "deactive",
+        }).countDocuments();
+        responseReturn(res, 200, { totalDeactives, deactiveSellers });
+      } else {
+        const deactiveSellers = await Seller.find({
+          status: "deactive",
+        })
+          .skip(skipPage)
+          .limit(parPage)
+          .sort({ createdAt: -1 });
+
+        const totalDeactives = await Seller.find({
+          status: "deactive",
+        }).countDocuments();
+
+        responseReturn(res, 200, { totalDeactives, deactiveSellers });
+      }
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { error: error.message });
     }
   };
 }

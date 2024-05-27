@@ -14,7 +14,7 @@ const Footer = () => {
             <ul className="flex flex-col gap-2 text-slate-600">
               <li>Address : 150100, Fergana, Uzbekistan</li>
               <li>Phone : +998905329914</li>
-              <li>Email : xolmurododilov@gmail.com</li>
+              <li>Email : dssrinman@gmail.com</li>
             </ul>
           </div>
         </div>
@@ -80,7 +80,7 @@ const Footer = () => {
                 Subscribe
               </button>
 
-              <ul className="flex justify-start items-center gap-3">
+              <ul className="flex justify-start items-center mt-3 gap-3">
                 <li>
                   <Link
                     className="w-[38px] h-[38px] hover:bg-[#059473] hover:text-white flex justify-center items-center bg-white rounded-full"

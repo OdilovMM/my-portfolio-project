@@ -47,4 +47,23 @@ const sellerSchema = new mongoose.Schema(
   }
 );
 
+sellerSchema.index(
+  {
+    name: "text",
+    email: "text",
+    status: "text",
+    payment: "text",
+    shopInfo: "text",
+  },
+  {
+    weights: {
+      name: 5,
+      email: 5,
+      status: 5,
+      payment: 5,
+      shopInfo: 5,
+    },
+  }
+);
+
 module.exports = mongoose.model("Seller", sellerSchema);

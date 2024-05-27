@@ -49,6 +49,37 @@ export const placeOrder = createAsyncThunk(
   }
 );
 
+export const getAllOrders = createAsyncThunk(
+  "order/getAllOrders",
+  async ({ userId, status }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/order/get-orders/${userId}/${status}`, {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getMyOrderDetails = createAsyncThunk(
+  "order/getMyOrderDetails",
+  async (orderId, { rejectWithValue, fulfillWithValue }) => {
+    console.log(orderId)
+    try {
+      const { data } = await api.get(`/order/get-order-detail/${orderId}`, {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const orderReducer = createSlice({
   name: "order",
   initialState: {
@@ -64,7 +95,20 @@ export const orderReducer = createSlice({
       state.successMessage = "";
     },
   },
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getAllOrders.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(getAllOrders.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.myOrders = payload.orders;
+      })
+      .addCase(getMyOrderDetails.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.myOrder = payload.myOrder;
+      });
+  },
 });
 export const { messageClear } = orderReducer.actions;
 export default orderReducer.reducer;

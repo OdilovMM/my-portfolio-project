@@ -6,7 +6,6 @@ import { jwtDecode } from "jwt-decode";
 export const admin_Login = createAsyncThunk(
   "auth/admin_login",
   async (info, { rejectWithValue, fulfillWithValue }) => {
-    console.log(info);
     try {
       const { data } = await api.post("/auth/admin-login", info, {
         withCredentials: true,
@@ -14,7 +13,6 @@ export const admin_Login = createAsyncThunk(
       localStorage.setItem("accessToken", data.token);
       return fulfillWithValue(data);
     } catch (error) {
-      console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
   }
@@ -23,11 +21,11 @@ export const admin_Login = createAsyncThunk(
 export const seller_login = createAsyncThunk(
   "auth/seller_login",
   async (info, { rejectWithValue, fulfillWithValue }) => {
-    console.log(info);
     try {
       const { data } = await api.post("/auth/seller-login", info, {
         withCredentials: true,
       });
+      console.log(data)
       localStorage.setItem("accessToken", data.token);
       return fulfillWithValue(data);
     } catch (error) {
@@ -56,12 +54,12 @@ export const seller_register = createAsyncThunk(
   "auth/seller_register",
   async (info, { rejectWithValue, fulfillWithValue }) => {
     try {
-      console.log(info);
       const { data } = await api.post("/auth/seller-register", info, {
         withCredentials: true,
       });
+      console.log(data)
+
       localStorage.setItem("accessToken", data.token);
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       console.log(error.response.data);
@@ -74,7 +72,6 @@ const returnRole = (token) => {
   if (token) {
     const decodeToken = jwtDecode(token);
     const expTime = new Date(decodeToken.exp * 1000);
-    console.log(expTime);
     if (new Date() > expTime) {
       localStorage.removeItem("accessToken");
       return "";
@@ -89,16 +86,12 @@ const returnRole = (token) => {
 export const profileImageUpload = createAsyncThunk(
   "auth/uploadProfileImage",
   async (image, { rejectWithValue, fulfillWithValue }) => {
-    console.log(image);
     try {
       const { data } = await api.patch("/auth/upload-profile-image", image, {
         withCredentials: true,
       });
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
-      console.log(error.response.data);
-      console.log(error);
       return rejectWithValue(error.response.data);
     }
   }
@@ -108,14 +101,31 @@ export const addProfileInfo = createAsyncThunk(
   "auth/addProfileInfo",
   async (detail, { rejectWithValue, fulfillWithValue }) => {
     try {
-      console.log(detail);
       const { data } = await api.post("/auth/add-profile-address", detail, {
         withCredentials: true,
       });
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
-      console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async ({ navigate, role }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get("/auth/logout", {
+        withCredentials: true,
+      });
+      localStorage.removeItem("accessToken");
+      if (role === "admin") {
+        navigate("/admin/login");
+      } else {
+        navigate("/login");
+      }
+      return fulfillWithValue(data);
+    } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
@@ -162,7 +172,6 @@ export const authReducer = createSlice({
         state.successMessage = payload.message;
         state.token = payload.token;
         state.role = returnRole(payload.token);
-
         toast.success(payload.message);
       })
       .addCase(seller_register.rejected, (state, { payload }) => {
@@ -183,8 +192,9 @@ export const authReducer = createSlice({
       })
       .addCase(seller_login.rejected, (state, { payload }) => {
         state.loader = false;
-        state.errorMessage = payload.error;
-        toast.error(payload.error);
+        // state.errorMessage = payload.error;
+        // toast.error(payload.error);
+        console.log(payload.error);
       })
       .addCase(getUserDetail.fulfilled, (state, { payload }) => {
         state.loader = false;
@@ -217,6 +227,11 @@ export const authReducer = createSlice({
         state.loader = false;
         state.errorMessage = payload.error;
         toast.error(payload.error);
+      })
+      .addCase(logout.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.userInfo = "";
+        toast.success(payload.message);
       });
   },
 });

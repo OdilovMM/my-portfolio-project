@@ -33,7 +33,6 @@ class authControllers {
         res.cookie("customerToken", token, {
           expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         });
-        console.log(newCustomer, token);
         responseReturn(res, 201, {
           message: "User Registered Successful",
           token,
@@ -75,6 +74,13 @@ class authControllers {
     } catch (error) {
       responseReturn(res, 500, { error: "Internal Server error" });
     }
+  };
+
+  customerLogout = async (req, res) => {
+    res.cookie("customerToken", "", {
+      expires: new Date(Date.now()),
+    });
+    responseReturn(res, 200, { message: "Logout" });
   };
 }
 

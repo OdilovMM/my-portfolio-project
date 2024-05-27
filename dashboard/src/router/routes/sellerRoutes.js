@@ -1,4 +1,6 @@
 import { lazy } from "react";
+
+const AddBanner = lazy(() => import("../../views/components/AddBanner"));
 const Pending = lazy(() => import("../../views/Pending"));
 const Deactive = lazy(() => import("../../views/Deactive"));
 const OrderDetails = lazy(() => import("../../views/seller/OrderDetails"));
@@ -101,5 +103,11 @@ export const sellerRoutes = [
     element: <Profile />,
     role: "seller",
     visibility: ["active", "deactive", "pending"],
+  },
+  {
+    path: "/seller/dashboard/add-banner/:productId",
+    element: <AddBanner />,
+    role: "seller",
+    status: "active",
   },
 ];

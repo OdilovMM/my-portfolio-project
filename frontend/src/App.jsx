@@ -15,11 +15,28 @@ import {
   SearchPage,
   PaymentPage,
   DashboardPage,
+  HomeProfile,
+  MyOrderPage,
+  WishlistPage,
+  ConfirmOrder,
 } from "./pages";
 import { MainLayout } from "./layout";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import { OrderDetails } from "./components";
+import Chat from "./components/profile/Chat";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllMyWishlists } from "./store/reducers/cartReducer";
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  const { userInfo } = useSelector((state) => state.customerAuth);
+
+  useEffect(() => {
+    dispatch(getAllMyWishlists(userInfo.id));
+  }, [userInfo, dispatch]);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -34,9 +51,11 @@ const App = () => {
           <Route path="my-cart" element={<AddedProductCart />} />
           <Route path="payment" element={<PaymentPage />} />
           <Route path="shipping" element={<ShippingPage />} />
+          <Route path="confirm?" element={<ConfirmOrder />} />
           <Route path="product/details/:slug" element={<ProductDetail />} />
           <Route path="products/search?" element={<SearchPage />} />
           <Route path="products?" element={<CategoryProducts />} />
+
           <Route
             path="/dashboard"
             element={
@@ -44,7 +63,14 @@ const App = () => {
                 <DashboardPage />
               </ProtectedRoute>
             }
-          ></Route>
+          >
+            <Route index element={<HomeProfile />} />
+            <Route path="my-orders" element={<MyOrderPage />} />
+            <Route path="chat" element={<Chat />} />
+            <Route path="my-wishlist" element={<WishlistPage />} />
+            <Route path="order/details/:orderId" element={<OrderDetails />} />
+            <Route path="chat/:sellerId" element={<Chat />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

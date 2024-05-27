@@ -1,7 +1,66 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { FaList } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  adminMessageToSeller,
+  getSellerMessage,
+  updateAdminMessage,
+  messageClear,
+} from "../../store/Reducers/chatReducer";
+import { socket } from "../../utils/utils";
 
 const SellerAdminChat = () => {
+  const scrollRef = useRef();
+  const dispatch = useDispatch();
+  const [messageText, setMessageText] = useState("");
+  const { userInfo } = useSelector((state) => state.auth);
+  const { sellerAdminMessage, successMessage } = useSelector(
+    (state) => state.chat
+  );
+
+  useEffect(() => {
+    dispatch(getSellerMessage());
+  }, [dispatch]);
+
+  const handleSendMessageToAdmin = (e) => {
+    e.preventDefault();
+    if (messageText) {
+      dispatch(
+        adminMessageToSeller({
+          senderId: userInfo._id,
+          receiverId: "",
+          senderName: userInfo?.shopInfo?.shopName,
+          message: messageText,
+        })
+      );
+      setMessageText("");
+    } else {
+      toast.error("Enter your message");
+      return;
+    }
+  };
+
+  useEffect(() => {
+    socket.on("adminMessage", (msg) => {
+      dispatch(updateAdminMessage(msg));
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (successMessage) {
+      socket.emit(
+        "sellerSendMessageAdmin",
+        sellerAdminMessage[sellerAdminMessage.length - 1]
+      );
+      dispatch(messageClear());
+    }
+  }, [successMessage, dispatch, sellerAdminMessage]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [sellerAdminMessage]);
+
   return (
     <div className="px-2 lg:px-7 py-5">
       <div className="w-full bg-[#3D464D] px-4 py-4 rounded-md h-[calc(100vh-140px)]">
@@ -11,7 +70,7 @@ const SellerAdminChat = () => {
               <div className="flex justify-start items-center gap-3">
                 <div className="relative">
                   <img
-                    src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+                    src="http://localhost:3000/images/user.png"
                     className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
                     alt=""
                   />
@@ -30,61 +89,51 @@ const SellerAdminChat = () => {
 
             <div className="py-4">
               <div className="bg-[#8c9a9ceb] h-[calc(100vh-290px)] rounded-[5px] p-3 overflow-y-auto">
-                {/* Left */}
-                <div className="w-full flex justify-start items-center ">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div>
-                      <img
-                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                        className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
-                        alt=""
-                      />
-                    </div>
-                    <div className="flex justify-center items-start  flex-col w-full bg-blue-300 text-white py-1 px-2 rounded-sm">
-                      <span>Hello there Admin, Are you her???</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* right */}
-                <div className="w-full flex justify-end items-center ">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div className="flex justify-center items-start  flex-col w-full bg-blue-600 text-white py-1 px-2 rounded-sm">
-                      <span>Hi??? How Can i help uu??</span>
-                    </div>
-
-                    <div>
-                      <img
-                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                        className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                </div>
-                {/* left */}
-
-                <div className="w-full flex justify-start items-center ">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div>
-                      <img
-                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                        className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
-                        alt=""
-                      />
-                    </div>
-                    <div className="flex justify-center items-start  flex-col w-full bg-blue-300 text-white py-1 px-2 rounded-sm">
-                      <span>
-                        I need some instructions about the Admin panel
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                {sellerAdminMessage.map((mes, ind) => {
+                  if (userInfo._id === mes.senderId) {
+                    return (
+                      <div
+                        ref={scrollRef}
+                        key={ind}
+                        className="w-full flex justify-end items-center "
+                      >
+                        <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
+                          <div className="flex justify-center items-start flex-col bg-blue-300 text-[#333] px-2 rounded-tl-full rounded-bl-full rounded-tr-full ">
+                            <span>{mes.message}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div
+                        ref={scrollRef}
+                        key={ind}
+                        className="w-full flex justify-start items-center "
+                      >
+                        <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
+                          <div>
+                            <img
+                              src="http://localhost:3000/images/user.png"
+                              className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
+                              alt=""
+                            />
+                          </div>
+                          <div className="flex justify-center items-start flex-col bg-blue-300 text-[#333]  px-2 rounded-tl-full rounded-tr-full rounded-br-full">
+                            <span>{mes.message}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }
+                })}
               </div>
             </div>
 
-            <form className="flex gap-3">
+            <form onSubmit={handleSendMessageToAdmin} className="flex gap-3">
               <input
+                value={messageText}
+                onChange={(e) => setMessageText(e.target.value)}
                 type="text"
                 className="w-full flex justify-between px-2 border rounded-[5px] border-slate-700 items-center py-[5px] outline-none bg-[#85a8ac83]"
                 placeholder="Type your text"

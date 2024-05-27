@@ -9,5 +9,6 @@ router.patch("/upload-profile-image", authMiddleware, authController.uploadProfi
 router.post("/seller-register", authController.sellerRegister);
 router.post("/seller-login", authController.sellerLogin);
 router.post("/add-profile-address",authMiddleware, authController.addProfileAddress);
+router.get("/logout",authMiddleware, authController.logout);
 
 module.exports = router;

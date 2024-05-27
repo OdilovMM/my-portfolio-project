@@ -1,10 +1,91 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaList } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
+import toast from "react-hot-toast";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  getCustomerMessage,
+  getCustomers,
+  sendMessageToCustomer,
+  messageClear,
+  updateMessage,
+} from "../../store/Reducers/chatReducer";
+import { Link, useParams } from "react-router-dom";
+import { socket } from "../../utils/utils";
 
 const SellerCustomerChat = () => {
+  const scrollRef = useRef();
+
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
+  const { customers, currentCustomer, messages, successMessage } = useSelector(
+    (state) => state.chat
+  );
+  const { customerId } = useParams();
   const [show, setShow] = useState(false);
   const sellerId = 65;
+  const [messageText, setMessageText] = useState("");
+  const [incomingMessage, setIncomingMessage] = useState("");
+
+  useEffect(() => {
+    dispatch(getCustomers(userInfo._id));
+  }, [userInfo, dispatch]);
+
+  useEffect(() => {
+    if (customerId) {
+      dispatch(getCustomerMessage(customerId));
+    }
+  }, [customerId, dispatch]);
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (messageText) {
+      dispatch(
+        sendMessageToCustomer({
+          senderId: userInfo._id,
+          receiverId: customerId,
+          name: userInfo?.shopInfo?.shopName,
+          messageText,
+        })
+      );
+      setMessageText("");
+    } else {
+      toast.error("Enter your message");
+      return;
+    }
+  };
+
+  useEffect(() => {
+    socket.on("customerMessage", (msg) => {
+      setIncomingMessage(msg);
+    });
+  }, []);
+
+
+  useEffect(() => {
+    if (successMessage) {
+      socket.emit("sendMessageSeller", messages[messages.length - 1]);
+      dispatch(messageClear());
+    }
+  }, [successMessage, dispatch, messages]);
+
+  useEffect(() => {
+    if (incomingMessage) {
+      if (
+        customerId === incomingMessage.senderId &&
+        userInfo._id === incomingMessage.receiverId
+      ) {
+        dispatch(updateMessage(incomingMessage));
+      } else {
+        toast.success(incomingMessage.senderName + " " + "Send a message");
+        dispatch(messageClear());
+      }
+    }
+  }, [incomingMessage, dispatch, customerId, userInfo]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
     <div className="px-2 lg:px-7 py-5">
@@ -25,63 +106,34 @@ const SellerCustomerChat = () => {
                   <IoMdClose />{" "}
                 </span>
               </div>
+              <ul className="flex flex-col gap-1 w-full">
+                {customers.map((customer, index) => {
+                  return (
+                    <li className="flex flex-row w-full hover:bg-slate-500 active:bg-slate-500">
+                      <Link
+                        key={index}
+                        to={`/seller/dashboard/chat-customer/${customer?.fdId}`}
+                        className={`flex w-full justify-start gap-0 items-center text-white px-2 py-1 rounded-sm cursor-pointer`}
+                      >
+                        <div className="relative">
+                          <img
+                            src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+                            className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
+                            alt=""
+                          />
 
-              <div
-                className={`h-[60px] flex justify-start gap-0 items-center text-white px-2 py-2 rounded-sm cursor-pointer bg-[#979696]`}
-              >
-                <div className="relative">
-                  <img
-                    src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                    className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
-                    alt=""
-                  />
-
-                  <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
-                </div>
-                <div className="flex justify-center items-start flex-col w-full">
-                  <div className="flex justify-between pl-2 items-center w-full">
-                    <h2 className="font-bold">John One</h2>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className={`h-[60px] flex justify-start gap-0 items-center text-white px-2 py-2 rounded-sm cursor-pointer `}
-              >
-                <div className="relative">
-                  <img
-                    src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                    className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
-                    alt=""
-                  />
-
-                  <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
-                </div>
-                <div className="flex justify-center items-start flex-col w-full">
-                  <div className="flex justify-between pl-2 items-center w-full">
-                    <h2 className="font-bold">John Doe</h2>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className={`h-[60px] flex justify-start gap-0 items-center text-white px-2 py-2 rounded-sm cursor-pointer `}
-              >
-                <div className="relative">
-                  <img
-                    src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                    className="w-[39px] h-[39px] rounded-full max-w-[38px] p-[2px] border border-white-[5px]"
-                    alt=""
-                  />
-
-                  <div className="w-[10px] h-[10px] bg-black  rounded-full absolute right-0 bottom-0"></div>
-                </div>
-                <div className="flex justify-center items-start flex-col w-full">
-                  <div className="flex justify-between pl-2 items-center w-full">
-                    <h2 className="font-bold">John Doe</h2>
-                  </div>
-                </div>
-              </div>
+                          <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
+                        </div>
+                        <div className="flex justify-center items-start flex-col w-full">
+                          <div className="flex justify-between pl-2 items-center w-full">
+                            <h2>{customer?.name}</h2>
+                          </div>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           </div>
 
@@ -98,7 +150,7 @@ const SellerCustomerChat = () => {
 
                     <div className="w-[10px] h-[10px] bg-green-500  rounded-full absolute right-0 bottom-0"></div>
                   </div>
-                  <h2 className="text-white">John Doe</h2>
+                  <h2 className="text-white">{currentCustomer?.name}</h2>
                 </div>
               )}
 
@@ -113,62 +165,69 @@ const SellerCustomerChat = () => {
             </div>
 
             <div className="py-4">
-              <div className="bg-[#98a3a4eb] h-[calc(100vh-290px)] rounded-[5px] p-3 overflow-y-auto">
-                {/* Left */}
-                <div className="w-full flex justify-start items-center ">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div>
-                      <img
-                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                        className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
-                        alt=""
-                      />
-                    </div>
-                    <div className="flex justify-center items-start  flex-col w-full bg-blue-300 text-white py-1 px-2 rounded-sm">
-                      <span>Hello there Admin, Are you her???</span>
-                    </div>
-                  </div>
-                </div>
+              <div className="bg-[#98a3a4eb] h-[calc(100vh-290px)] rounded-[5px]  overflow-y-auto">
+                {customerId ? (
+                  messages.map((message, index) => {
+                    if (message?.senderId === customerId) {
+                      return (
+                        <div
+                          key={index}
+                          ref={scrollRef}
+                          className="w-full flex justify-start items-center "
+                        >
+                          <div
+                            ref={scrollRef}
+                            className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]"
+                          >
+                            <div>
+                              <img
+                                src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+                                className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
+                                alt=""
+                              />
+                            </div>
+                            <div className="flex justify-center items-start flex-col w-full bg-blue-300 text-[#333] py-1 px-2 rounded-tl-full rounded-tr-full rounded-br-full">
+                              <span>{message?.message}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div
+                          ref={scrollRef}
+                          key={index}
+                          className="w-full flex justify-end items-center "
+                        >
+                          <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
+                            <div className="flex justify-center items-start flex-col bg-blue-300 text-[#333] py-1 px-2 rounded-tl-full rounded-bl-full rounded-tr-full ">
+                              <span>{message?.message}</span>
+                            </div>
 
-                {/* right */}
-                <div className="w-full flex justify-end items-center ">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div className="flex justify-center items-start  flex-col w-full bg-blue-600 text-white py-1 px-2 rounded-sm">
-                      <span>Hi??? How Can i help uu??</span>
-                    </div>
-
-                    <div>
-                      <img
-                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                        className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
-                        alt=""
-                      />
-                    </div>
+                            {/* <div>
+                              <img
+                                src={userInfo.image}
+                                className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
+                                alt=""
+                              />
+                            </div> */}
+                          </div>
+                        </div>
+                      );
+                    }
+                  })
+                ) : (
+                  <div className="w-full h-full flex justify-center items-center bg-slate-50">
+                    <span className="text-[26px]">Select a customer</span>
                   </div>
-                </div>
-                {/* left */}
-
-                <div className="w-full flex justify-start items-center ">
-                  <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                    <div>
-                      <img
-                        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-                        className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
-                        alt=""
-                      />
-                    </div>
-                    <div className="flex justify-center items-start  flex-col w-full bg-blue-300 text-white py-1 px-2 rounded-sm">
-                      <span>
-                        I need some instructions about the Admin panel
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
 
-            <form className="flex gap-3">
+            <form onSubmit={handleSendMessage} className="flex gap-3">
               <input
+                value={messageText}
+                onChange={(e) => setMessageText(e.target.value)}
                 type="text"
                 className="w-full flex justify-between px-2 border rounded-[5px] border-slate-700 items-center py-[5px] outline-none bg-[#85a8ac83]"
                 placeholder="Type your text"

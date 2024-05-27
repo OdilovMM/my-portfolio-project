@@ -5,11 +5,8 @@ import { AiFillStar } from "react-icons/ai";
 import { CiStar } from "react-icons/ci";
 import { Products } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import { FadeLoader, GridLoader } from "react-spinners";
+import {  GridLoader } from "react-spinners";
 
-import { BsFillGridFill } from "react-icons/bs";
-import { FaThList } from "react-icons/fa";
-import ShoppingProducts from "./ShoppingProducts";
 
 import {
   getProductsPriceRange,
@@ -321,9 +318,23 @@ const Shop = () => {
                   <div className="flex justify-center items-start gap-3">
                     <button
                       onClick={resetFilter}
-                      className="py-[2px] px-2 border outline-0 bg-slate-300 rounded-sm text-slate-600 font-semibold"
+                      className="inline-flex items-center px-4 py-[6px] bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-md"
                     >
-                      Clear Filter
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 mr-2"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+                        />
+                      </svg>
+                      Restore
                     </button>
 
                     <select

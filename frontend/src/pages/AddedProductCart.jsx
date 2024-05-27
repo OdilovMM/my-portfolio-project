@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { BreadCrumbs } from "../components";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { MdDelete } from "react-icons/md";
 import {
   getCustomerCartProducts,
   deleteProductFromCart,
@@ -10,6 +11,7 @@ import {
   decrementProductQuantity,
 } from "./../store/reducers/cartReducer.js";
 import toast from "react-hot-toast";
+import emptyCart from "../assets/icon/empty-cart.png";
 
 const AddedProductCart = () => {
   const navigate = useNavigate();
@@ -81,14 +83,14 @@ const AddedProductCart = () => {
 
       {/* main */}
 
-      <div className="bg-[#eeeeee]">
+      <div className="bg-[#e1e4e6a3] min-h-[65vh] ">
         <div className="w-[85%] lg:w-[90%] md:w-[90%] sm:w-[90%] mx-auto py-14">
           {card_products.length > 0 || outofstock_products.length > 0 ? (
             <div className="flex flex-wrap">
               <div className="w-[67%] md-lg:w-full">
                 <div className="pr-3 md-lg:pr-0">
                   <div className="flex flex-col gap-3">
-                    <div className="bg-white p-4">
+                    <div className="bg-[#fff]  rounded-lg shadow-md p-4">
                       <h2 className="text-md text-red-500 font-semibold">
                         Stock Products in {card_products.length}
                       </h2>
@@ -97,7 +99,7 @@ const AddedProductCart = () => {
                     {card_products.map((pr, ind) => (
                       <div
                         key={ind}
-                        className="flex bg-white p-4 flex-col gap-2"
+                        className="flex bg-[#fff]  rounded-lg shadow-md p-4 flex-col gap-2"
                       >
                         <div className="flex justify-start items-center">
                           <h2 className="text-md text-slate-600 font-bold">
@@ -109,11 +111,13 @@ const AddedProductCart = () => {
                           <div key={index} className="w-full flex flex-wrap">
                             <div className="flex sm:w-full gap-2 w-7/12">
                               <div className="flex gap-2 justify-start items-center">
-                                <img
-                                  className="w-[80px] h-[80px] object-contain"
-                                  src={product.productInfo.images[0]}
-                                  alt=""
-                                />
+                                <Link >
+                                  <img
+                                    className="w-[80px] h-[80px] object-contain"
+                                    src={product.productInfo.images[0]}
+                                    alt=""
+                                  />
+                                </Link>
                                 <div className="pr-4 text-slate-600">
                                   <h2 className="text-md font-semibold">
                                     {product.productInfo.name}
@@ -155,7 +159,18 @@ const AddedProductCart = () => {
 
                               {/* increment */}
                               <div className="flex gap-2 flex-col">
-                                <div className="flex  h-[30px] gap-1 justify-center items-start text-xl">
+                                <div className="flex  h-[30px]  justify-center items-center text-xl">
+                                  <button
+                                    onClick={() =>
+                                      dispatch(
+                                        deleteProductFromCart(product._id)
+                                      )
+                                    }
+                                    className=" px-2 py-2"
+                                  >
+                                    <MdDelete size={22} color="blue" />
+                                  </button>
+
                                   <button
                                     onClick={() =>
                                       handleDecrement(
@@ -163,11 +178,11 @@ const AddedProductCart = () => {
                                         product._id
                                       )
                                     }
-                                    className="px-6 bg-slate-400 cursor-pointer"
+                                    className="px-6 py-1 shadow-md  cursor-pointer"
                                   >
                                     -
                                   </button>
-                                  <span className="px-3 bg-slate-400 ">
+                                  <span className="text-center py-1 w-[60px] shadow-md  ">
                                     {product.quantity}
                                   </span>
                                   <button
@@ -178,19 +193,11 @@ const AddedProductCart = () => {
                                         product._id
                                       )
                                     }
-                                    className="px-6 bg-slate-400 cursor-pointer"
+                                    className="px-6 py-1 shadow-md  cursor-pointer"
                                   >
                                     +
                                   </button>
                                 </div>
-                                <button
-                                  onClick={() =>
-                                    dispatch(deleteProductFromCart(product._id))
-                                  }
-                                  className="px-12 bg-slate-400"
-                                >
-                                  Delete
-                                </button>
                               </div>
                             </div>
                           </div>
@@ -200,13 +207,13 @@ const AddedProductCart = () => {
 
                     {outofstock_products.length > 0 && (
                       <div className="flex flex-col gap-3">
-                        <div className="bg-white p-4">
+                        <div className=" p-4 bg-[#fff]  rounded-lg shadow-md">
                           <h2 className="text-md text-red-500 font-semibold">
                             Out of Stock {card_products.length + 1}
                           </h2>
                         </div>
 
-                        <div className="bg-white p-4">
+                        <div className="bg-[#fff]  rounded-lg shadow-md p-4">
                           {outofstock_products.map((product, index) => (
                             <div key={index} className="w-full flex flex-wrap">
                               <div className="flex sm:w-full gap-2 w-7/12">
@@ -301,7 +308,7 @@ const AddedProductCart = () => {
               <div className="w-[33%] md-lg:w-full">
                 <div className="pl-3 md-lg:pl-0 md-lg:mt-5">
                   {card_products.length > 0 && (
-                    <div className="bg-white p-3 text-slate-600 flex flex-col gap-3">
+                    <div className="bg-[#fff]  rounded-lg shadow-md p-3 text-slate-600 flex flex-col gap-3">
                       <h2 className="text-xl font-bold">Order Summary</h2>
                       <div className="flex justify-between items-center">
                         <span>{buy_product_item} Items </span>
@@ -340,13 +347,26 @@ const AddedProductCart = () => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col w-[200px] gap-3">
-              <h2 className="block text-[20px] text-green-700 font-bold">
-                You cart is empty
-              </h2>
-              <Link className="px-4 py-1 bg-slate-400 text-black" to="/shop">
-                Buy now
-              </Link>
+            <div className=" w-[470px] flex justify-center items-center mx-auto">
+              <div>
+                <div className="w-[280px] md:w-[200px] mx-auto">
+                  <img src={emptyCart} className="" alt="" />
+                </div>
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <h2 className="block text-[25px] text-center font-bold">
+                    You cart is <span className="text-red-500">empty</span>
+                  </h2>
+                  <p>
+                    Must add items on the cart before you proceed to check out
+                  </p>
+                  <Link
+                    className="px-6 py-1 bg-[#e84949] rounded-[15px] font-bold text-[#fff] uppercase"
+                    to="/shop"
+                  >
+                    Return to shop
+                  </Link>
+                </div>
+              </div>
             </div>
           )}
         </div>

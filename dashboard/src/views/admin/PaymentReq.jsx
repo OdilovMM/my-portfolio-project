@@ -1,18 +1,31 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useState, useEffect } from "react";
 import { FixedSizeList as List } from "react-window";
-
+import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { confirmPaymentRequest, getPaymentRequestFromSeller } from "../../store/Reducers/paymentReducer";
+import { FaCheck } from "react-icons/fa6";
 function handleOnWheel({ deltaY }) {}
-
 const outerElType = forwardRef((props, ref) => (
   <div ref={ref} onWheel={handleOnWheel} {...props} />
 ));
 
+
+
 const PaymentReq = () => {
-  const array = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, 7, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-    41,
-  ];
+
+  const dispatch = useDispatch();
+  const { pendingWithdraws, loader } = useSelector((state) => state.payment);
+  const [paymentId, setPaymentId] = useState("");
+
+  useEffect(() => {
+    dispatch(getPaymentRequestFromSeller());
+  }, [dispatch]);
+
+  const handleConfirmRequest = (id) => {
+    setPaymentId(id);
+    dispatch(confirmPaymentRequest(id))
+    console.log(id)
+  };
 
   const Row = ({ index, style }) => {
     return (
@@ -20,19 +33,27 @@ const PaymentReq = () => {
         <div className="w-[25%] p-2 whitespace-nowrap text-[#fff]">
           {index + 1}
         </div>
-        <div className="w-[25%] p-2 whitespace-nowrap text-[#fff]">$5{index + 1}5{index + 1}5</div>
+        <div className="w-[25%] p-2 whitespace-nowrap text-[#fff]">
+          ${pendingWithdraws[index]?.amount}
+        </div>
         <div className="w-[25%] p-2 whitespace-nowrap">
-          <span className="px-3 py-1 bg-[#6e7376] text-[#fff] rounded-[3px]">
-            Pending
+          <span className="px-3 py-1 bg-[#6e7376] capitalize text-[#fff] rounded-[3px]">
+            {pendingWithdraws[index]?.status}
           </span>
         </div>
         <div className="w-[25%] p-2 whitespace-nowrap text-[#fff]">
-          {" "}
-          12 Apr 2024{" "}
+          {moment(pendingWithdraws[index]?.createdAt).format("LLL")}
         </div>
         <div className="w-[25%] p-2 whitespace-nowrap">
-          <button className="bg-[#687177] capitalize rounded-[5px] text-[#fff] px-3 py-1 cursor-pointer">
-            confirm
+          <button
+            disabled={loader}
+            onClick={() => handleConfirmRequest(pendingWithdraws[index]?._id)}
+            className="bg-[#687177] hover:bg-[#987179] capitalize rounded-[5px] text-[#fff] px-3 py-1 cursor-pointer"
+          >
+            {loader && paymentId === pendingWithdraws[index]?._id
+              ? "Confirming..."
+              : "Confirm"}
+            {/* <FaCheck/> */}
           </button>
         </div>
       </div>
@@ -43,7 +64,7 @@ const PaymentReq = () => {
     <div className="px-2 lg:px-7 pt-5">
       <div className="w-full p-4 bg-[#3D464D] rounded-md">
         <h2 className="text-xl font-medium pb-5 text-[#fff]">
-          Withdrawal Request
+          Payment Request
         </h2>
         <div className="w-full">
           <div className="w-full overflow-x-auto">
@@ -59,7 +80,7 @@ const PaymentReq = () => {
                 style={{ minWidth: "340px" }}
                 className="List"
                 height={350}
-                itemCount={2000}
+                itemCount={pendingWithdraws?.length}
                 itemSize={35}
                 outerElementType={outerElType}
               >

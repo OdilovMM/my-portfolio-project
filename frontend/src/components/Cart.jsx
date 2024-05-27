@@ -1,17 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AiFillHeart, AiOutlineEye, AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineEye } from "react-icons/ai";
 import Rating from "./Rating";
 import saleIcon from "./../assets/icon/icons8-sale.gif";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../store/reducers/cartReducer";
+import { addToCart, addToWishlist } from "../store/reducers/cartReducer";
 import toast from "react-hot-toast";
 
 const Cart = ({ product, index }) => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.customerAuth);
 
-  const handleAddWishlist = (id) => {};
+  const handleAddWishlist = (product) => {
+    if (userInfo) {
+      dispatch(
+        addToWishlist({
+          userId: userInfo.id,
+          productId: product._id,
+          name: product.name,
+          brand: product.brand,
+          category: product.category,
+          description: product.description,
+          discount: product.discount,
+          images: product.images,
+          price: product.price,
+          rating: product.rating,
+          shopName: product.shopName,
+          slug: product.slug,
+          stock: product.stock,
+        })
+      );
+    } else {
+      toast.error("Login First");
+    }
+  };
 
   const handleAddToCart = (id) => {
     if (userInfo) {
@@ -29,7 +51,7 @@ const Cart = ({ product, index }) => {
 
   return (
     <>
-      <div className="w-[232px] h-[400px] flex flex-col justify-between md:w-[210px] overflow-hidden border-[0.5px] border-grey-200 md-lg:w-[290px] group  rounded-[6px] shadow-sm  relative cursor-pointer">
+      <div className="w-[232px] h-[400px] flex flex-col justify-between md:w-[260px] overflow-hidden border-[0.5px] border-grey-200 md-lg:w-[290px] group  rounded-[6px] shadow-md  relative cursor-pointer">
         <div className="relative h-[300px] overflow-hidden   ">
           <Link className=" h-full w-full   flex justify-center items-center transition-transform duration-500 transform scale-105 group-hover:scale-110">
             <img
@@ -59,7 +81,7 @@ const Cart = ({ product, index }) => {
           {/* link */}
           <div className="absolute top-2 right-1 flex flex-col gap-2 transform translate-x-9  opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition duration-500">
             <button
-              onClick={() => handleAddWishlist(product._id)}
+              onClick={() => handleAddWishlist(product)}
               className="p-2 bg-white  hover:bg-pink-500 transition ease-in-out"
             >
               <AiFillHeart color="red" size={22} />
@@ -67,7 +89,7 @@ const Cart = ({ product, index }) => {
               {/* <AiOutlineHeart size={22} /> */}
             </button>
             <Link
-              to={`/product/details/${product?._id}`}
+              to={`/product/details/${product?.slug}`}
               className="p-2 bg-white  hover:bg-pink-500 transition ease-in-out"
             >
               <AiOutlineEye size={22} />
@@ -82,7 +104,7 @@ const Cart = ({ product, index }) => {
             className="absolute  bottom-0 w-full transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-500"
           >
             <button
-              onClick={() => handleAddToCart(product._id)}
+              onClick={() => handleAddToCart(product?._id)}
               className="flex h-[40px] bg-[#5b5555] hover:bg-[#141111] transition duration-900 ease-in-out w-full flex-row gap-2 items-center justify-center"
             >
               <span className="text-white font-Poppins">Add To Cart</span>
@@ -90,7 +112,7 @@ const Cart = ({ product, index }) => {
           </div>
         </div>
         {/* bottom info */}
-        <div className="flex flex-col h-[100px] overflow-hidden bg-[#d0dae3] ">
+        <div className="flex flex-col h-[100px] overflow-hidden bg-[#fefdfe] ">
           <div className="px-3 py-3">
             <h2>{product?.name.slice(0, 10)}...</h2>
             <div className="flex flex-row items-center justify-between">
@@ -101,8 +123,8 @@ const Cart = ({ product, index }) => {
               >
                 $ {product?.price}
                 <span className="pl-2 line-through text-red-600">
-                  {product.discount > 0 &&
-                    product.price +
+                  {product?.discount > 0 &&
+                    product?.price +
                       Math.floor((product.price * product.discount) / 100)}{" "}
                 </span>
               </p>

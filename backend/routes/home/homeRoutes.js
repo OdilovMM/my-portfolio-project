@@ -6,5 +6,8 @@ router.get("/get-categories", homeController.getAllCategories);
 router.get("/get-products", homeController.getProducts);
 router.get("/get-products-price-range", homeController.getProductsByPriceRange);
 router.get("/product-query", homeController.getProductQuery);
+router.get("/get-product/:slug", homeController.getProduct);
+router.post("/add-customer-product-review", homeController.addProductReview);
+router.get("/get-all-reviews/:productId", homeController.getAllReviews);
 
 module.exports = router;

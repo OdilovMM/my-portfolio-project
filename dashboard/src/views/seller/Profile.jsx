@@ -7,10 +7,12 @@ import {
   profileImageUpload,
   addProfileInfo,
 } from "../../store/Reducers/authReducer";
+import { createStripeConnect } from "../../store/Reducers/sellerReducer";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const { userInfo, imgLoader, loader } = useSelector((state) => state.auth);
+  const { loader: isLoading } = useSelector((state) => state.seller);
 
   const [userDataInfo, setUserDataInfo] = useState({
     division: "",
@@ -18,7 +20,6 @@ const Profile = () => {
     shopName: "",
     subDistrict: "",
   });
-  const status = "active";
 
   const handleAddImage = (e) => {
     if (e.target.files.length > 0) {
@@ -111,13 +112,24 @@ const Profile = () => {
                 </div>
                 <div className="flex gap-2 ">
                   <span className="font-bold">Payment Account:</span>
-                  <p className="bg-slate-400 rounded-md px-2 cursor-pointer">
-                    {status === "active" ? (
-                      <span className="capitalize">{userInfo.payment}</span>
-                    ) : (
-                      <span className="capitalize">click active</span>
-                    )}
-                  </p>
+                  {userInfo?.payment === "active" ? (
+                    <p>Activated</p>
+                  ) : (
+                    <p className="bg-slate-400 rounded-md px-2 cursor-pointer">
+                      {userInfo?.payment === "active" ? (
+                        <span className="capitalize">{userInfo.payment}</span>
+                      ) : (
+                        <button
+                          onClick={() => dispatch(createStripeConnect())}
+                          className="capitalize text-black"
+                        >
+                          {isLoading
+                            ? "Redirecting..."
+                            : "Create Stripe Account"}
+                        </button>
+                      )}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

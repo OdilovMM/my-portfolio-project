@@ -16,8 +16,9 @@ const Home = () => {
       <Banner />
       <Category />
       <div className="py-[40px]">
-        <FeaturedProducts products={products} />
+        <FeaturedProducts products={products} title='Featured Products' />
       </div>
+     
       <div className="py-10">
         <div className="w-[85%] flex flex-wrap mx-auto">
           <div className="grid w-full grid-cols-3 md-lg:grid-cols-2 md:grid-cols-1 gap-7">
