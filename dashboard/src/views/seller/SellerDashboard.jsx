@@ -11,7 +11,6 @@ import moment from "moment";
 
 const SellerDashboard = () => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.auth);
   const {
     totalSales,
     totalOrders,

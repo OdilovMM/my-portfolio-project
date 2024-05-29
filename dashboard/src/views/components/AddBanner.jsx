@@ -38,7 +38,6 @@ const AddBanner = () => {
   }, [productId, dispatch, loader]);
 
   const handleAddSubmit = (e) => {
-    console.log("dadafa");
     e.preventDefault();
     const formData = new FormData();
     formData.append("productId", productId);
@@ -50,7 +49,7 @@ const AddBanner = () => {
   useEffect(() => {
     dispatch(getBanner(productId));
     console.log("get");
-  }, [productId]);
+  }, [productId, dispatch]);
 
   const update = (e) => {
     e.preventDefault();

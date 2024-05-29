@@ -6,13 +6,12 @@ import { Link } from "react-router-dom";
 import { MdAutoDelete } from "react-icons/md";
 import { LuEye } from "react-icons/lu";
 import { useSelector, useDispatch } from "react-redux";
-import { ScaleLoader } from "react-spinners";
 import { getProducts } from "../../store/Reducers/productReducer";
 import { MdAddPhotoAlternate } from "react-icons/md";
 
 const AllProducts = () => {
   const dispatch = useDispatch();
-  const { loader, products, totalProducts } = useSelector(
+  const { products, totalProducts } = useSelector(
     (state) => state.product
   );
 

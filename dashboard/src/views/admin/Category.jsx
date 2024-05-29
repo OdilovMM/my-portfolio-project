@@ -121,13 +121,11 @@ const Category = () => {
                   {categories.map((d, i) => (
                     <tr key={i}>
                       <td
-                        scope="row"
                         className="py-1 px-4 font-medium whitespace-nowrap"
                       >
                         {i + 1}
                       </td>
                       <td
-                        scope="row"
                         className="py-1 px-4 font-medium whitespace-nowrap"
                       >
                         <img
@@ -137,14 +135,12 @@ const Category = () => {
                         />
                       </td>
                       <td
-                        scope="row"
                         className="py-3 px-4 font-medium whitespace-nowrap"
                       >
                         {d.name}
                       </td>
 
                       <td
-                        scope="row"
                         className="py-3 px-4 font-medium whitespace-nowrap"
                       >
                         <div className="flex flex-start items-center gap-4">
