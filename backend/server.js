@@ -10,6 +10,8 @@ const socket = require("socket.io");
 const http = require("http");
 const server = http.createServer(app);
 
+// router folder imports
+
 const authRouter = require("./routes/authRoutes");
 const categoryRouter = require("./routes/dashboard/categoryRoutes");
 const productRouter = require("./routes/dashboard/productRoutes");
