@@ -10,12 +10,13 @@ import {
   sendMessage,
   updateMessage,
 } from "../../store/reducers/chatReducer";
+import { API_BASE_URL } from "../../utils/backendUrl";
 import { GrChatOption } from "react-icons/gr";
 import toast from "react-hot-toast";
 
 import io from "socket.io-client";
 import { useRef } from "react";
-const socket = io("http://localhost:5000");
+const socket = io(API_BASE_URL);
 
 const Chat = () => {
   const scrollRef = useRef();

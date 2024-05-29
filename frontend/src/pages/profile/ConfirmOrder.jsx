@@ -8,6 +8,7 @@ import ok from "../../assets/success.svg";
 import { Link } from "react-router-dom";
 import { FadeLoader } from "react-spinners";
 import api from "../../api/api";
+import { API_BASE_URL } from "../../utils/backendUrl";
 
 const load = async () => {
   return await loadStripe(
@@ -47,6 +48,7 @@ const ConfirmOrder = () => {
     });
   }, [stripe]);
 
+  
   const getLoad = async () => {
     const tempStripe = await load();
     setStripe(tempStripe);
@@ -62,7 +64,7 @@ const ConfirmOrder = () => {
     if (orderId) {
       try {
         await axios.get(
-          `http://localhost:5000/api/v1/order/confirm/${orderId}`
+          `${API_BASE_URL}/api/v1/order/confirm/${orderId}`
         );
         localStorage.removeItem("orderId");
         setLoader(false);
