@@ -5,8 +5,7 @@ import { AiFillStar } from "react-icons/ai";
 import { CiStar } from "react-icons/ci";
 import { Products } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import {  GridLoader } from "react-spinners";
-
+import { GridLoader } from "react-spinners";
 
 import {
   getProductsPriceRange,
@@ -25,19 +24,20 @@ const Shop = () => {
     isLoading,
   } = useSelector((state) => state.home);
 
+  const defaultPriceRange = { low: 0, high: 1000 };
+
   useEffect(() => {
     dispatch(getProductsPriceRange());
   }, [dispatch]);
 
   useEffect(() => {
     setValue({
-      values: [priceRange.low, priceRange.high],
+      values: [priceRange?.low, priceRange?.high],
     });
   }, [priceRange]);
 
   const [filter, setFilter] = useState(true);
   const [rating, setRating] = useState("");
-  const [styles, setStyles] = useState("grid");
   const [sortPrice, setSortPrice] = useState("");
 
   const [searchCategory, setSearchCategory] = useState("");
@@ -52,7 +52,6 @@ const Shop = () => {
 
   // for pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [search, setSearch] = useState("");
   const [pages, setPages] = useState(5);
   // **
 
@@ -64,8 +63,8 @@ const Shop = () => {
   useEffect(() => {
     dispatch(
       queryProduct({
-        low: value.values[0],
-        high: value.values[1],
+        low: value?.values[0],
+        high: value?.values[1],
         searchCategory,
         rating,
         sortPrice,
@@ -79,7 +78,12 @@ const Shop = () => {
     setSearchCategory("");
     setSortPrice("");
     setCurrentPage(1);
-    setValue({ values: [priceRange.low, priceRange.high] });
+    setValue({
+      values: [
+        priceRange?.low || defaultPriceRange.low,
+        priceRange?.high || defaultPriceRange.high,
+      ],
+    });
   };
 
   return (
@@ -153,8 +157,10 @@ const Shop = () => {
 
                 <Range
                   step={1}
-                  min={priceRange.low}
-                  max={priceRange.high}
+                  // min={priceRange.low}
+                  // max={priceRange.high}
+                  min={priceRange?.low || defaultPriceRange.low}
+                  max={priceRange?.high || defaultPriceRange.high}
                   values={value.values}
                   onChange={(values) => setValue({ values })}
                   renderTrack={({ props, children }) => (
