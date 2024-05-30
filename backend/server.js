@@ -24,13 +24,11 @@ const chatRouter = require("./routes/chatRoutes");
 const paymentRouter = require("./routes/paymentRoutes");
 const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 
-
-
 app.use(
   cors({
     origin: [
       "https://multivendor-eshop.vercel.app",
-      "https://ecommerce-dashboard-git-master-odilovmms-projects.vercel.app",
+      "admin-dashboard-rouge-seven.vercel.app",
     ],
     credentials: true,
   })
