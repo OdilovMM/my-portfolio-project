@@ -49,7 +49,7 @@ const Header = ({ showBar, setShowBar }) => {
 
         <div className="flex justify-center items-center gap-8 relative">
           <div className="hidden md:block relative ">
-            <ul className="flex flex-row gap-0 items-center">
+            {/* <ul className="flex flex-row gap-0 items-center">
               <li className="relative p-3">
                 <Link className="cursor-pointer">
                   <span className="absolute text-[12px] top-0 text-black font-bold right-1 rounded-full flex justify-center items-center">
@@ -82,7 +82,7 @@ const Header = ({ showBar, setShowBar }) => {
                   <CiMail size={22} />
                 </Link>
               </li>
-            </ul>
+            </ul> */}
           </div>
           <div className="flex justify-center items-center">
             <div className="flex justify-center items-center gap-4">
@@ -97,14 +97,16 @@ const Header = ({ showBar, setShowBar }) => {
                   <img
                     src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
                     alt=""
-                    className="w-[45px] h-[45px] rounded-full overflow-hidden object-cover"
+                    className="w-[45px] h-[45px] cursor-pointer rounded-full overflow-hidden object-cover"
                   />
                 ) : (
-                  <img
-                    src={userInfo.image}
-                    alt=""
-                    className="w-[45px] h-[45px] rounded-full overflow-hidden object-cover"
-                  />
+                  <Link to="/seller/dashboard/profile">
+                    <img
+                      src={userInfo.image}
+                      alt=""
+                      className="w-[45px] h-[45px] cursor-pointer rounded-full overflow-hidden object-cover"
+                    />
+                  </Link>
                 )}
               </div>
             </div>

@@ -7,7 +7,6 @@ import { getActiveSellers } from "../../store/Reducers/sellerReducer";
 
 const Sellers = () => {
   const dispatch = useDispatch();
-  const { role } = useSelector((state) => state.auth);
   const { sellers, totalSellers } = useSelector((state) => state.seller);
 
   const [currentPage, setCurrentPage] = useState(1);

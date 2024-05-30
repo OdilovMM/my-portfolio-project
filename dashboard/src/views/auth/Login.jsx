@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { FaGoogle } from "react-icons/fa6";
-import { FaFacebook } from "react-icons/fa";
+
 import { useSelector, useDispatch } from "react-redux";
 import { ScaleLoader } from "react-spinners";
 import { seller_login } from "../../store/Reducers/authReducer";
@@ -28,14 +27,9 @@ const Login = () => {
 
   const handleSubmitData = (e) => {
     e.preventDefault();
-    console.log(credentials);
     dispatch(seller_login(credentials));
-
-    setTimeout(() => {
-      navigate("/");
-    }, 1500);
   };
-  
+
   useEffect(() => {
     if (userInfo) {
       navigate("/seller/dashboard");
@@ -46,8 +40,10 @@ const Login = () => {
 
   return (
     <div className="min-w-screen min-h-screen bg-[#e5e1e1] flex items-center justify-center">
-      <div className="w-[350px] text-[#fffFFF] bg-[#a1cbd9] p-7 rounded-md">
-        <h2 className="text-xl mb-3 font-bold">Login</h2>
+      <div className="w-[350px] text-[#333] bg-[#a1cbd9] p-7 rounded-md">
+        <h2 className="text-[26px] mb-3 font-bold">
+          Login to your Seller account
+        </h2>
 
         <form className="space-y-6" onSubmit={handleSubmitData}>
           <div>
@@ -123,27 +119,6 @@ const Login = () => {
             <Link to="/register" className="text-blue-600 pl-2">
               Sign up
             </Link>
-          </div>
-
-          <div className="w-full flex justify-center items-center mb-3">
-            <div className="w-[45%] bg-slate-700 h-[2px]"></div>
-            <div className="w-[10%] flex justify-center items-center ">
-              <span className="pb-1"> Or</span>
-            </div>
-            <div className="w-[45%] bg-slate-700 h-[2px]"></div>
-          </div>
-
-          <div className="flex justify-center items-center gap-3">
-            <div className="w-[135px] h-[35px] flex rounded-md bg-orange-500 shadow-lg hover:shadow-orange-600/50 justify-center cursor-pointer items-center overflow-hidden">
-              <span>
-                <FaGoogle />
-              </span>
-            </div>
-            <div className="w-[135px] h-[35px] flex rounded-md bg-blue-500 shadow-lg hover:shadow-orange-600/50 justify-center cursor-pointer items-center overflow-hidden">
-              <span>
-                <FaFacebook />
-              </span>
-            </div>
           </div>
         </form>
       </div>

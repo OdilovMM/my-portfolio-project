@@ -75,6 +75,7 @@ class authControllers {
 
   sellerLogin = async (req, res) => {
     const { password, email } = req.body;
+    console.log(req.body)
     try {
       const seller = await Seller.findOne({ email }).select("+password");
       console.log(seller);

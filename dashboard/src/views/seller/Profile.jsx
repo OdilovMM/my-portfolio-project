@@ -83,7 +83,7 @@ const Profile = () => {
               <input
                 onChange={handleAddImage}
                 type="file"
-                name=""
+                name="img"
                 className="hidden"
                 id="img"
               />

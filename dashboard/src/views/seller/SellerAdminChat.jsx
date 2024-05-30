@@ -70,7 +70,7 @@ const SellerAdminChat = () => {
               <div className="flex justify-start items-center gap-3">
                 <div className="relative">
                   <img
-                    src="http://localhost:3000/images/user.png"
+                    src="https://e7.pngegg.com/pngimages/753/432/png-clipart-user-profile-2018-in-sight-user-conference-expo-business-default-business-angle-service-thumbnail.png"
                     className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
                     alt=""
                   />
@@ -114,7 +114,7 @@ const SellerAdminChat = () => {
                         <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
                           <div>
                             <img
-                              src="http://localhost:3000/images/user.png"
+                              src="https://e7.pngegg.com/pngimages/753/432/png-clipart-user-profile-2018-in-sight-user-conference-expo-business-default-business-angle-service-thumbnail.png"
                               className="w-[44px] h-[44px] rounded-full max-w-[46px] p-[2px] border-2 border-white"
                               alt=""
                             />

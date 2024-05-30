@@ -27,7 +27,6 @@ const OrderDetails = () => {
     setStatus(e.target.value);
   };
 
-  console.log(order);
 
   return (
     <div className="px-2 lg:px-7 pt-5">

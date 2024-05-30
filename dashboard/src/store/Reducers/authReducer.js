@@ -25,10 +25,11 @@ export const seller_login = createAsyncThunk(
       const { data } = await api.post("/auth/seller-login", info, {
         withCredentials: true,
       });
-      console.log(data)
+      console.log(data);
       localStorage.setItem("accessToken", data.token);
       return fulfillWithValue(data);
     } catch (error) {
+      console.log(error);
       console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
@@ -57,7 +58,7 @@ export const seller_register = createAsyncThunk(
       const { data } = await api.post("/auth/seller-register", info, {
         withCredentials: true,
       });
-      console.log(data)
+      console.log(data);
 
       localStorage.setItem("accessToken", data.token);
       return fulfillWithValue(data);
@@ -122,7 +123,7 @@ export const logout = createAsyncThunk(
       if (role === "admin") {
         navigate("/admin/login");
       } else {
-        navigate("/login");
+        navigate("/seller/login");
       }
       return fulfillWithValue(data);
     } catch (error) {
@@ -179,7 +180,7 @@ export const authReducer = createSlice({
         state.errorMessage = payload.error;
         toast.error(payload.error);
       })
-
+      //
       .addCase(seller_login.pending, (state, { payload }) => {
         state.loader = true;
       })
@@ -193,7 +194,7 @@ export const authReducer = createSlice({
       .addCase(seller_login.rejected, (state, { payload }) => {
         state.loader = false;
         // state.errorMessage = payload.error;
-        // toast.error(payload.error);
+        toast.error(payload.error);
         console.log(payload.error);
       })
       .addCase(getUserDetail.fulfilled, (state, { payload }) => {
@@ -207,7 +208,6 @@ export const authReducer = createSlice({
         state.imgLoader = false;
         state.userInfo = payload.userInfo;
         toast.success(payload.message);
-        console.log(payload.message);
       })
       .addCase(profileImageUpload.rejected, (state, { payload }) => {
         state.imgLoader = false;
@@ -221,7 +221,6 @@ export const authReducer = createSlice({
         state.loader = false;
         state.userInfo = payload.userInfo;
         toast.success(payload.message);
-        console.log(payload.message);
       })
       .addCase(addProfileInfo.rejected, (state, { payload }) => {
         state.loader = false;

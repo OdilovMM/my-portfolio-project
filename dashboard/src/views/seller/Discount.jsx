@@ -55,60 +55,51 @@ const Discount = () => {
               {[1, 2, 3, 4, 5].map((d, i) => (
                 <tr key={i}>
                   <td
-                    scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
                     {d}
                   </td>
                   <td
-                    scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
                     <img
                       className="w-[45px] h-[45px]"
-                      src={`http://localhost:3000/images/category/${d}.jpg`}
+                      src={`https://multi-vendor-shop.onrender.com/images/category/${d}.jpg`}
                       alt=""
                     />
                   </td>
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     T-Shirt
                   </td>
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     Clothes
                   </td>
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     Adidas
                   </td>
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     210$
                   </td>
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     12 %
                   </td>
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     15
                   </td>
 
                   <td
-                    scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     <div className="flex flex-start items-center gap-4">

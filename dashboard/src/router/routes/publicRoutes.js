@@ -13,7 +13,7 @@ const publicRoutes = [
     element: <Home />,
   },
   {
-    path: "/login",
+    path: "/seller/login",
     element: <Login />,
   },
   {

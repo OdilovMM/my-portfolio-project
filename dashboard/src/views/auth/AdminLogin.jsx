@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { admin_Login, clearMessage } from "../../store/Reducers/authReducer";
+import { admin_Login } from "../../store/Reducers/authReducer";
 import { ScaleLoader } from "react-spinners";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 const AdminLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loader, errorMessage, userInfo } = useSelector((state) => state.auth);
+  const { loader, userInfo } = useSelector((state) => state.auth);
 
   const [visible, setVisible] = useState(false);
   const [credentials, setCredentials] = useState({
@@ -27,24 +26,8 @@ const AdminLogin = () => {
 
   const handleSubmitData = (e) => {
     e.preventDefault();
-    console.log(credentials);
     dispatch(admin_Login(credentials));
-
-    setTimeout(() => {
-      navigate("/");
-    }, 1500);
   };
-
-  useEffect(() => {
-    if (errorMessage) {
-      toast.error(errorMessage);
-      dispatch(clearMessage());
-    }
-    // if (successMessage) {
-    //   toast.error(errorMessage);
-    //   dispatch(clearMessage());
-    // }
-  }, [errorMessage, dispatch, navigate]);
 
   useEffect(() => {
     if (userInfo) {
@@ -56,8 +39,11 @@ const AdminLogin = () => {
 
   return (
     <div className="min-w-screen min-h-screen bg-[#e5e1e1] flex items-center justify-center">
-      <div className="w-[350px] text-[#fffFFF] bg-[#a1cbd9] p-7 rounded-md">
-        <h2 className="text-xl mb-3 font-bold">Admin Login</h2>
+      <div className="w-[350px] text-[#333] bg-[#a1cbd9] p-7 rounded-md">
+        <h2 className="text-[26px] mb-3 font-bold">Login as an Admin</h2>
+        <p className="text-[16px] text-red-700 mb-3 font-bold">
+          Remember! If you lost credentials, Please contact with developer!
+        </p>
 
         <form className="space-y-6" onSubmit={handleSubmitData}>
           <div>

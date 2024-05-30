@@ -7,7 +7,6 @@ import { getDeactiveSellers } from "../../store/Reducers/sellerReducer";
 
 const DeactiveSeller = () => {
   const dispatch = useDispatch();
-  const { role } = useSelector((state) => state.auth);
   const { totalDeactives, deactiveSellers } = useSelector(
     (state) => state.seller
   );
@@ -16,7 +15,6 @@ const DeactiveSeller = () => {
   const [searchValue, setSearchValue] = useState("");
   const [parPage, setParPage] = useState(5);
 
-  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const obj = {

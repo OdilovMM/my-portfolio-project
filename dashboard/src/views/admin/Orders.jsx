@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IoEyedropOutline } from "react-icons/io5";
-import { BiCommentDetail } from "react-icons/bi";
+
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from "./Pagination";
