@@ -24,11 +24,21 @@ const chatRouter = require("./routes/chatRoutes");
 const paymentRouter = require("./routes/paymentRoutes");
 const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 
+// app.use(
+//   cors({
+//     origin: [
+//       "https://admin-seller-dashboard.vercel.app",
+//       "https://multi-vendor-eshop-front-end.vercel.app",
+//     ],
+//     credentials: true,
+//   })
+// );
+
 app.use(
   cors({
     origin: [
-      "https://admin-seller-dashboard.vercel.app",
-      "https://multi-vendor-eshop-front-end.vercel.app",
+      "http://localhost:5174",
+      "http://localhost:3000",
     ],
     credentials: true,
   })
