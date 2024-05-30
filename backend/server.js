@@ -26,7 +26,7 @@ const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 
 app.use(
   cors({
-    origin: ["*"],
+    origin: "https://multi-vendor-eshop-front-7hap4iqr4-odilovmms-projects.vercel.app/",
     credentials: true,
   })
 );
