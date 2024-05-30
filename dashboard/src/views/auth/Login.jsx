@@ -116,7 +116,7 @@ const Login = () => {
           </div>
           <div className="flex gap-4">
             <h4>Do not have an account?</h4>
-            <Link to="/register" className="text-blue-600 pl-2">
+            <Link to="/seller/register" className="text-blue-600 pl-2">
               Sign up
             </Link>
           </div>

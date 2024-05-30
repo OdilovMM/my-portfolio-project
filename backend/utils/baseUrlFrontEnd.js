@@ -1,1 +1,1 @@
-export const FRONT_END_URL = "https://multivendor-eshop.vercel.app";
+export const FRONT_SELLER_END_URL = "https://multivendor-eshop.vercel.app";

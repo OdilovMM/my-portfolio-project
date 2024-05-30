@@ -20,8 +20,8 @@ class paymentController {
         const account = await stripe.accounts.create({ type: "express" });
         const accountLink = await stripe.accountLinks.create({
           account: account.id,
-          refresh_url: `${FRONT_END_URL}/refresh`,
-          return_url: `${FRONT_END_URL}/success?activeCode=${uniqueId}`,
+          refresh_url: `${FRONT_SELLER_END_URL}/refresh`,
+          return_url: `${FRONT_SELLER_END_URL}/success?activeCode=${uniqueId}`,
           type: "account_onboarding",
         });
         await paymentModel.create({
@@ -34,8 +34,8 @@ class paymentController {
         const account = await stripe.accounts.create({ type: "express" });
         const accountLink = await stripe.accountLinks.create({
           account: account.id,
-          refresh_url: `${FRONT_END_URL}/refresh`,
-          return_url: `${FRONT_END_URL}/success?activeCode=${uniqueId}`,
+          refresh_url: `${FRONT_SELLER_END_URL}/refresh`,
+          return_url: `${FRONT_SELLER_END_URL}/success?activeCode=${uniqueId}`,
           type: "account_onboarding",
         });
         await paymentModel.create({
