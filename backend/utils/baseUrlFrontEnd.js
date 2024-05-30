@@ -1,1 +1,1 @@
-export const FRONT_SELLER_END_URL = "http://localhost:3000";
+export const FRONT_SELLER_END_URL = "https://admin-dashboard-eshop.vercel.app";
