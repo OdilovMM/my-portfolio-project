@@ -12,7 +12,7 @@ import moment from "moment";
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.auth);
+  const { categories } = useSelector((state) => state.category);
   const {
     totalSales,
     totalOrders,
@@ -166,7 +166,7 @@ const AdminDashboard = () => {
         </div>
         <div className="flex justify-between items-center shadow-xl p-5 border-b-[2px] bg-[#dfcbcb] rounded-md gap-3">
           <div className="flex flex-col justify-start  items-start text-[#333]">
-            <h2 className="text-3xl font-semibold">18</h2>
+            <h2 className="text-3xl font-semibold">{categories.length}</h2>
             <span className="text-md font-semibold">Total Categories</span>
           </div>
           <div className="w-[45px] h-[45px] rounded-full  justify-center items-center">
