@@ -37,8 +37,8 @@ const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
-      "http://localhost:3000",
+      "https://redshop-multivendor-commerce.vercel.app/",
+      "https://ecommerce-dashboard-umber.vercel.app",
     ],
     credentials: true,
   })

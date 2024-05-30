@@ -1,1 +1,1 @@
-export const FRONT_END_URL = "http://localhost:3000";
+export const FRONT_END_URL = "https://ecommerce-dashboard-umber.vercel.app";
