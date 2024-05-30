@@ -37,7 +37,7 @@ const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
+      "https://eshop-frontend-fawn.vercel.app",
       "https://admin-dashboard-eshop.vercel.app",
     ],
     credentials: true,
