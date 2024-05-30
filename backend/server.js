@@ -29,7 +29,7 @@ const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 app.use(
   cors({
     origin: [
-      "https://multivendor-eshop.vercel.app/",
+      "https://multivendor-eshop.vercel.app",
       "https://ecommerce-dashboard-git-master-odilovmms-projects.vercel.app",
     ],
     credentials: true,
