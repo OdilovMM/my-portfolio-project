@@ -13,11 +13,11 @@ const publicRoutes = [
     element: <Home />,
   },
   {
-    path: "/seller/login",
+    path: "/login",
     element: <Login />,
   },
   {
-    path: "/seller/register",
+    path: "/register",
     element: <Register />,
   },
   {

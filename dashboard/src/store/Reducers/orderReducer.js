@@ -44,7 +44,6 @@ export const getSellerAllOrders = createAsyncThunk(
 export const getSingleOrderDetail = createAsyncThunk(
   "order/getSingleOrderDetail",
   async (orderId, { rejectWithValue, fulfillWithValue }) => {
-    console.log(orderId);
 
     try {
       const { data } = await api.get(
@@ -53,7 +52,6 @@ export const getSingleOrderDetail = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -63,7 +61,6 @@ export const getSingleOrderDetail = createAsyncThunk(
 export const getSellerSingleOrderDetail = createAsyncThunk(
   "order/getSellerSingleOrderDetail",
   async (orderId, { rejectWithValue, fulfillWithValue }) => {
-    console.log(orderId);
 
     try {
       const { data } = await api.get(
@@ -72,7 +69,6 @@ export const getSellerSingleOrderDetail = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -83,7 +79,6 @@ export const getSellerSingleOrderDetail = createAsyncThunk(
 export const updateOrderStatus = createAsyncThunk(
   "order/updateOrderStatus",
   async ({ orderId, info }, { rejectWithValue, fulfillWithValue }) => {
-    console.log(orderId);
 
     try {
       const { data } = await api.patch(
@@ -93,7 +88,6 @@ export const updateOrderStatus = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -103,7 +97,6 @@ export const updateOrderStatus = createAsyncThunk(
 export const sellerUpdateOrderStatus = createAsyncThunk(
   "order/sellerUpdateOrderStatus",
   async ({ orderId, info }, { rejectWithValue, fulfillWithValue }) => {
-    console.log(orderId);
 
     try {
       const { data } = await api.patch(
@@ -113,7 +106,6 @@ export const sellerUpdateOrderStatus = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);

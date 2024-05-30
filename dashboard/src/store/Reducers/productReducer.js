@@ -112,8 +112,7 @@ export const productReducer = createSlice({
         state.loader = false;
         state.successMessage = payload.message;
         toast.success(payload.message);
-        console.log(payload);
-        console.log(payload.message);
+      
       })
       .addCase(addProduct.rejected, (state, { payload }) => {
         state.loader = false;
@@ -127,7 +126,6 @@ export const productReducer = createSlice({
       })
       .addCase(getA_Product.fulfilled, (state, { payload }) => {
         state.product = payload.product;
-        console.log(payload.product);
       })
       .addCase(updateProduct.pending, (state, { payload }) => {
         state.loader = true;

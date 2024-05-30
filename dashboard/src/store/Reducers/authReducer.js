@@ -25,12 +25,9 @@ export const seller_login = createAsyncThunk(
       const { data } = await api.post("/auth/seller-login", info, {
         withCredentials: true,
       });
-      console.log(data);
       localStorage.setItem("accessToken", data.token);
       return fulfillWithValue(data);
     } catch (error) {
-      console.log(error);
-      console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
   }
@@ -45,7 +42,6 @@ export const getUserDetail = createAsyncThunk(
       });
       return fulfillWithValue(data);
     } catch (error) {
-      console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
   }
@@ -58,12 +54,10 @@ export const seller_register = createAsyncThunk(
       const { data } = await api.post("/auth/seller-register", info, {
         withCredentials: true,
       });
-      console.log(data);
 
       localStorage.setItem("accessToken", data.token);
       return fulfillWithValue(data);
     } catch (error) {
-      console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
   }
@@ -123,7 +117,7 @@ export const logout = createAsyncThunk(
       if (role === "admin") {
         navigate("/admin/login");
       } else {
-        navigate("/seller/login");
+        navigate("/login");
       }
       return fulfillWithValue(data);
     } catch (error) {
@@ -193,7 +187,6 @@ export const authReducer = createSlice({
       })
       .addCase(seller_login.rejected, (state, { payload }) => {
         state.loader = false;
-        // state.errorMessage = payload.error;
         toast.error(payload.error);
         console.log(payload.error);
       })

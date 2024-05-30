@@ -53,7 +53,6 @@ export const getPaymentRequestFromSeller = createAsyncThunk(
 export const confirmPaymentRequest = createAsyncThunk(
   "payment/confirmPaymentRequest",
   async (paymentId, { rejectWithValue, fulfillWithValue }) => {
-    console.log(paymentId);
     try {
       const { data } = await api.put(
         "/payment/admin-confirm-payment-request",
@@ -62,7 +61,6 @@ export const confirmPaymentRequest = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);

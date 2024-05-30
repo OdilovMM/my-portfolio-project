@@ -7,7 +7,7 @@ const Home = () => {
 
   if (role === "seller") return <Navigate to="/seller/dashboard" replace />;
   else if (role === "admin") return <Navigate to="/admin/dashboard" replace />;
-  else return <Navigate to="/seller/login" replace />;
+  else return <Navigate to="/login" replace />;
 };
 
 export default Home;

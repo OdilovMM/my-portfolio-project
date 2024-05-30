@@ -61,6 +61,7 @@ const Category = () => {
       });
       setShowImage("");
     }, 1000);
+   
   };
 
   useEffect(() => {
@@ -120,29 +121,21 @@ const Category = () => {
                 <tbody>
                   {categories.map((d, i) => (
                     <tr key={i}>
-                      <td
-                        className="py-1 px-4 font-medium whitespace-nowrap"
-                      >
+                      <td className="py-1 px-4 font-medium whitespace-nowrap">
                         {i + 1}
                       </td>
-                      <td
-                        className="py-1 px-4 font-medium whitespace-nowrap"
-                      >
+                      <td className="py-1 px-4 font-medium whitespace-nowrap">
                         <img
                           className="w-[45px] h-[45px]"
                           src={d.image}
                           alt=""
                         />
                       </td>
-                      <td
-                        className="py-3 px-4 font-medium whitespace-nowrap"
-                      >
+                      <td className="py-3 px-4 font-medium whitespace-nowrap">
                         {d.name}
                       </td>
 
-                      <td
-                        className="py-3 px-4 font-medium whitespace-nowrap"
-                      >
+                      <td className="py-3 px-4 font-medium whitespace-nowrap">
                         <div className="flex flex-start items-center gap-4">
                           <Link className="px-[6px] cursor-pointer">
                             <FaPenNib />
