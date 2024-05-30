@@ -24,21 +24,13 @@ const chatRouter = require("./routes/chatRoutes");
 const paymentRouter = require("./routes/paymentRoutes");
 const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 
-// app.use(
-//   cors({
-//     origin: [
-//       "https://admin-seller-dashboard.vercel.app",
-//       "https://multi-vendor-eshop-front-end.vercel.app",
-//     ],
-//     credentials: true,
-//   })
-// );
+
 
 app.use(
   cors({
     origin: [
-      "https://redshop-multivendor-commerce.vercel.app/",
-      "https://ecommerce-dashboard-umber.vercel.app",
+      "https://multivendor-eshop.vercel.app/",
+      "https://ecommerce-dashboard-git-master-odilovmms-projects.vercel.app",
     ],
     credentials: true,
   })
