@@ -38,7 +38,7 @@ app.use(
   cors({
     origin: [
       "https://eshop-frontend-fawn.vercel.app",
-      "https://admin-dashboard-eshop.vercel.app",
+      "https://admin-dashboard-drab-three.vercel.app",
     ],
     credentials: true,
   })
