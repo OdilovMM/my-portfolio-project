@@ -7,7 +7,9 @@ const {
   mongo: { ObjectId },
 } = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
+const { FRONT_SELLER_END_URL } = require("../utils/baseUrlFrontEnd");
 const stripe = require("stripe")(process.env.SECRET_KEY_STRIPE);
+
 
 class paymentController {
   createSellerStripeAccount = async (req, res) => {
