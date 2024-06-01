@@ -1,3 +1,3 @@
-const FRONT_SELLER_END_URL = "http://localhost:3000";
+const FRONT_SELLER_END_URL = "https://seller-dashboard-sigma.vercel.app";
 
 module.exports = { FRONT_SELLER_END_URL };
