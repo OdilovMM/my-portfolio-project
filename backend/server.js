@@ -24,7 +24,6 @@ const chatRouter = require("./routes/chatRoutes");
 const paymentRouter = require("./routes/paymentRoutes");
 const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 
-
 app.use(
   cors({
     origin: [
@@ -32,16 +31,22 @@ app.use(
       "https://seller-dashboard-sigma.vercel.app",
       "https://admin-dashboard-seven-lovat-63.vercel.app",
     ],
+    methods: ["GET", "POST", "UPDATE", "DELETE", "PATCH"],
     credentials: true,
   })
 );
-const io = socket(server, {
+
+const io = require("socket.io")(server, {
   cors: {
-    origin: "*",
+    origin: [
+      "https://eshop-frontend-fawn.vercel.app",
+      "https://seller-dashboard-sigma.vercel.app",
+      "https://admin-dashboard-seven-lovat-63.vercel.app",
+    ],
+    methods: ["GET", "POST"],
     credentials: true,
   },
 });
-
 var allCustomer = [];
 var allSeller = [];
 let admin = {};
