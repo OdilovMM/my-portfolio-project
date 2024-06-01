@@ -1,25 +1,17 @@
-import { lazy } from "react";
-
-const AddBanner = lazy(() => import("../../views/components/AddBanner"));
-const Pending = lazy(() => import("../../views/Pending"));
-const Deactive = lazy(() => import("../../views/Deactive"));
-const OrderDetails = lazy(() => import("../../views/seller/OrderDetails"));
-const EditProduct = lazy(() => import("../../views/seller/EditProduct"));
-const Profile = lazy(() => import("../../views/seller/Profile"));
-const SellerAdminChat = lazy(() =>
-  import("../../views/seller/SellerAdminChat")
-);
-const SellerCustomerChat = lazy(() =>
-  import("../../views/seller/SellerCustomerChat")
-);
-const Payments = lazy(() => import("../../views/seller/Payments"));
-const SellerOrders = lazy(() => import("../../views/seller/SellerOrders"));
-const Discount = lazy(() => import("../../views/seller/Discount"));
-const AllProducts = lazy(() => import("../../views/seller/AllProducts"));
-const AddProduct = lazy(() => import("../../views/seller/AddProduct"));
-const SellerDashboard = lazy(() =>
-  import("../../views/seller/SellerDashboard")
-);
+import AddBanner from "../../views/components/AddBanner";
+import Pending from "../../views/Pending";
+import Deactive from "../../views/Deactive";
+import OrderDetails from "../../views/seller/OrderDetails";
+import EditProduct from "../../views/seller/EditProduct";
+import Profile from "../../views/seller/Profile";
+import SellerAdminChat from "../../views/seller/SellerAdminChat";
+import SellerCustomerChat from "../../views/seller/SellerCustomerChat";
+import Payments from "../../views/seller/Payments";
+import SellerOrders from "../../views/seller/SellerOrders";
+import Discount from "../../views/seller/Discount";
+import AllProducts from "../../views/seller/AllProducts";
+import AddProduct from "../../views/seller/AddProduct";
+import SellerDashboard from "../../views/seller/SellerDashboard";
 
 export const sellerRoutes = [
   {

@@ -1,11 +1,10 @@
-import { lazy } from "react";
 
-const SuccessPage = lazy(() => import("../../views/seller/SuccessPage"));
-const AnAuthorized = lazy(() => import("../../views/AnAuthorized"));
-const Home = lazy(() => import("../../views/Home"));
-const Login = lazy(() => import("../../views/auth/Login"));
-const Register = lazy(() => import("../../views/auth/Register"));
-const AdminLogin = lazy(() => import("../../views/auth/AdminLogin"));
+import SuccessPage from "../../views/seller/SuccessPage";
+import AnAuthorized from "../../views/AnAuthorized";
+import Home from "../../views/Home";
+import Login from "../../views/auth/Login";
+import Register from "../../views/auth/Register";
+import AdminLogin from "../../views/auth/AdminLogin";
 
 const publicRoutes = [
   {

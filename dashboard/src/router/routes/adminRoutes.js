@@ -1,14 +1,13 @@
-import { lazy } from "react";
-const AdminDashboard = lazy(() => import("../../views/admin/AdminDashboard"));
-const Orders = lazy(() => import("../../views/admin/Orders"));
-const Category = lazy(() => import("../../views/admin/Category"));
-const Sellers = lazy(() => import("../../views/admin/Sellers"));
-const PaymentReq = lazy(() => import("../../views/admin/PaymentReq"));
-const DeactiveSeller = lazy(() => import("../../views/admin/DeactiveSeller"));
-const SellerReq = lazy(() => import("../../views/admin/SellerReq"));
-const SellerDetail = lazy(() => import("../../views/admin/SellerDetail"));
-const ChatSeller = lazy(() => import("../../views/admin/ChatSeller"));
-const OrdersDetail = lazy(() => import("../../views/admin/OrdersDetail"));
+import AdminDashboard from "../../views/admin/AdminDashboard";
+import Orders from "../../views/admin/Orders";
+import Category from "../../views/admin/Category";
+import Sellers from "../../views/admin/Sellers";
+import PaymentReq from "../../views/admin/PaymentReq";
+import DeactiveSeller from "../../views/admin/DeactiveSeller";
+import SellerReq from "../../views/admin/SellerReq";
+import SellerDetail from "../../views/admin/SellerDetail";
+import ChatSeller from "../../views/admin/ChatSeller";
+import OrdersDetail from "../../views/admin/OrdersDetail";
 
 export const adminRoutes = [
   {

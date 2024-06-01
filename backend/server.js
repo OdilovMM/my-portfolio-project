@@ -24,21 +24,13 @@ const chatRouter = require("./routes/chatRoutes");
 const paymentRouter = require("./routes/paymentRoutes");
 const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 
-// app.use(
-//   cors({
-//     origin: [
-//       "https://admin-seller-dashboard.vercel.app",
-//       "https://multi-vendor-eshop-front-end.vercel.app",
-//     ],
-//     credentials: true,
-//   })
-// );
 
 app.use(
   cors({
     origin: [
       "https://eshop-frontend-fawn.vercel.app",
-      "https://admin-dashboard-drab-three.vercel.app",
+      "https://seller-dashboard-sigma.vercel.app",
+      "https://admin-dashboard-seven-lovat-63.vercel.app",
     ],
     credentials: true,
   })

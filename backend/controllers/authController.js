@@ -13,7 +13,6 @@ class authControllers {
 
     try {
       const admin = await Admin.findOne({ email }).select("+password");
-      console.log(admin);
       if (admin) {
         const match = await bcrypt.compare(password, admin.password);
 
@@ -75,10 +74,8 @@ class authControllers {
 
   sellerLogin = async (req, res) => {
     const { password, email } = req.body;
-    console.log(req.body)
     try {
       const seller = await Seller.findOne({ email }).select("+password");
-      console.log(seller);
       if (seller) {
         const match = await bcrypt.compare(password, seller.password);
 
@@ -108,8 +105,8 @@ class authControllers {
     const { id, role } = req;
     try {
       if (role === "admin") {
-        const user = await Admin.findById(id);
-        responseReturn(res, 200, { userInfo: user });
+        const admin = await Admin.findById(id);
+        responseReturn(res, 200, { adminInfo: admin });
       } else {
         const seller = await Seller.findById(id);
         responseReturn(res, 200, { userInfo: seller });
@@ -118,6 +115,7 @@ class authControllers {
       responseReturn(res, 500, { error: "Internal server error" });
     }
   };
+
 
   uploadProfileImage = async (req, res) => {
     const { id } = req;
