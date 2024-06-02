@@ -1,8 +1,4 @@
-const { createToken } = require("../../utils/createToken");
 const { responseReturn } = require("../../utils/response");
-const bcrypt = require("bcrypt");
-const cloudinary = require("cloudinary").v2;
-const formidable = require("formidable");
 const Seller = require("../../models/sellerModel");
 
 class sellerController {
@@ -82,7 +78,6 @@ class sellerController {
         const totalSellers = await Seller.find({
           status: "active",
         }).countDocuments();
-        console.log(sellers, totalSellers);
         responseReturn(res, 200, { totalSellers, sellers });
       }
     } catch (error) {

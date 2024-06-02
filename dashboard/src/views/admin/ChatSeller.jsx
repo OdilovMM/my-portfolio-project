@@ -24,6 +24,7 @@ const ChatSeller = () => {
     currentSeller,
     successMessage,
   } = useSelector((state) => state.chat);
+  
   const { sellerId } = useParams();
   const [show, setShow] = useState(false);
   const [messageText, setMessageText] = useState("");

@@ -5,8 +5,6 @@ const authorOrders = require("../../models/authOrderModel");
 const CustomerOrders = require("../../models/customerOrderModel");
 const Sellers = require("../../models/sellerModel");
 const Customers = require("../../models/customerModel");
-const AdminSellerMessage = require("../../models/chat/adminSellerMessageSchema");
-const SellerCustomerMessage = require("../../models/chat/sellerCustomerMessageModel");
 const { responseReturn } = require("../../utils/response");
 const {
   mongo: { ObjectId },
@@ -31,13 +29,10 @@ class dashboardController {
       const totalOrders = await CustomerOrders.find({}).countDocuments();
       const totalCustomers = await Customers.find({}).countDocuments();
       const totalSellers = await Sellers.find({}).countDocuments();
-
       const totalDeactiveSellers = await Sellers.find({
         status: "deactive",
       }).countDocuments();
-      const recentMessages = await AdminSellerMessage.find({}).limit(3);
       const recentOrders = await CustomerOrders.find({}).limit(8);
-      console.log(totalDeactiveSellers);
 
       responseReturn(res, 200, {
         totalSales: totalSales.length > 0 ? totalSales[0].totalAmount : 0,
@@ -45,7 +40,6 @@ class dashboardController {
         totalOrders,
         totalCustomers,
         totalSellers,
-        recentMessages,
         recentOrders,
         totalDeactiveSellers,
       });
@@ -101,20 +95,7 @@ class dashboardController {
         })
         .countDocuments();
 
-      const recentMessages = await SellerCustomerMessage.find({
-        $or: [
-          {
-            senderId: {
-              $eq: id,
-            },
-          },
-          {
-            receiverId: {
-              $eq: id,
-            },
-          },
-        ],
-      }).limit(3);
+      
 
       const recentOrders = await authorOrders
         .find({
@@ -126,7 +107,6 @@ class dashboardController {
         totalSales: totalSales.length > 0 ? totalSales[0].totalAmount : 0,
         totalProducts,
         totalOrders,
-        recentMessages,
         recentOrders,
         totalPendingOrder,
       });

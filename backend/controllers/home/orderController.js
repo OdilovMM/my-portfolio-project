@@ -259,7 +259,6 @@ class orderController {
   getSellerOrders = async (req, res) => {
     const { sellerId } = req.params;
     let { page, search, parPage } = req.query;
-    console.log(req.query);
     page = parseInt(page);
     parPage = parseInt(parPage);
     const skipPage = parPage * (page - 1);
@@ -283,6 +282,7 @@ class orderController {
         responseReturn(res, 200, { orders, totalOrder: totalOrders.length });
       }
     } catch (error) {
+      console.log(error)
       responseReturn(res, 500, { error: error.message });
     }
   };
@@ -301,14 +301,12 @@ class orderController {
   sellerOrderUpdateStatus = async (req, res) => {
     const { orderId } = req.params;
     const { status } = req.body;
-    console.log(orderId);
 
     try {
       const product = await authOrder.findById(orderId);
       const updated = await authOrder.findByIdAndUpdate(orderId, {
         deliveryStatus: status,
       });
-      console.log("updated:", updated, "product:", product);
       responseReturn(res, 200, { message: "Customer Order Status Updated" });
     } catch (error) {
       console.log(error);
@@ -337,7 +335,6 @@ class orderController {
 
   orderConfirm = async (req, res) => {
     const { orderId } = req.params;
-    console.log(orderId);
     try {
       await customerOrder.findByIdAndUpdate(orderId, {
         paymentStatus: "paid",
@@ -375,7 +372,6 @@ class orderController {
       responseReturn(res, 200, { message: "success" });
     } catch (error) {
       console.log(error);
-      console.log(error.message);
     }
   };
 }

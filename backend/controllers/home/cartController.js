@@ -142,6 +142,7 @@ class cartController {
         buy_product_item,
       });
     } catch (error) {
+      console.log(error)
       responseReturn(res, 500, { error: error.message });
     }
   };
@@ -195,7 +196,6 @@ class cartController {
   };
 
   addToWishlist = async (req, res) => {
-    console.log(req.body);
     const { slug } = req.body;
     try {
       const product = await Wishlist.findOne({ slug });
@@ -210,12 +210,11 @@ class cartController {
         });
       }
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       responseReturn(res, 500, { error: error.message });
     }
   };
   getAllMyWishlist = async (req, res) => {
-    console.log(req.params);
     const { userId } = req.params;
     try {
       const wishlist = await Wishlist.find({

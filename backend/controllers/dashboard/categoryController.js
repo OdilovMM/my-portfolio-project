@@ -48,7 +48,6 @@ class categoryController {
   };
 
   getCategory = async (req, res) => {
-    console.log(req.query);
     const { page, search, parPage } = req.query;
 
     try {

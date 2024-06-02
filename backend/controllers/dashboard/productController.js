@@ -67,10 +67,11 @@ class productController {
   };
 
   getProducts = async (req, res) => {
-    console.log(req.query);
-    console.log(req.id);
+  
     const { page, search, parPage } = req.query;
     const { id } = req;
+
+    console.log(req.id)
 
     const skipPage = parseInt(parPage) * (parseInt(page) - 1);
 
@@ -108,11 +109,9 @@ class productController {
   // get single product
   getProduct = async (req, res) => {
     const { productId } = req.params;
-    console.log("getA_Product:", productId);
 
     try {
       const product = await Product.findById(productId);
-      console.log(product);
       responseReturn(res, 200, { product });
     } catch (error) {
       console.log(error.message);
@@ -120,7 +119,6 @@ class productController {
   };
 
   updateProduct = async (req, res) => {
-    console.log(req.body);
     let { name, description, discount, price, brand, stock, productId } =
       req.body;
     name = name.trim();
@@ -156,7 +154,6 @@ class productController {
     const form = formidable({ multiples: true });
 
     form.parse(req, async (err, field, files) => {
-      console.log(field, files);
 
       const { oldImage, productId } = field;
       const { newImage } = files;
@@ -239,11 +236,9 @@ class productController {
   };
 
   getAllBanners = async (req, res) => {
-    console.log("get banners");
     try {
       const getBanners = await Banner.find();
       responseReturn(res, 200, { getBanners });
-      console.log(getBanners);
     } catch (error) {
       responseReturn(res, 500, { error: error.message });
     }

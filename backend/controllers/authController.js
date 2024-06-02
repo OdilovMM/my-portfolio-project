@@ -1,6 +1,5 @@
 const Admin = require("../models/adminModel");
 const Seller = require("../models/sellerModel");
-const sellerCustomer = require("../models/chat/sellerCustomerModel");
 const { createToken } = require("../utils/createToken");
 const { responseReturn } = require("../utils/response");
 const bcrypt = require("bcrypt");
@@ -52,9 +51,7 @@ class authControllers {
           method: "manual",
           shopInfo: {},
         });
-        await sellerCustomer.create({
-          myId: seller.id,
-        });
+       
 
         const token = await createToken({
           id: seller.id,
@@ -136,7 +133,6 @@ class authControllers {
         const result = await cloudinary.uploader.upload(image.filepath, {
           folder: "profile",
         });
-        console.log(result);
 
         if (result) {
           await Seller.findByIdAndUpdate(id, { image: result.url });

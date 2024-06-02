@@ -1,4 +1,3 @@
-const sellerCustomerModel = require("../../models/chat/sellerCustomerModel");
 const Customer = require("../../models/customerModel");
 const { createToken } = require("../../utils/createToken");
 const { responseReturn } = require("../../utils/response");
@@ -20,9 +19,7 @@ class authControllers {
           password: await bcrypt.hash(password, 12),
           method: "manually",
         });
-        await sellerCustomerModel.create({
-          myId: newCustomer.id,
-        });
+       
         const token = await createToken({
           id: newCustomer.id,
           name: newCustomer.name,

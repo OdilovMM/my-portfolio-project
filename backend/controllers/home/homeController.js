@@ -1,7 +1,6 @@
 const Category = require("./../../models/categoryModel");
 const Products = require("./../../models/productModel");
 const Reviews = require("./../../models/reviewModel");
-const formidable = require("formidable");
 const { responseReturn } = require("../../utils/response");
 const queryProducts = require("../../utils/queryProducts");
 const moment = require("moment");
