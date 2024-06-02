@@ -6,8 +6,6 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 
-
-
 // router folder imports
 
 const authRouter = require("./routes/authRoutes");
@@ -21,17 +19,26 @@ const orderRouter = require("./routes/home/orderRoutes");
 const paymentRouter = require("./routes/paymentRoutes");
 const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 
+// app.use(
+//   cors({
+//     origin: [
+//       "https://eshop-frontend-fawn.vercel.app",
+//       "https://seller-dashboard-sigma.vercel.app",
+//       "https://admin-dashboard-seven-lovat-63.vercel.app",
+//     ],
+//     credentials: true,
+//   })
+// );
 app.use(
   cors({
     origin: [
-      "https://eshop-frontend-fawn.vercel.app",
-      "https://seller-dashboard-sigma.vercel.app",
-      "https://admin-dashboard-seven-lovat-63.vercel.app", 
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:5175",
     ],
     credentials: true,
   })
 );
-
 
 app.use(bodyParser.json());
 app.use(cookieParser());

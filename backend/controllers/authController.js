@@ -175,6 +175,7 @@ class authControllers {
   };
 
   logout = async (req, res) => {
+    console.log(req.id)
     try {
       res.cookie("accessToken", null, {
         expires: new Date(Date.now()),
