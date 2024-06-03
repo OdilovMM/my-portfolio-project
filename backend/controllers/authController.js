@@ -51,7 +51,6 @@ class authControllers {
           method: "manual",
           shopInfo: {},
         });
-       
 
         const token = await createToken({
           id: seller.id,
@@ -100,6 +99,8 @@ class authControllers {
 
   getUser = async (req, res) => {
     const { id, role } = req;
+    console.log(id, role);
+
     try {
       if (role === "admin") {
         const admin = await Admin.findById(id);
@@ -112,7 +113,6 @@ class authControllers {
       responseReturn(res, 500, { error: "Internal server error" });
     }
   };
-
 
   uploadProfileImage = async (req, res) => {
     const { id } = req;
@@ -175,7 +175,7 @@ class authControllers {
   };
 
   logout = async (req, res) => {
-    console.log(req.id)
+    console.log(req.id);
     try {
       res.cookie("accessToken", null, {
         expires: new Date(Date.now()),

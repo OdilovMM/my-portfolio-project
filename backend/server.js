@@ -32,7 +32,7 @@ const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
+      "https://665d7eb9c9ce7a1e0dfe7b77--seller-dashboard-eshop.netlify.app",
       "http://localhost:5174",
       "http://localhost:5175",
     ],
@@ -60,17 +60,6 @@ app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/payment", paymentRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 
-// const __dirname = path.resolve();
-
-app.use("/dashboard", express.static(path.join(__dirname, "dashboard/build")));
-app.get("/dashboard/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dashboard/build", "index.html"));
-});
-
-app.use(express.static(path.join(__dirname, "frontend/build")));
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
-});
 
 const port = process.env.PORT || 8000;
 dbConnect();
