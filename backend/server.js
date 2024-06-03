@@ -32,7 +32,7 @@ const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 app.use(
   cors({
     origin: [
-      "https://665d7eb9c9ce7a1e0dfe7b77--seller-dashboard-eshop.netlify.app",
+      "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:5175",
     ],
