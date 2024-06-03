@@ -22,23 +22,20 @@ const dashboardRouter = require("./routes/dashboard/dashboardRoutes");
 // app.use(
 //   cors({
 //     origin: [
-//       "https://eshop-frontend-fawn.vercel.app",
-//       "https://seller-dashboard-sigma.vercel.app",
-//       "https://admin-dashboard-seven-lovat-63.vercel.app",
+//       "http://localhost:5173",
+//       "http://localhost:5174",
+//       "http://localhost:5175",
+//       //       "https://eshop-frontend-fawn.vercel.app",
+//       //       "https://seller-dashboard-sigma.vercel.app",
+//       //       "https://admin-dashboard-seven-lovat-63.vercel.app",
 //     ],
 //     credentials: true,
 //   })
 // );
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:5175",
-    ],
-    credentials: true,
-  })
-);
+
+app.use(cors({ origin: true, credentials: true }));
+app.options("*", cors());
+
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -59,7 +56,6 @@ app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/payment", paymentRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
-
 
 const port = process.env.PORT || 8000;
 dbConnect();

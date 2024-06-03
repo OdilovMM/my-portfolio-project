@@ -99,7 +99,8 @@ class authControllers {
 
   getUser = async (req, res) => {
     const { id, role } = req;
-    console.log(id, role);
+    console.log(req.user)
+    console.log(req.role)
 
     try {
       if (role === "admin") {
